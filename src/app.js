@@ -18,9 +18,7 @@ class App{
   }
 
   cors(){
-    this.server.use(Cors({
-      origin: 'http://localhost:3000'
-    }));
+    this.server.use(cors());
   }
 
   routes(){
