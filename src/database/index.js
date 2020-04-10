@@ -12,7 +12,6 @@ import Segmento from '../app/models/Segmento';
 
 
 import databaseConfig from '../config/database';
-import MongoCredentials from '../credentials/mongo';
 import CadastroClientes from '../app/models/CadastrosClientes';
 import InfoCadastroClientes from '../app/models/InfoCadastroClientes';
 
@@ -45,7 +44,7 @@ class Database {
 
   mongo(){
     this.mongoConnection = mongoose.connect(
-      MongoCredentials.connectionString,
+      process.env.MONGO,
       {useNewUrlParser: true, useFindAndModify: true, useUnifiedTopology: true, useFindAndModify: true}
     )
   }
