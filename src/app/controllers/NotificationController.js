@@ -1,7 +1,6 @@
 import Notification from '../schemas/Notification';
 import jwt from 'jsonwebtoken';
 import {promisify} from 'util';
-import chaveToken from '../../credentials/Jwt';
 
 
 class NotificationController{
@@ -24,7 +23,7 @@ class NotificationController{
     const [, token] = authHeader.split(' ');
     try
     {
-      const decoded = await promisify(jwt.verify)(token, chaveToken.chave);
+      const decoded = await promisify(jwt.verify)(token, process.env.JWT_KEY);
       const notifications = await Notification.find(
         {
           user: decoded.id,

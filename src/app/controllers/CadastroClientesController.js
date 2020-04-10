@@ -2,8 +2,6 @@ import * as Yup from 'yup';
 import jwt from 'jsonwebtoken';
 import {promisify} from 'util';
 
-import chaveToken from '../../credentials/Jwt';
-
 import CadastroClientes from '../models/CadastrosClientes';
 
 class CadastroClientesController{
@@ -121,7 +119,7 @@ class CadastroClientesController{
 
 
     try{
-      const decoded = await promisify(jwt.verify)(token, chaveToken.chave);
+      const decoded = await promisify(jwt.verify)(token, process.env.JWT_KEY);
 
 
       const adminApp = await UserApp.findOne({

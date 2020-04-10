@@ -7,8 +7,6 @@ import {promisify} from 'util';
 import App from '../models/App';
 import UserApp from '../models/UserApp';
 
-import chaveToken from '../../credentials/Jwt';
-
 class UserAppController{
   async index(req, res){
 
@@ -24,7 +22,7 @@ class UserAppController{
 
     try
     {
-      const decoded = await promisify(jwt.verify)(token, chaveToken.chave);
+      const decoded = await promisify(jwt.verify)(token, process.env.JWT_KEY);
 
 
 

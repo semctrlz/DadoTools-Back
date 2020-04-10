@@ -4,7 +4,6 @@ import {promisify} from 'util';
 
 import User from '../models/User';
 import File from '../models/File';
-import chaveToken from '../../credentials/Jwt';
 
 class SessionController{
   async store(req, res){
@@ -55,8 +54,8 @@ class SessionController{
         avatar
 
       },
-      token: jwt.sign({ id }, chaveToken.chave, {
-       expiresIn: chaveToken.expiresIn,
+      token: jwt.sign({ id }, process.env.JWT_KEY, {
+       expiresIn: process.env.JWT_EXPIRES,
     }),
   });
   }
@@ -70,7 +69,7 @@ class SessionController{
     const [, token] = authHeader.split(' ');
     try
     {
-      const decoded = await promisify(jwt.verify)(token, chaveToken.chave);
+      const decoded = await promisify(jwt.verify)(token, process.env.JWT_KEY);
       req.idUsuario = decoded.id;
       res.status(200).json({message: "Valid Token"});
 

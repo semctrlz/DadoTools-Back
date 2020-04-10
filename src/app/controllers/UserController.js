@@ -5,8 +5,6 @@ import fs from 'fs';
 import jwt from 'jsonwebtoken';
 import {promisify} from 'util';
 
-import chaveToken from '../../credentials/Jwt';
-
 import DeletarImagem from '../../../temp/uploads';
 
 import User from '../models/User';
@@ -99,7 +97,7 @@ class UserController{
         const [, token] = authHeader.split(' ');
 
         try{
-          const decoded = await promisify(jwt.verify)(token, chaveToken.chave);
+          const decoded = await promisify(jwt.verify)(token, process.env.JWT_KEY);
           const {is_adm: isAdmin} = await User.findByPk(decoded.id);
 
           if(!isAdmin){

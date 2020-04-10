@@ -1,11 +1,11 @@
-const credenciais = require('../credentials/database');
+require('dotenv/config');
 
 module.exports = {
-dialect:  'mysql',
-host: credenciais.host,
-username: credenciais.username,
-password: credenciais.senha,
-database: credenciais.banco,
+dialect:  process.env.DB_DIALECT,
+host: process.env.DB_HOST,
+username: process.env.DB_USER,
+password: process.env.DB_PASS,
+database: process.env.DB_NAME,
   define: {
     timestamp: true,
     underscored: true,

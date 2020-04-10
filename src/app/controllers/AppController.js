@@ -2,8 +2,6 @@ import * as Yup from 'yup';
 import jwt from 'jsonwebtoken';
 import {promisify} from 'util';
 
-import chaveToken from '../../credentials/Jwt';
-
 import App from '../models/App';
 import UserApp from '../models/UserApp';
 import {Op} from 'sequelize'
@@ -53,7 +51,7 @@ class AppController{
 
     try{
       //Colocar usuario atual como admin
-      const decoded = await promisify(jwt.verify)(token, chaveToken.chave);
+      const decoded = await promisify(jwt.verify)(token, process.env.JWT_KEY);
 
       await UserApp.create({
         id_usuario: decoded.id,
