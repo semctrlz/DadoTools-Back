@@ -1,5 +1,5 @@
 var express =require('express');
-var Cors = require('cors');
+var cors = require('cors');
 var path = require('path');
 var routes = require ('./routes');
 require('./database');
