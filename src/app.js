@@ -18,7 +18,12 @@ class App{
   }
 
   cors(){
-    this.server.use(cors());
+    this.server.use(cors(
+      {
+        origin: 'https://serene-curie-1d6501.netlify.com',
+        optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+      }
+    ));
   }
 
   routes(){
