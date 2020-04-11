@@ -1,5 +1,5 @@
-fs = require('fs');
-path = require('path');
+var fs = require('fs');
+var path = require('path');
 module.exports = async function DeletarImagem(nome){
   try
   {

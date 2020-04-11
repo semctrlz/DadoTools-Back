@@ -20,7 +20,7 @@ class App{
   cors(){
     this.server.use(cors(
       {
-        origin: 'https://dadotools.netlify.com',
+        origin: process.env.HOST,
         optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
       }
     ));
