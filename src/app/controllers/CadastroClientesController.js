@@ -92,13 +92,11 @@ class CadastroClientesController{
 
       //Convert o valor primeira compra para numero
       
-      if(valor_primeira_compra === ""){
+      if(req.body.valor_primeira_compra === ""){
         req.body.valor_primeira_compra = "0";
       }
       
-        req.body.valor_primeira_compra = parseFloat(valor_primeira_compra);
-      
-
+        req.body.valor_primeira_compra = parseFloat(req.body.valor_primeira_compra);
       
       const data = {...req.body,...{id_usuario:req.idUsuario} };
 
@@ -107,8 +105,7 @@ class CadastroClientesController{
 
     }catch(err){
       console.log(err);
-      res.status(401).json({message: "Erro ao cadastrar cliente. Verifique os dados informados e tente novamente.",
-    mensagem: "Erro: " + err });
+      res.status(401).json({message: "Erro ao cadastrar cliente. Verifique os dados informados e tente novamente."});
     }
   }
 
