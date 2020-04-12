@@ -103,8 +103,7 @@ class CadastroClientesController{
       const resultado = await CadastroClientes.create(data);
       return res.json(resultado);
 
-    }catch(err){
-      console.log(err);
+    }catch(err){      
       res.status(401).json({message: "Erro ao cadastrar cliente. Verifique os dados informados e tente novamente."});
     }
   }

@@ -1,14 +1,8 @@
 import File from '../models/File';
-import User from '../models/User';
-import sharp from 'sharp';
-import fs from 'fs';
-
 
 class FileController{
   async store(req,res){    
-    if(req.file){
-      
-      const arquivo = req.file;     
+    if(req.file){          
 
       const { originalname: nome, filename: path } = req.file;
       const file = await File.create({
