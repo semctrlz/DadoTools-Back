@@ -61,8 +61,7 @@ class CadastroClientesController{
       segmento: Yup.string().max(2).required(),
       forma_pagto:Yup.string().max(3).required(),
       cond_pagto: Yup.string().max(3).required(),
-      status: Yup.string().default('P'),
-      valor_primeira_compra:Yup.number(),
+      status: Yup.string().default('P'),      
       obs_vendedor: Yup.string().max(255)
     });
 
@@ -97,7 +96,7 @@ class CadastroClientesController{
 
     }catch(err){
       res.status(401).json({message: "Erro ao cadastrar cliente. Verifique os dados informados e tente novamente.",
-    err});
+    mensagem: "Erro: " + err });
     }
   }
 
