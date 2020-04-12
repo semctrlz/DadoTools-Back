@@ -133,16 +133,15 @@ module.exports = {
           type: Sequelize.STRING(1),
           allowNull:false,
           default: 'P'
-        },
+        },        
         created_at: {
           type: Sequelize.DATE,
-          allowNull: false,
-          default: 'now()',
+          allowNull: false,              
         },
         updated_at: {
           type: Sequelize.DATE,
-          allowNull: false,
-          default: 'now()',
+          allowNull: false,     
+          
         },
       });
   },

@@ -40,6 +40,8 @@ class CadastroClientes extends Model {
         sequelize,
       }
     );
+
+    
     return this;
   }
 

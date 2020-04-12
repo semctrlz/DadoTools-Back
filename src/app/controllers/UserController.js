@@ -121,6 +121,8 @@ class UserController{
         }
       }
 
+      console.log(req.body);
+
       const {id:user_id} = await user.update(req.body);
 
       const { id, cargo, avatar } = await User.findByPk(user_id, {

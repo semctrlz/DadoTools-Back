@@ -6,7 +6,7 @@ module.exports = {
       nome: 'Vágner Lenon',
       sobrenome: 'Lima da Silva',
       email: 'vagner.lenon@gmail.com',
-      codigo_cigam:'',
+      codigo_cigam:'007015',
       is_sales: true,
       password_hash:'$2a$08$CaQ4PuuN/sAc7GIsJGJefOTXY9tFsiPTUsHCCqV8U3BOsCvegnb7a',
       cargo: 'Master',

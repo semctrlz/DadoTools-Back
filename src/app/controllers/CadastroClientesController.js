@@ -94,11 +94,17 @@ class CadastroClientesController{
       
       if(req.body.valor_primeira_compra === ""){
         req.body.valor_primeira_compra = "0";
+      }      
+
+      if(req.body.data_nascimento === ""){
+        req.body.data_nascimento = new Date();
       }
 
       req.body.valor_primeira_compra = parseFloat(req.body.valor_primeira_compra);
       
       const data = {...req.body,...{id_usuario:req.idUsuario} };
+
+      console.log(data);
 
       const resultado = await CadastroClientes.create(data);
       return res.json(resultado);
