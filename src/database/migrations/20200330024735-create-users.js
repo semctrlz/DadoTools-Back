@@ -29,7 +29,7 @@ module.exports = {
         },
         is_sales: {
           type: Sequelize.BOOLEAN,
-          defaultValue: 0
+          defaultValue: false
         },
         password_hash: {
           type: Sequelize.STRING,
