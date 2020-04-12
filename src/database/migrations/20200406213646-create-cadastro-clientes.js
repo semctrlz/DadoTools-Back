@@ -137,10 +137,12 @@ module.exports = {
         created_at: {
           type: Sequelize.DATE,
           allowNull: false,
+          default: 'now()',
         },
         updated_at: {
           type: Sequelize.DATE,
           allowNull: false,
+          default: 'now()',
         },
       });
   },
