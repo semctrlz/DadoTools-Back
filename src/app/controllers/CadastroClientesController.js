@@ -95,8 +95,8 @@ class CadastroClientesController{
       if(req.body.valor_primeira_compra === ""){
         req.body.valor_primeira_compra = "0";
       }
-      
-        req.body.valor_primeira_compra = parseFloat(req.body.valor_primeira_compra);
+
+      req.body.valor_primeira_compra = parseFloat(req.body.valor_primeira_compra);
       
       const data = {...req.body,...{id_usuario:req.idUsuario} };
 
