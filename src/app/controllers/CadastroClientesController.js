@@ -93,10 +93,11 @@ class CadastroClientesController{
       //Convert o valor primeira compra para numero
       
       if(valor_primeira_compra === ""){
-        req.body.valor_primeira_compra = 0;
-      }else{
-        req.body.valor_primeira_compra = parseFloat(valor_primeira_compra);
+        req.body.valor_primeira_compra = "0";
       }
+      
+        req.body.valor_primeira_compra = parseFloat(valor_primeira_compra);
+      
 
       
       const data = {...req.body,...{id_usuario:req.idUsuario} };
