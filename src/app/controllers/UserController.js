@@ -67,7 +67,7 @@ class UserController{
     if(!(await schema.isValid(req.body))){
       return res.status(400).json({error: 'Validation fails'})
     }
-      const {nome, sobrenome, email, codigo_cigam, is_sales, is_adm, oldPassword} = req.body;
+      const {nome, sobrenome, email, codigo_cigam, is_sales, is_adm, oldPassword, id_usuario} = req.body;
 
       const user = await User.findByPk(req.idUsuario);
 

@@ -96,7 +96,8 @@ class CadastroClientesController{
       return res.json(resultado);
 
     }catch(err){
-      res.status(401).json({message: "Erro ao cadastrar cliente. Verifique os dados informados e tente novamente."});
+      res.status(401).json({message: "Erro ao cadastrar cliente. Verifique os dados informados e tente novamente.",
+    err});
     }
   }
 

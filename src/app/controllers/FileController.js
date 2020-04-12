@@ -35,7 +35,7 @@ class FileController{
       fs.writeFile(novoCaminho, imagemNova, err => {
           if(err){
               // Já aqui um erro significa que o upload falhou, então é importante que o usuário saiba.
-              return res.status(401).json({error: "Ocorreu um erro ao salvar sua imagem, tente novamente."});
+              return res.status(400).json({error: "Ocorreu um erro ao salvar sua imagem, tente novamente."});
           }
       });
       
