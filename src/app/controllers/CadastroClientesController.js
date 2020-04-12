@@ -61,7 +61,8 @@ class CadastroClientesController{
       segmento: Yup.string().max(2).required(),
       forma_pagto:Yup.string().max(3).required(),
       cond_pagto: Yup.string().max(3).required(),
-      status: Yup.string().default('P'),      
+      status: Yup.string().default('P'),
+      valor_primeira_compra: Yup.string(),
       obs_vendedor: Yup.string().max(255)
     });
 
@@ -88,7 +89,16 @@ class CadastroClientesController{
     }
 
     try{
-      //Colocar usuario atual como admin
+
+      //Convert o valor primeira compra para numero
+      
+      if(valor_primeira_compra === ""){
+        req.body.valor_primeira_compra = 0;
+      }else{
+        req.body.valor_primeira_compra = parseFloat(valor_primeira_compra);
+      }
+
+      
       const data = {...req.body,...{id_usuario:req.idUsuario} };
 
       const resultado = await CadastroClientes.create(data);
