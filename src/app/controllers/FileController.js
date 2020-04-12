@@ -10,8 +10,14 @@ class FileController{
       
       const arquivo = req.file;     
 
-      try{
+      const { originalname: nome, filename: path } = req.file;
+      const file = await File.create({
+        nome,
+        path
+      }); 
 
+      try{
+/*
       const newPath = arquivo.path.split('.')[0] + '.webp';
       const arquivoAntigo = arquivo.path;
       const tamanho = 120;
@@ -44,15 +50,8 @@ class FileController{
       const file = await File.create({
         nome,
         path: arquivo.filename.split('.')[0] + '.jpg'
-      });
-      //Update usuário
-      User.update({
-        avatar_id: file.id,      
-      },
-      {
-        where: {id: req.idUsuario}
-      })
-
+      });      
+*/
         return res.json(file);
           
       }catch(err){
