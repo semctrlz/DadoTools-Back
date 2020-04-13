@@ -19,7 +19,7 @@ class SessionController{
     const {email, password} = req.body;
 
     const user = await User.findOne({
-      where:{email},
+      where:{email, is_ativo:true},
         include: [
           {
             model: File, as: 'avatar',
@@ -28,7 +28,7 @@ class SessionController{
         ]
     });
 
-    const error = 'Combinação de usuário/senha inválida. Por favor, verifique.';
+    const error = 'Combinação de usuário/senha inválida ou usuário inativo. Por favor, verifique.';
 
     if(!user){
       return res.status(401).json({error});
