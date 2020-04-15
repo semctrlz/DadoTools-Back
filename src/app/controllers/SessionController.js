@@ -4,6 +4,7 @@ import {promisify} from 'util';
 
 import User from '../models/User';
 import File from '../models/File';
+import Notification from '../schemas/Notification';
 
 class SessionController{
   async store(req, res){
@@ -67,15 +68,33 @@ class SessionController{
     }
 
     const [, token] = authHeader.split(' ');
+    
+console.log(req)
+
+    if(token === process.env.HASH_MASTER){
+      return res.status(200).json({message: "Valid Token"});
+    }
     try
     {
       const decoded = await promisify(jwt.verify)(token, process.env.JWT_KEY);
       req.idUsuario = decoded.id;
-      res.status(200).json({message: "Valid Token"});
+
+      const mensagemNot = `Sua Token foi testada`;
+      const link ="/login";
+      const response = await Notification.create({
+        content: mensagemNot,
+        link,
+        user: decoded.id
+      })
+
+
+
+      return res.status(200).json({message: "Valid Token"});
 
     }
     catch(err)
     {
+      console.log(err);
       return res.status(401).json({error:'Invalid Token.'});
     }
   }

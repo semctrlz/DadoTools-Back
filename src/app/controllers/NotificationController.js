@@ -1,32 +1,37 @@
 import Notification from '../schemas/Notification';
-import jwt from 'jsonwebtoken';
-import {promisify} from 'util';
+import * as Yup from 'yup';
+
 
 
 class NotificationController{
-  async create(content, userId){
-      const document = await Notification.create({
-        content: content,
-        user: userId
-      })
+  async create(req, res){
 
-      return document;
-  }
+    const schema = Yup.object().shape({
+      user: Yup.number().required(),
+      content: Yup.string().max(140).required(),
+      link: Yup.string().max(30).required(),
+    });
 
-  async index(req, res){
-
-    const authHeader = req.headers.authorization;
-    if(!authHeader){
-      return res.status(401).json ({error: 'token not provide.'});
+    if(!(await schema.isValid(req.body))){
+      return res.status(400).json({error: 'Validation fails'})
     }
 
-    const [, token] = authHeader.split(' ');
-    try
-    {
-      const decoded = await promisify(jwt.verify)(token, process.env.JWT_KEY);
+
+    const {content, user, link } = req.body;
+    
+      const document = await Notification.create({
+        content,
+        link,        
+        user
+      })
+
+      return res.status(200).json(document);
+  }
+
+  async index(req, res){    
       const notifications = await Notification.find(
         {
-          user: decoded.id,
+          user: req.idUsuario,
         }
         ).sort({
           createdAt: 'desc'
@@ -36,11 +41,10 @@ class NotificationController{
       }
       catch(err)
       {
-        console.log(err);
         return res.status(401).json({error:'Invalid Token.'});
       }
 
-  }
+  
 
   async update(req, res){
   // const notification = await Notification.findById(req.params.id);

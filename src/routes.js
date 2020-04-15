@@ -53,6 +53,10 @@ routes.get('/cadastro_empresas', CadastroClientes.index);
 routes.get('/detalhes_cadastros_empresas/:id', CadastroClientesController.index);
 routes.post('/detalhes_cadastros_empresas', CadastroClienteMessagesController.store);
 
+
+routes.post('/notify', NotificationController.create);
+
+
 routes.get('/configs_cadastro', OpcoesCadastroController.index);
 
 module.exports = routes;

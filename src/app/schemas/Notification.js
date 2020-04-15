@@ -5,6 +5,11 @@ const NotificationSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  link: {
+    type: String,
+    required: false,
+    default: '',
+  },
   user: {
     type: Number,
     required: true
@@ -14,7 +19,6 @@ const NotificationSchema = new mongoose.Schema({
     required: true,
     default: false
   }
-
 },
 {
   timestamps: true,
