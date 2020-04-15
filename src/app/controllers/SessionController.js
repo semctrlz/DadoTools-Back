@@ -79,16 +79,6 @@ console.log(req)
       const decoded = await promisify(jwt.verify)(token, process.env.JWT_KEY);
       req.idUsuario = decoded.id;
 
-      const mensagemNot = `Sua Token foi testada`;
-      const link ="/login";
-      const response = await Notification.create({
-        content: mensagemNot,
-        link,
-        user: decoded.id
-      })
-
-
-
       return res.status(200).json({message: "Valid Token"});
 
     }
