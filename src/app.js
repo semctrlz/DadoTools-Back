@@ -4,21 +4,10 @@ const path = require('path');
 const routes = require('./routes');
 require('./database');
 
-const whitelist = [process.env.HOST];
-const corsOptions = {
-  origin(origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-};
-
 class App {
   constructor() {
     this.server = express();
-    this.cors(corsOptions);
+    this.cors();
     this.middlewares();
     this.routes();
   }
@@ -44,6 +33,7 @@ class App {
           'Content-Length',
           'X-Total-Count',
         ],
+        origin: process.env.HOST,
       })
     );
   }
