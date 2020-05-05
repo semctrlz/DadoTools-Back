@@ -1,5 +1,4 @@
-import Sequelize, {Model} from 'sequelize';
-
+import Sequelize, { Model } from 'sequelize';
 
 class CadastroClientes extends Model {
   static init(sequelize) {
@@ -27,13 +26,13 @@ class CadastroClientes extends Model {
         fone_financeiro: Sequelize.STRING,
         email_financeiro: Sequelize.STRING,
         fone_fiscal: Sequelize.STRING,
-        email_fiscal:  Sequelize.STRING,
+        email_fiscal: Sequelize.STRING,
         rota: Sequelize.STRING,
         segmento: Sequelize.STRING,
-        forma_pagto:Sequelize.STRING,
+        forma_pagto: Sequelize.STRING,
         cond_pagto: Sequelize.STRING,
         status: Sequelize.STRING,
-        valor_primeira_compra:Sequelize.FLOAT,
+        valor_primeira_compra: Sequelize.FLOAT,
         obs_vendedor: Sequelize.STRING,
       },
       {
@@ -41,14 +40,13 @@ class CadastroClientes extends Model {
       }
     );
 
-    
     return this;
   }
 
   static associate(models) {
     this.hasMany(models.InfoCadastroClientes, {
       foreignKey: 'id_cadastro',
-      as: 'messages'
+      as: 'messages',
     });
   }
 }

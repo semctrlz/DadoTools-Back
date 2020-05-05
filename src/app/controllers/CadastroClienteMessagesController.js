@@ -6,37 +6,37 @@ import User from '../models/User';
 import File from '../models/File';
 import Notification from '../schemas/Notification';
 
-class CadastroClienteMessagesController{
-  async store(req, res){
+class CadastroClienteMessagesController {
+  async store(req, res) {
     const schema = Yup.object().shape({
       id_cadastro: Yup.number().required(),
-      mensagem: Yup.string().max(255).required()
+      mensagem: Yup.string().max(255).required(),
     });
 
-    if(!(await schema.isValid(req.body))){
-      return res.status(400).json({error: 'Validation fails'})
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validation fails' });
     }
 
-    const {id_cadastro, mensagem} = req.body;
+    const { id_cadastro, mensagem } = req.body;
 
     const retorno = await InfoCadastroClientes.create({
       id_usuario: req.idUsuario,
       id_cadastro,
-      mensagem
-    })
+      mensagem,
+    });
 
-    const {id_usuario: donoCadastro, nome_fantasia, razao_social} = await CadastrosClientes.findByPk(id_cadastro);
+    const {
+      id_usuario: donoCadastro,
+      nome_fantasia,
+    } = await CadastrosClientes.findByPk(id_cadastro);
 
-    if(donoCadastro !== req.idUsuario){
-
+    if (donoCadastro !== req.idUsuario) {
       const mensagemNot = `Você recebeu uma mensagem no cadastro de ${nome_fantasia}`;
-      const response = await Notification.create({
+      await Notification.create({
         content: mensagemNot,
-        user: donoCadastro
-      })
-
+        user: donoCadastro,
+      });
     }
-
 
     const usuario = await User.findByPk(req.idUsuario, {
       include: [
@@ -50,10 +50,9 @@ class CadastroClienteMessagesController{
     });
 
     return res.json({
-      mensagem:retorno,
-      usuario
-    })
+      mensagem: retorno,
+      usuario,
+    });
   }
 }
 export default new CadastroClienteMessagesController();
-

@@ -1,5 +1,4 @@
-import Sequelize, {Model} from 'sequelize';
-
+import Sequelize, { Model } from 'sequelize';
 
 class InfoCadastroClientes extends Model {
   static init(sequelize) {
@@ -18,15 +17,13 @@ class InfoCadastroClientes extends Model {
 
   static associate(models) {
     this.belongsTo(models.CadastroClientes, {
-      foreignKey: 'id_cadastro'
+      foreignKey: 'id_cadastro',
     });
 
     this.belongsTo(models.User, {
-      foreignKey: 'id_usuario'
+      foreignKey: 'id_usuario',
     });
-
   }
-
 }
 
 export default InfoCadastroClientes;

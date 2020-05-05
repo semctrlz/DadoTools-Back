@@ -1,33 +1,24 @@
 import jwt from 'jsonwebtoken';
-import {promisify} from 'util';
-import {Op} from 'sequelize'
-import User from '../models/User';
+import { promisify } from 'util';
 
-
-export default async (req, res, next)=>{
+export default async (req, res, next) => {
   const authHeader = req.headers.authorization;
-  
-  
 
-  if(!authHeader){
-    return res.status(401).json ({error: 'token not provide.'});
+  if (!authHeader) {
+    return res.status(401).json({ error: 'token not provide.' });
   }
 
-  const [, token] = authHeader.split(' ');  
-  if(token === process.env.HASH_MASTER){
+  const [, token] = authHeader.split(' ');
+  if (token === process.env.HASH_MASTER) {
     req.idUsuario = 1;
-    return next(); 
+    return next();
   }
 
-  try
-  {
+  try {
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_KEY);
     req.idUsuario = decoded.id;
-    return next();           
+    return next();
+  } catch (err) {
+    return res.status(401).json({ error: 'Invalid Token.' });
   }
-  catch(err)
-  {
-    return res.status(401).json({error:'Invalid Token.'});
-  }
-
 };

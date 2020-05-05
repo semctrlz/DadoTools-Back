@@ -1,5 +1,4 @@
-import Sequelize, {Model} from 'sequelize';
-
+import Sequelize, { Model } from 'sequelize';
 
 class UserApp extends Model {
   static init(sequelize) {
@@ -7,7 +6,7 @@ class UserApp extends Model {
       {
         id_usuario: Sequelize.INTEGER,
         id_app: Sequelize.INTEGER,
-        is_admin: Sequelize.BOOLEAN
+        nivel: Sequelize.INTEGER,
       },
       {
         sequelize,
@@ -19,7 +18,6 @@ class UserApp extends Model {
   static associate(models) {
     this.belongsTo(models.App, { foreignKey: 'id_app', as: 'Apps' });
   }
-
 }
 
 export default UserApp;

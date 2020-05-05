@@ -14,15 +14,14 @@ class User extends Model {
         cargo: Sequelize.STRING,
         is_sales: Sequelize.BOOLEAN,
         is_adm: Sequelize.BOOLEAN,
-
       },
       {
         sequelize,
       }
     );
 
-    this.addHook('beforeSave', async user => {
-      if(user.password){
+    this.addHook('beforeSave', async (user) => {
+      if (user.password) {
         user.password_hash = await bcrypt.hash(user.password, 8);
       }
     });
@@ -31,10 +30,40 @@ class User extends Model {
 
   static associate(models) {
     this.belongsTo(models.File, { foreignKey: 'avatar_id', as: 'avatar' });
-    this.hasMany(models.InfoCadastroClientes, { foreignKey: 'id_usuario', as: 'dadosUsuario' });
+
+    this.hasMany(models.InfoCadastroClientes, {
+      foreignKey: 'id_usuario',
+      as: 'dadosUsuario',
+    });
+    this.hasOne(models.UserApp, { foreignKey: 'id_usuario', as: 'userApp' });
+    this.hasMany(models.Ticket, { foreignKey: 'id_usuario', as: 'criador' });
+    this.hasMany(models.Ticket, {
+      foreignKey: 'id_destinatario',
+      as: 'destinatario',
+    });
+    this.hasMany(models.TicketsUpdates, {
+      foreignKey: 'id_usuario',
+      as: 'criador_update',
+    });
+    this.hasMany(models.EncerramentoTicket, {
+      foreignKey: 'id_usuario',
+      as: 'criador_encerramento',
+    });
+    this.hasMany(models.AvaliacaoTicket, {
+      foreignKey: 'id_usuario',
+      as: 'usuario_avaliador',
+    });
+    this.hasMany(models.TicketsGrupos, {
+      foreignKey: 'id_usuario',
+      as: 'criador_grupo',
+    });
+    this.belongsTo(models.TicketsGrupos, {
+      foreignKey: 'id_grupo',
+      as: 'componentes_grupo',
+    });
   }
 
-  checkPassword(password){
+  checkPassword(password) {
     return bcrypt.compare(password, this.password_hash);
   }
 }

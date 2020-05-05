@@ -1,14 +1,12 @@
-'use strict';
-
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('condicoes_pagtos',{
-      cod_condicao_pagto:{
+    return queryInterface.createTable('condicoes_pagtos', {
+      cod_condicao_pagto: {
         type: Sequelize.STRING(3),
         allowNull: false,
         primaryKey: true,
       },
-      nome_condicao_pagto:{
+      nome_condicao_pagto: {
         type: Sequelize.STRING(64),
         allowNull: false,
       },
@@ -19,11 +17,11 @@ module.exports = {
       updated_at: {
         type: Sequelize.DATE,
         allowNull: false,
-      }
+      },
     });
   },
 
   down: (queryInterface, Sequelize) => {
-      return queryInterface.dropTable('condicoes_pagtos');
-  }
+    return queryInterface.dropTable('condicoes_pagtos');
+  },
 };

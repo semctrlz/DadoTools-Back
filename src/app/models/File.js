@@ -1,4 +1,4 @@
-import Sequelize, {Model} from 'sequelize';
+import Sequelize, { Model } from 'sequelize';
 
 class File extends Model {
   static init(sequelize) {
@@ -9,9 +9,9 @@ class File extends Model {
         url: {
           type: Sequelize.VIRTUAL,
           get() {
-            return `${process.env.SITE}/files/${this.path}`
-          }
-        }
+            return `${process.env.SITE}/avatar/${this.path}`;
+          },
+        },
       },
       {
         sequelize,
