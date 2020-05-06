@@ -8,6 +8,7 @@ import File from '../models/File';
 import TicketsUpdates from '../models/TicketsUpdates';
 import TicketsUpdatesFormatados from '../models/TicketsUpdatesFormatados';
 import TicketsUpdatesFile from '../models/TicketsUpdatesFile';
+import Notification from '../schemas/Notification';
 
 class TicketUpdatesController {
   async index(req, res) {
@@ -181,6 +182,58 @@ class TicketUpdatesController {
           required: false,
         },
       ],
+    });
+
+    const ticketBase = await Ticket.findByPk(id_ticket, {
+      include: [
+        {
+          model: User,
+          as: 'criador',
+          required: false,
+          attributes: ['id', 'nome', 'sobrenome', 'email', 'cargo'],
+          include: [
+            {
+              model: File,
+              as: 'avatar',
+              attributes: ['id', 'nome', 'path', 'url'],
+            },
+          ],
+        },
+        {
+          model: User,
+          as: 'destinatario',
+          required: false,
+          attributes: ['id', 'nome', 'sobrenome', 'email', 'cargo'],
+          include: [
+            {
+              model: File,
+              as: 'avatar',
+              attributes: ['id', 'nome', 'path', 'url'],
+            },
+          ],
+        },
+      ],
+    });
+
+    const idUsuarioNot =
+      req.idUsuario === ticketBase.criador.id
+        ? ticketBase.destinatario.id
+        : ticketBase.criador.id;
+
+    const nomeUsuarioNot =
+      req.idUsuario === ticketBase.criador.id
+        ? ticketBase.destinatario.nome
+        : ticketBase.criador.nome;
+
+    const link =
+      req.idUsuario === ticketBase.criador.id
+        ? `tickets/inbox/${id_ticket}`
+        : `tickets/enviados/${id_ticket}`;
+
+    await Notification.create({
+      content: `${nomeUsuarioNot} enviou uma atualização para o ticket #${id_ticket}. `,
+      link,
+      user: idUsuarioNot,
     });
 
     return res.json(update);

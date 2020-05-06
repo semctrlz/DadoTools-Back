@@ -8,6 +8,7 @@ import TicketsUpdatesFormatados from '../models/TicketsUpdatesFormatados';
 import User from '../models/User';
 import File from '../models/File';
 import AvaliacaoTicket from '../models/AvaliacaoTicket';
+import Notification from '../schemas/Notification';
 
 class TicketUpdatesController {
   async index(req, res) {
@@ -210,6 +211,24 @@ class TicketUpdatesController {
           where: {
             id_ticket,
           },
+        });
+      }
+
+      const user = await User.findByPk(id_usuario);
+
+      if (ticket.id_usuario === id_usuario) {
+        // Mensagem para o Destinatario do ticket informando que o criador o fechou
+        await Notification.create({
+          content: `${user.nome} finalizou o ticket #${id_ticket}. `,
+          link: `tickets/concluidos/${ticket.id}`,
+          user: ticket.id_destinatario,
+        });
+      } else {
+        // Mensagem para o criador do ticket informando que o destinatário encerrou
+        await Notification.create({
+          content: `${user.nome} encerrou o ticket #${id_ticket}. `,
+          link: `tickets/concluidos/${ticket.id}`,
+          user: ticket.id_usuario,
         });
       }
 

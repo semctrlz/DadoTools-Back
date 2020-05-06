@@ -120,6 +120,7 @@ class UserTicketsController {
           {
             id_destinatario: req.idUsuario,
           },
+          { status: 'I' },
         ],
       },
       include: [

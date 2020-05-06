@@ -9,6 +9,7 @@ import TicketsUpdates from '../models/TicketsUpdates';
 import TicketsUpdatesFormatados from '../models/TicketsUpdatesFormatados';
 import UserApp from '../models/UserApp';
 import TicketsUpdatesFile from '../models/TicketsUpdatesFile';
+import Notification from '../schemas/Notification';
 
 class TicketsController {
   async index(req, res) {
@@ -144,6 +145,14 @@ class TicketsController {
       assunto,
       prazo,
       texto,
+    });
+
+    const user = await User.findByPk(req.idUsuario);
+
+    await Notification.create({
+      content: `Você recebeu um ticket de ${user.nome}. `,
+      link: `tickets/inbox/${ticket.id}`,
+      user: id_destinatario,
     });
 
     const { id: id_ticket } = ticket;
