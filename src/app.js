@@ -31,13 +31,6 @@ class App {
       'https://server.zware.com.br/avatar',
     ];
     const corsOptions = {
-      origin(origin, callback) {
-        if (whitelist.indexOf(origin) !== -1) {
-          callback(null, true);
-        } else {
-          callback(new Error('Not allowed by CORS'));
-        }
-      },
       exposedHeaders: [
         'Access-Control-Allow-Origin',
         'Vary',
