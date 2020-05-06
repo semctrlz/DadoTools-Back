@@ -25,7 +25,11 @@ class App {
   }
 
   cors() {
-    const whitelist = [process.env.HOST, 'https://server.zware.com.br'];
+    const whitelist = [
+      process.env.HOST,
+      'https://server.zware.com.br/',
+      'https://server.zware.com.br/avatar',
+    ];
     const corsOptions = {
       origin(origin, callback) {
         if (whitelist.indexOf(origin) !== -1) {
