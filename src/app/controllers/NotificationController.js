@@ -36,10 +36,6 @@ class NotificationController {
     return res.json(notifications);
   }
 
-  catch(err) {
-    return res.status(401).json({ error: 'Invalid Token.' });
-  }
-
   async update(req, res) {
     // const notification = await Notification.findById(req.params.id);
     const notification = await Notification.findByIdAndUpdate(

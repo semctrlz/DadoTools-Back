@@ -25,17 +25,23 @@ class App {
   }
 
   cors() {
-    this.server.use(
-      cors({
-        exposedHeaders: [
-          'Access-Control-Allow-Origin',
-          'Vary',
-          'Content-Length',
-          'X-Total-Count',
-        ],
-        origin: process.env.HOST,
-      })
-    );
+    const whitelist = [process.env.HOST, 'https://server.zware.com.br'];
+    const corsOptions = {
+      origin(origin, callback) {
+        if (whitelist.indexOf(origin) !== -1) {
+          callback(null, true);
+        } else {
+          callback(new Error('Not allowed by CORS'));
+        }
+      },
+      exposedHeaders: [
+        'Access-Control-Allow-Origin',
+        'Vary',
+        'Content-Length',
+        'X-Total-Count',
+      ],
+    };
+    this.server.use(cors(corsOptions));
   }
 
   routes() {
