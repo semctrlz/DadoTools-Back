@@ -3,9 +3,9 @@ node_modules
 src/credentials
 .env
 
-temp/uploads
+temp/uploads/avatar
 
 temp/uploads!index.js
-temp/uploads/files
+
 temp/uploads/files!logo_dadoTools.png
 
