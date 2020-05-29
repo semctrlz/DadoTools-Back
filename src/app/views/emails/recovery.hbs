@@ -1,0 +1,26 @@
+<div style="
+      padding: 20px 10px;
+      line-height: 25px;
+      ">
+      <p><strong>Olá, {{nome}}.</strong><br/></p>
+      <p>Você está recebendo esse e-mail pois houve uma solicitação de redefinição de senha no Dado Tools.</p>
+      <p>Caso você não tenha realizado esta solicitação, desconsidere este e-mail e sua continuará em segurança.</p>
+      <p>Se você realizou esta solicitação clique no link abaixo para redefinir sua senha.</p>
+      <a href='{{site}}/recovery/{{token}}' style="
+        display: block;
+        width: fit-content;
+        margin: 0 auto;
+        text-decoration: none;
+        color: #4742C9;
+        font-weight: 700;
+
+      ">REDEFINIR SENHA</a>
+      <p>OBS: Este link é válido por 10 minutos e pode ser usado apenas uma vez para a redefinição de senha. Após isso você deverá fazer uma nova solicitação.</p>
+      <p>Caso o link não esteja funcionando copie o seguinte texto abaixo (sem as aspas) e cole no navegador</p>
+      <p style="
+        font-size: 0.8em;
+        display: block;
+        width: fit-content;
+        margin: 0 auto;
+      ">"{{site}}/recovery/{{token}}"</p>
+    </div>

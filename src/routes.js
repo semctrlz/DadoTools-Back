@@ -24,6 +24,7 @@ import EncerramentoTicketController from './app/controllers/EncerramentoTicketCo
 import AnexoController from './app/controllers/AnexoController';
 import AnexoUpdateController from './app/controllers/AnexoUpdateController';
 import TicketsGruposController from './app/controllers/TicketsGruposController';
+import RecoveryController from './app/controllers/RecoveryController';
 
 import authMiddleware from './app/middlewares/auth';
 
@@ -34,6 +35,10 @@ const uploadFiles = multer(multerTickets);
 routes.post('/users', UserController.store);
 routes.post('/sessions', SessionController.store);
 routes.get('/sessions', SessionController.verify);
+
+routes.post('/recovery', RecoveryController.store);
+routes.put('/recovery', RecoveryController.alterarSenha);
+routes.get('/recovery/:token', RecoveryController.index);
 
 routes.use(authMiddleware);
 

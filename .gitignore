@@ -6,3 +6,6 @@ src/credentials
 temp/uploads
 
 temp/uploads!index.js
+temp/uploads/files
+temp/uploads/files!logo_dadoTools.png
+
