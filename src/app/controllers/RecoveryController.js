@@ -51,7 +51,7 @@ class RecoveryController {
 
       await Mail.sendMail({
         to: `${nome} <${req.body.email}>`,
-        subject: 'Teste',
+        subject: 'Recuperação de senha Dado Tools',
         template: 'recovery',
         context: {
           nome,
