@@ -33,14 +33,15 @@ class App {
       'https://server.zware.com.br/files',
     ];
     const corsOptions = {
+      AcessControlAllowOrigin: true,
       exposedHeaders: [
         'Access-Control-Allow-Origin',
         'Vary',
         'Content-Length',
         'X-Total-Count',
       ],
-      whitelist,
     };
+    this.server.header('Access-Control-Allow-Origin', '*');
     this.server.use(cors());
   }
 
