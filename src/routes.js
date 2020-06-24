@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import multer from 'multer';
-
 import multerConfig from './config/multer';
 import multerTickets from './config/multerTickets';
 import UserController from './app/controllers/UserController';
@@ -29,6 +28,8 @@ import GestaoTicketController from './app/controllers/GestaoTicketController';
 
 import authMiddleware from './app/middlewares/auth';
 
+const cors = require('cors');
+
 const routes = new Router();
 const uploadAvatar = multer(multerConfig);
 const uploadFiles = multer(multerTickets);
@@ -42,6 +43,14 @@ routes.put('/recovery', RecoveryController.alterarSenha);
 routes.get('/recovery/:token', RecoveryController.index);
 
 routes.use(authMiddleware);
+routes.use((req, res, next) => {
+  // Qual site tem permissão de realizar a conexão, no exemplo abaixo está o "*" indicando que qualquer site pode fazer a conexão
+  res.header('Access-Control-Allow-Origin', '*');
+  // Quais são os métodos que a conexão pode realizar na API
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  routes.use(cors());
+  next();
+});
 
 routes.post('/files', uploadAvatar.single('file'), FileController.store);
 

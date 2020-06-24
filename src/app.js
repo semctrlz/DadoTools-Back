@@ -41,7 +41,6 @@ class App {
         'X-Total-Count',
       ],
     };
-    this.server.header('Access-Control-Allow-Origin', '*');
     this.server.use(cors());
   }
 
