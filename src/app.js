@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -40,7 +41,7 @@ class App {
       ],
       whitelist,
     };
-    this.server.use(cors(corsOptions));
+    this.server.use(cors());
   }
 
   routes() {
