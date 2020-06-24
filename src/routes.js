@@ -43,14 +43,6 @@ routes.put('/recovery', RecoveryController.alterarSenha);
 routes.get('/recovery/:token', RecoveryController.index);
 
 routes.use(authMiddleware);
-routes.use((req, res, next) => {
-  // Qual site tem permissão de realizar a conexão, no exemplo abaixo está o "*" indicando que qualquer site pode fazer a conexão
-  res.header('Access-Control-Allow-Origin', '*');
-  // Quais são os métodos que a conexão pode realizar na API
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-  routes.use(cors());
-  next();
-});
 
 routes.post('/files', uploadAvatar.single('file'), FileController.store);
 
