@@ -33,27 +33,17 @@ class App {
       'https://server.zware.com.br/files',
     ];
     const corsOptions = {
-      AcessControlAllowOrigin: true,
+      allowedHeaders: true,
+      origin: ['https://dadotools.netlify.app/'],
       exposedHeaders: [
         'Access-Control-Allow-Origin',
         'Vary',
         'Content-Length',
         'X-Total-Count',
       ],
+      preflightContinue: true,
     };
-    this.server.use(
-      cors({
-        origin: '*',
-        allowedHeaders: true,
-        exposedHeaders: [
-          'Access-Control-Allow-Origin',
-          'Vary',
-          'Content-Length',
-          'X-Total-Count',
-        ],
-        preflightContinue: true,
-      })
-    );
+    this.server.use(cors(corsOptions));
   }
 
   routes() {
