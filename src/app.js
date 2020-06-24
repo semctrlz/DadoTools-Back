@@ -29,6 +29,7 @@ class App {
       process.env.HOST,
       'https://server.zware.com.br',
       'https://server.zware.com.br/avatar',
+      'https://server.zware.com.br/files',
     ];
     const corsOptions = {
       exposedHeaders: [
@@ -37,6 +38,7 @@ class App {
         'Content-Length',
         'X-Total-Count',
       ],
+      whitelist,
     };
     this.server.use(cors(corsOptions));
   }
