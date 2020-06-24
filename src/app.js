@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -30,7 +29,6 @@ class App {
       process.env.HOST,
       'https://server.zware.com.br',
       'https://server.zware.com.br/avatar',
-      'https://server.zware.com.br/files',
     ];
     const corsOptions = {
       exposedHeaders: [
@@ -39,6 +37,7 @@ class App {
         'Content-Length',
         'X-Total-Count',
       ],
+      origin: whitelist,
     };
     this.server.use(cors(corsOptions));
   }
