@@ -41,7 +41,19 @@ class App {
         'X-Total-Count',
       ],
     };
-    this.server.use(cors());
+    this.server.use(
+      cors({
+        origin: '*',
+        allowedHeaders: true,
+        exposedHeaders: [
+          'Access-Control-Allow-Origin',
+          'Vary',
+          'Content-Length',
+          'X-Total-Count',
+        ],
+        preflightContinue: true,
+      })
+    );
   }
 
   routes() {
