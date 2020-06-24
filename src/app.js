@@ -34,7 +34,7 @@ class App {
     ];
     const corsOptions = {
       allowedHeaders: true,
-      origin: ['https://dadotools.netlify.app/'],
+      origin: '*',
       exposedHeaders: [
         'Access-Control-Allow-Origin',
         'Vary',

@@ -28,8 +28,6 @@ import GestaoTicketController from './app/controllers/GestaoTicketController';
 
 import authMiddleware from './app/middlewares/auth';
 
-const cors = require('cors');
-
 const routes = new Router();
 const uploadAvatar = multer(multerConfig);
 const uploadFiles = multer(multerTickets);
