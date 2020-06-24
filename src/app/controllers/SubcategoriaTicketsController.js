@@ -4,6 +4,7 @@ import { Op } from 'sequelize';
 import IsTicketAdmin from '../middlewares/AdminTickets';
 
 import SubcategoriaTickets from '../models/SubcategoriaTickets';
+import CategoriaTickets from '../models/CategoriaTickets';
 
 class SubcategoriaTicketsController {
   async index(req, res) {
@@ -25,6 +26,7 @@ class SubcategoriaTicketsController {
         'nome',
         'descricao',
         'ativo',
+        'dias_prazo',
         'created_at',
         'updated_at',
       ],
@@ -38,6 +40,7 @@ class SubcategoriaTicketsController {
       id_categoria: Yup.number().required(),
       nome: Yup.string().max(64).required(),
       descricao: Yup.string().max(255),
+      dias_prazo: Yup.number().min(1),
     });
 
     if (!(await schema.isValid(req.body))) {
@@ -70,9 +73,39 @@ class SubcategoriaTicketsController {
       });
     }
 
-    const subcategoria = await SubcategoriaTickets.create(req.body);
+    await SubcategoriaTickets.create(req.body);
 
-    return res.json(subcategoria);
+    const categorias = await CategoriaTickets.findAll({
+      order: [['nome']],
+      attributes: [
+        'id',
+        'nome',
+        'descricao',
+        'ativo',
+        'created_at',
+        'updated_at',
+      ],
+      include: [
+        {
+          model: SubcategoriaTickets,
+          as: 'subcategorias',
+          order: [['nome']],
+          attributes: [
+            'id',
+            'nome',
+            'descricao',
+            'ativo',
+            'dias_prazo',
+            'created_at',
+            'updated_at',
+          ],
+          separate: true,
+          required: false,
+        },
+      ],
+    });
+
+    return res.json(categorias);
   }
 
   async delete(req, res) {
@@ -95,7 +128,38 @@ class SubcategoriaTicketsController {
         id: req.query.id_subcategoria,
       },
     });
-    return res.json({ message: 'Subcategoria deletada com sucesso!' });
+
+    const categorias = await CategoriaTickets.findAll({
+      order: [['nome']],
+      attributes: [
+        'id',
+        'nome',
+        'descricao',
+        'ativo',
+        'created_at',
+        'updated_at',
+      ],
+      include: [
+        {
+          model: SubcategoriaTickets,
+          as: 'subcategorias',
+          order: [['nome']],
+          attributes: [
+            'id',
+            'nome',
+            'descricao',
+            'ativo',
+            'dias_prazo',
+            'created_at',
+            'updated_at',
+          ],
+          separate: true,
+          required: false,
+        },
+      ],
+    });
+
+    return res.json(categorias);
   }
 
   async update(req, res) {
@@ -140,10 +204,13 @@ class SubcategoriaTicketsController {
       });
     }
 
+    const { dias_prazo = 1 } = req.body;
+
     await SubcategoriaTickets.update(
       {
         nome: req.body.nome,
         descricao: req.body.descricao,
+        dias_prazo,
         ativo:
           req.body.ativo !== null
             ? req.body.ativo
@@ -154,9 +221,37 @@ class SubcategoriaTicketsController {
       }
     );
 
-    const novos_dados = await SubcategoriaTickets.findByPk(req.body.id);
+    const categorias = await CategoriaTickets.findAll({
+      order: [['nome']],
+      attributes: [
+        'id',
+        'nome',
+        'descricao',
+        'ativo',
+        'created_at',
+        'updated_at',
+      ],
+      include: [
+        {
+          model: SubcategoriaTickets,
+          as: 'subcategorias',
+          order: [['nome']],
+          attributes: [
+            'id',
+            'nome',
+            'descricao',
+            'ativo',
+            'dias_prazo',
+            'created_at',
+            'updated_at',
+          ],
+          separate: true,
+          required: false,
+        },
+      ],
+    });
 
-    return res.json(novos_dados);
+    return res.json(categorias);
   }
 }
 

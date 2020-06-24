@@ -11,6 +11,15 @@ class Ticket extends Model {
         prioridade: Sequelize.STRING,
         assunto: Sequelize.STRING,
         prazo: Sequelize.DATE,
+        vencido: {
+          type: Sequelize.VIRTUAL,
+          get() {
+            if (this.prazo) {
+              return new Date(this.prazo) < new Date();
+            }
+            return false;
+          },
+        },
         texto: Sequelize.STRING,
         status: Sequelize.STRING,
         prioridade_ext: {
@@ -25,6 +34,21 @@ class Ticket extends Model {
                 return 'Alta';
               default:
                 return 'Normal';
+            }
+          },
+        },
+        prioridade_num: {
+          type: Sequelize.VIRTUAL,
+          get() {
+            switch (this.prioridade) {
+              case 'U':
+                return 1;
+              case 'B':
+                return 4;
+              case 'A':
+                return 2;
+              default:
+                return 3;
             }
           },
         },

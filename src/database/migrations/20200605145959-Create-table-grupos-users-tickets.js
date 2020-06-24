@@ -1,35 +1,29 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('subcategoria_tickets', {
+    return queryInterface.createTable('grupo_user_tickets', {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
       },
-      nome: {
-        type: Sequelize.STRING(30),
-        allowNull: false,
-      },
-      descricao: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      id_categoria: {
+
+      id_usuario: {
         type: Sequelize.INTEGER,
-        references: { model: 'categoria_tickets', key: 'id' },
+        references: { model: 'users', key: 'id' },
         onDelete: 'cascade',
         onUpdate: 'no action',
       },
-      ativo: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
-        defaultValue: true,
+      id_grupo: {
+        type: Sequelize.INTEGER,
+        references: { model: 'tickets_grupos', key: 'id' },
+        onDelete: 'cascade',
+        onUpdate: 'no action',
       },
-      dias_prazo: {
+      nivel: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        defaultValue: 1,
+        default_value: 0,
       },
       created_at: {
         type: Sequelize.DATE,
@@ -43,6 +37,6 @@ module.exports = {
   },
 
   down: (queryInterface) => {
-    return queryInterface.dropTable('subcategoria_tickets');
+    return queryInterface.dropTable('grupo_user_tickets');
   },
 };

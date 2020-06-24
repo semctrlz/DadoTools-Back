@@ -20,11 +20,11 @@ module.exports = {
         onUpdate: 'no action',
       },
       categoria: {
-        type: Sequelize.STRING(20),
+        type: Sequelize.STRING(50),
         allowNull: false,
       },
       subcategoria: {
-        type: Sequelize.STRING(20),
+        type: Sequelize.STRING(50),
         allowNull: true,
       },
       prioridade: {

@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import { Op } from 'sequelize';
+import { parseISO, format } from 'date-fns';
 import Ticket from '../models/Ticket';
 import TicketsFile from '../models/TicketsFile';
 import TicketsFormatado from '../models/TicketsFormatado';
@@ -10,6 +11,7 @@ import TicketsUpdatesFormatados from '../models/TicketsUpdatesFormatados';
 import UserApp from '../models/UserApp';
 import TicketsUpdatesFile from '../models/TicketsUpdatesFile';
 import Notification from '../schemas/Notification';
+import Mail from '../../utils/Mailer';
 
 class TicketsController {
   async index(req, res) {
@@ -92,9 +94,9 @@ class TicketsController {
       ),
       categoria: Yup.string('Formato inválido')
         .required('Campo obrigatório')
-        .max(20, 'Tamanho máximo para o campo: 20 caracteres.'),
+        .max(50, 'Tamanho máximo para o campo: 20 caracteres.'),
       subcategoria: Yup.string('Formato inválido').max(
-        20,
+        50,
         'Tamanho máximo para o campo: 20 caracteres.'
       ),
       prioridade: Yup.string('Formato inválido')
@@ -153,6 +155,42 @@ class TicketsController {
       content: `Você recebeu um ticket de ${user.nome}. `,
       link: `tickets/inbox/${ticket.id}`,
       user: id_destinatario,
+    });
+
+    const userDest = await User.findByPk(id_destinatario);
+
+    let priori = 'Normal';
+
+    switch (prioridade) {
+      case 'U':
+        priori = 'Urgente';
+        break;
+      case 'B':
+        priori = 'Baixa';
+        break;
+      case 'A':
+        priori = 'Alta';
+        break;
+      default:
+        priori = 'Normal';
+        break;
+    }
+
+    await Mail.sendMail({
+      to: `${userDest.nome} <${userDest.email}>`,
+      subject: 'Você recebeu um ticket',
+      template: 'NewTicket',
+      context: {
+        nome: userDest.nome,
+        titulo: assunto,
+        body: texto,
+        link: `${process.env.HOST}/tickets/inbox/${ticket.id}`,
+        categoria,
+        subcategoria,
+        prioridade: priori,
+        prazo: format(parseISO(prazo), 'dd/MM/YYY HH:mm'),
+        criador: user.nome,
+      },
     });
 
     const { id: id_ticket } = ticket;
@@ -222,6 +260,18 @@ class TicketsController {
         email,
         password,
         cargo,
+      });
+
+      await Mail.sendMail({
+        to: `${nome} <${email}>`,
+        subject: 'Novo acesso Dado Tools',
+        template: 'newUser',
+        context: {
+          nome,
+          link: `${process.env.HOST}`,
+          email,
+          senha: password,
+        },
       });
     }
 

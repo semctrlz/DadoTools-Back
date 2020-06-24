@@ -42,13 +42,6 @@ module.exports = {
         allowNull: false,
         defaultValue: false,
       },
-
-      id_grupo: {
-        type: Sequelize.INTEGER,
-        references: { model: 'tickets_grupos', key: 'id' },
-        onDelete: 'set null',
-        onUpdate: 'no action',
-      },
       is_ativo: {
         type: Sequelize.BOOLEAN,
         allowNull: false,

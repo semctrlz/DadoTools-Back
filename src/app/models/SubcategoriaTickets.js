@@ -7,6 +7,7 @@ class SubcategoriaTickets extends Model {
         nome: Sequelize.STRING,
         descricao: Sequelize.STRING,
         ativo: Sequelize.BOOLEAN,
+        dias_prazo: Sequelize.NUMBER,
       },
       {
         sequelize,

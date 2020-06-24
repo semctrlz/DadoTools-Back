@@ -1,38 +1,38 @@
 module.exports = {
-  up: (queryInterface, Sequelize) => {
+  up: (queryInterface) => {
     return queryInterface.bulkInsert('user_apps', [
       {
         id_usuario: 1,
         id_app: 1,
-        is_admin: true,
+        nivel: 5,
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
         id_usuario: 1,
         id_app: 2,
-        is_admin: true,
+        nivel: 5,
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
         id_usuario: 2,
         id_app: 1,
-        is_admin: true,
+        nivel: 1,
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
         id_usuario: 2,
         id_app: 2,
-        is_admin: true,
+        nivel: 1,
         created_at: new Date(),
         updated_at: new Date(),
       },
     ]);
   },
 
-  down: (queryInterface, Sequelize) => {
+  down: (queryInterface) => {
     return queryInterface.bulkDelete('user_apps', null, {});
   },
 };

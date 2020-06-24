@@ -4,5 +4,4 @@ import databaseConfig from '../config/database';
 
 class Raw extends Sequelize {}
 
-export default new Raw();
-sequelize = new Sequelize(databaseConfig);
+export default new Raw(databaseConfig);

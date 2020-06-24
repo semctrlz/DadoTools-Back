@@ -36,6 +36,12 @@ class User extends Model {
       as: 'dadosUsuario',
     });
     this.hasOne(models.UserApp, { foreignKey: 'id_usuario', as: 'userApp' });
+
+    this.hasMany(models.GrupoUserTicket, {
+      foreignKey: 'id_usuario',
+      as: 'user_grupo',
+    });
+
     this.hasMany(models.Ticket, { foreignKey: 'id_usuario', as: 'criador' });
     this.hasMany(models.Ticket, {
       foreignKey: 'id_destinatario',
@@ -56,10 +62,6 @@ class User extends Model {
     this.hasMany(models.TicketsGrupos, {
       foreignKey: 'id_usuario',
       as: 'criador_grupo',
-    });
-    this.belongsTo(models.TicketsGrupos, {
-      foreignKey: 'id_grupo',
-      as: 'componentes_grupo',
     });
   }
 

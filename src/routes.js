@@ -25,6 +25,7 @@ import AnexoController from './app/controllers/AnexoController';
 import AnexoUpdateController from './app/controllers/AnexoUpdateController';
 import TicketsGruposController from './app/controllers/TicketsGruposController';
 import RecoveryController from './app/controllers/RecoveryController';
+import GestaoTicketController from './app/controllers/GestaoTicketController';
 
 import authMiddleware from './app/middlewares/auth';
 
@@ -94,10 +95,11 @@ routes.post('/tickets', TicketsController.store);
 routes.put('/tickets/prazo', TicketsController.alterarPrazo);
 
 routes.post(
-  '/tickets/anexos/:id_ticket',
+  '/tickets/anexos',
   uploadFiles.single('file'),
   AnexoController.store
 );
+routes.delete('/tickets/anexos', AnexoController.delete);
 
 routes.get('/tickets/inbox/:id', UserTicketsController.get_received);
 routes.get('/tickets/inbox', UserTicketsController.inbox);
@@ -129,6 +131,22 @@ routes.post(
 );
 
 routes.get('/tickets/grupos', TicketsGruposController.index);
+routes.post('/tickets/grupos/owner', TicketsGruposController.owner);
 routes.post('/tickets/grupos', TicketsGruposController.store);
+routes.put('/tickets/grupos', TicketsGruposController.update);
+routes.delete('/tickets/grupos', TicketsGruposController.delete);
+routes.post('/tickets/componentes', TicketsGruposController.addMembers);
+routes.delete('/tickets/componentes', TicketsGruposController.removeMembers);
+routes.put('/tickets/componentes', TicketsGruposController.updateMember);
+
+routes.get('/tickets/gestao/inbox/:id', GestaoTicketController.inbox);
+routes.get('/tickets/gestao/enviados/:id', GestaoTicketController.enviados);
+routes.get('/tickets/gestao/concluidos/:id', GestaoTicketController.concluidos);
+
+routes.get('/tickets/gestao/historico/:id', GestaoTicketController.historico);
+routes.get(
+  '/tickets/historico/:id/filtro',
+  UserTicketsController.historico_filtro
+);
 
 module.exports = routes;

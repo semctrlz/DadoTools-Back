@@ -11,15 +11,59 @@ import TicketsUpdatesFormatados from '../models/TicketsUpdatesFormatados';
 import AvaliacaoTicket from '../models/AvaliacaoTicket';
 import EncerramentoTicket from '../models/EncerramentoTicket';
 import TicketsUpdatesFile from '../models/TicketsUpdatesFile';
+import TicketsGrupos from '../models/TicketsGrupos';
+import GrupoUserTicket from '../models/GrupoUserTicket';
 
 class UserTicketsController {
   async inbox(req, res) {
+    const schema = Yup.object().shape({
+      id: Yup.number().required(),
+    });
+
+    if (!(await schema.isValid(req.params))) {
+      return res.status(400).json({ error: 'Validation fails' });
+    }
+
+    const idGrupos = await GrupoUserTicket.findAll({
+      where: {
+        [Op.and]: [{ id_usuario: req.idUsuario }, { nivel: { [Op.gte]: 3 } }],
+      },
+      attributes: ['id_grupo'],
+    });
+
+    const ids = [];
+    idGrupos.forEach((idg) => {
+      ids.push(idg.id_grupo);
+    });
+
+    // Verificar se o usuário que está solicitando é gestor do usuário solicitado
+
+    const grupos = await TicketsGrupos.findAll({
+      attributes: ['id', 'nome', 'descricao'],
+      where: { id: ids },
+      include: [
+        {
+          where: {
+            id_usuario: req.params.id,
+          },
+          model: GrupoUserTicket,
+          as: 'componentes',
+          attributes: ['nivel'],
+          required: false,
+        },
+      ],
+    });
+
+    if (grupos.length === 0) {
+      return res.json({ error: 'Não tem acesso' });
+    }
+
     // Lista os tickets, anexos, texto formatado, criador e destinatário
     const tickets = await Ticket.findAll({
       where: {
         [Op.and]: [
           {
-            id_destinatario: req.idUsuario,
+            id_destinatario: req.params.id,
           },
           {
             status: 'I',
@@ -99,7 +143,11 @@ class UserTicketsController {
       ],
     });
 
-    return res.json(tickets);
+    const usuario = await User.findByPk(req.params.id, {
+      attributes: ['nome', 'sobrenome'],
+    });
+
+    return res.json({ tickets, usuario });
   }
 
   async get_received(req, res) {
@@ -111,16 +159,14 @@ class UserTicketsController {
       return res.status(400).json({ error: 'Validation fails' });
     }
 
-    // Verificar se o usuário que está solicitando é gestor do usuário solicitado
-
-    const ticket = await Ticket.findOne({
+    const tickets = await Ticket.findOne({
       where: {
         [Op.and]: [
           {
             id: req.params.id,
           },
           {
-            id_destinatario: req.idUsuario,
+            id_destinatario: req.params.id,
           },
           { status: 'I' },
         ],
@@ -196,10 +242,13 @@ class UserTicketsController {
         },
       ],
     });
-    if (ticket) {
-      return res.json(ticket);
-    }
+    if (tickets) {
+      const usuario = await User.findByPk(req.params.id, {
+        attributes: ['nome', 'sobrenome'],
+      });
 
+      return res.json({ tickets, usuario });
+    }
     return res.status(401).json({
       message: 'Não existe ticket com este número. Verifique.',
     });
@@ -207,11 +256,53 @@ class UserTicketsController {
 
   async enviados(req, res) {
     // Lista os tickets, anexos, texto formatado, criador e destinatário
+    const schema = Yup.object().shape({
+      id: Yup.number().required(),
+    });
+
+    if (!(await schema.isValid(req.params))) {
+      return res.status(400).json({ error: 'Validation fails' });
+    }
+
+    const idGrupos = await GrupoUserTicket.findAll({
+      where: {
+        [Op.and]: [{ id_usuario: req.idUsuario }, { nivel: { [Op.gte]: 3 } }],
+      },
+      attributes: ['id_grupo'],
+    });
+
+    const ids = [];
+    idGrupos.forEach((idg) => {
+      ids.push(idg.id_grupo);
+    });
+
+    // Verificar se o usuário que está solicitando é gestor do usuário solicitado
+
+    const grupos = await TicketsGrupos.findAll({
+      attributes: ['id', 'nome', 'descricao'],
+      where: { id: ids },
+      include: [
+        {
+          where: {
+            id_usuario: req.params.id,
+          },
+          model: GrupoUserTicket,
+          as: 'componentes',
+          attributes: ['nivel'],
+          required: false,
+        },
+      ],
+    });
+
+    if (grupos.length === 0) {
+      return res.json({ error: 'Não tem acesso' });
+    }
+
     const tickets = await Ticket.findAll({
       where: {
         [Op.and]: [
           {
-            id_usuario: req.idUsuario,
+            id_usuario: req.params.id,
           },
           {
             status: 'I',
@@ -291,7 +382,11 @@ class UserTicketsController {
       ],
     });
 
-    return res.json(tickets);
+    const usuario = await User.findByPk(req.params.id, {
+      attributes: ['nome', 'sobrenome'],
+    });
+
+    return res.json({ tickets, usuario });
   }
 
   async get_sent(req, res) {
@@ -497,13 +592,55 @@ class UserTicketsController {
   }
 
   async concluidos(req, res) {
+    const schema = Yup.object().shape({
+      id: Yup.number().required(),
+    });
+
+    if (!(await schema.isValid(req.params))) {
+      return res.status(400).json({ error: 'Validation fails' });
+    }
+
+    const idGrupos = await GrupoUserTicket.findAll({
+      where: {
+        [Op.and]: [{ id_usuario: req.idUsuario }, { nivel: { [Op.gte]: 3 } }],
+      },
+      attributes: ['id_grupo'],
+    });
+
+    const ids = [];
+    idGrupos.forEach((idg) => {
+      ids.push(idg.id_grupo);
+    });
+
+    // Verificar se o usuário que está solicitando é gestor do usuário solicitado
+
+    const grupos = await TicketsGrupos.findAll({
+      attributes: ['id', 'nome', 'descricao'],
+      where: { id: ids },
+      include: [
+        {
+          where: {
+            id_usuario: req.params.id,
+          },
+          model: GrupoUserTicket,
+          as: 'componentes',
+          attributes: ['nivel'],
+          required: false,
+        },
+      ],
+    });
+
+    if (grupos.length === 0) {
+      return res.json({ error: 'Não tem acesso' });
+    }
+
     const { page = 1 } = req.query;
     const registrosPorPagina = 20;
 
     const quantidade = await Ticket.count({
       where: {
         [Op.and]: [
-          { id_usuario: req.idUsuario },
+          { id_usuario: req.params.id },
           { [Op.or]: [{ status: 'F' }, { status: 'S' }] },
         ],
       },
@@ -513,7 +650,7 @@ class UserTicketsController {
     const tickets = await Ticket.findAll({
       where: {
         [Op.and]: [
-          { id_usuario: req.idUsuario },
+          { id_usuario: req.params.id },
 
           { [Op.or]: [{ status: 'F' }, { status: 'S' }] },
         ],
@@ -552,7 +689,11 @@ class UserTicketsController {
       ],
     });
 
-    return res.header('X-Total-Count', quantidade).json(tickets);
+    const usuario = await User.findByPk(req.params.id, {
+      attributes: ['nome', 'sobrenome'],
+    });
+
+    return res.header('X-Total-Count', quantidade).json({ tickets, usuario });
   }
 
   async concluidos_filtro(req, res) {
@@ -570,7 +711,7 @@ class UserTicketsController {
     const quantidade = await Ticket.count({
       where: {
         [Op.and]: [
-          { id_usuario: req.idUsuario },
+          { id_usuario: req.params.id },
           { [Op.or]: [{ status: 'F' }, { status: 'S' }] },
           {
             [Op.or]: [
@@ -619,7 +760,7 @@ class UserTicketsController {
     const tickets = await Ticket.findAll({
       where: {
         [Op.and]: [
-          { id_usuario: req.idUsuario },
+          { id_usuario: req.params.id },
 
           { [Op.or]: [{ status: 'F' }, { status: 'S' }] },
           {
@@ -681,28 +822,72 @@ class UserTicketsController {
         },
       ],
     });
+    const usuario = await User.findByPk(req.params.id, {
+      attributes: ['nome', 'sobrenome'],
+    });
 
-    return res.header('X-Total-Count', quantidade).json(tickets);
+    return res.header('X-Total-Count', quantidade).json({ tickets, usuario });
   }
 
   async historico(req, res) {
+    const schema = Yup.object().shape({
+      id: Yup.number().required(),
+    });
+
+    if (!(await schema.isValid(req.params))) {
+      return res.status(400).json({ error: 'Validation fails' });
+    }
+
+    const idGrupos = await GrupoUserTicket.findAll({
+      where: {
+        [Op.and]: [{ id_usuario: req.idUsuario }, { nivel: { [Op.gte]: 3 } }],
+      },
+      attributes: ['id_grupo'],
+    });
+
+    const ids = [];
+    idGrupos.forEach((idg) => {
+      ids.push(idg.id_grupo);
+    });
+
+    // Verificar se o usuário que está solicitando é gestor do usuário solicitado
+
+    const grupos = await TicketsGrupos.findAll({
+      attributes: ['id', 'nome', 'descricao'],
+      where: { id: ids },
+      include: [
+        {
+          where: {
+            id_usuario: req.params.id,
+          },
+          model: GrupoUserTicket,
+          as: 'componentes',
+          attributes: ['nivel'],
+          required: false,
+        },
+      ],
+    });
+
+    if (grupos.length === 0) {
+      return res.json({ error: 'Não tem acesso' });
+    }
+
     const { page = 1 } = req.query;
     const registrosPorPagina = 20;
 
     const quantidade = await Ticket.count({
       where: {
         [Op.and]: [
-          { id_destinatario: req.idUsuario },
+          { id_destinatario: req.params.id },
           { [Op.or]: [{ status: 'F' }, { status: 'S' }] },
         ],
       },
     });
-    res.header('X-Total-Count', quantidade);
 
     const tickets = await Ticket.findAll({
       where: {
         [Op.and]: [
-          { id_destinatario: req.idUsuario },
+          { id_destinatario: req.params.id },
 
           { [Op.or]: [{ status: 'F' }, { status: 'S' }] },
         ],
@@ -741,7 +926,11 @@ class UserTicketsController {
       ],
     });
 
-    return res.header('X-Total-Count', quantidade).json(tickets);
+    const usuario = await User.findByPk(req.params.id, {
+      attributes: ['nome', 'sobrenome'],
+    });
+
+    return res.header('X-Total-Count', quantidade).json({ tickets, usuario });
   }
 
   async historico_filtro(req, res) {
@@ -759,7 +948,7 @@ class UserTicketsController {
     const quantidade = await Ticket.count({
       where: {
         [Op.and]: [
-          { id_destinatario: req.idUsuario },
+          { id_destinatario: req.params.id },
           { [Op.or]: [{ status: 'F' }, { status: 'S' }] },
           {
             [Op.or]: [
@@ -803,12 +992,11 @@ class UserTicketsController {
         },
       ],
     });
-    res.header('X-Total-Count', quantidade);
 
     const tickets = await Ticket.findAll({
       where: {
         [Op.and]: [
-          { id_destinatario: req.idUsuario },
+          { id_destinatario: req.params.id },
 
           { [Op.or]: [{ status: 'F' }, { status: 'S' }] },
           {

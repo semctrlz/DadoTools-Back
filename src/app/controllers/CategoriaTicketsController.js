@@ -9,9 +9,6 @@ import SubcategoriaTickets from '../models/SubcategoriaTickets';
 class CategoriaTicketsController {
   async index(req, res) {
     const categorias = await CategoriaTickets.findAll({
-      where: {
-        ativo: true,
-      },
       order: [['nome']],
       attributes: [
         'id',
@@ -25,13 +22,13 @@ class CategoriaTicketsController {
         {
           model: SubcategoriaTickets,
           as: 'subcategorias',
-          where: { ativo: true },
           order: [['nome']],
           attributes: [
             'id',
             'nome',
             'descricao',
             'ativo',
+            'dias_prazo',
             'created_at',
             'updated_at',
           ],
@@ -76,9 +73,39 @@ class CategoriaTicketsController {
       });
     }
 
-    const categoria = await CategoriaTickets.create(req.body);
+    await CategoriaTickets.create(req.body);
 
-    return res.json(categoria);
+    const categorias = await CategoriaTickets.findAll({
+      order: [['nome']],
+      attributes: [
+        'id',
+        'nome',
+        'descricao',
+        'ativo',
+        'created_at',
+        'updated_at',
+      ],
+      include: [
+        {
+          model: SubcategoriaTickets,
+          as: 'subcategorias',
+          order: [['nome']],
+          attributes: [
+            'id',
+            'nome',
+            'descricao',
+            'ativo',
+            'dias_prazo',
+            'created_at',
+            'updated_at',
+          ],
+          separate: true,
+          required: false,
+        },
+      ],
+    });
+
+    return res.json(categorias);
   }
 
   async delete(req, res) {
@@ -100,12 +127,43 @@ class CategoriaTicketsController {
         .json({ error: 'Você não tem permissão para essa operação.' });
     }
 
-    CategoriaTickets.destroy({
+    await CategoriaTickets.destroy({
       where: {
         id: req.query.id_categoria,
       },
     });
-    return res.json({ message: 'Categoria deletada com sucesso!' });
+
+    const categorias = await CategoriaTickets.findAll({
+      order: [['nome']],
+      attributes: [
+        'id',
+        'nome',
+        'descricao',
+        'ativo',
+        'created_at',
+        'updated_at',
+      ],
+      include: [
+        {
+          model: SubcategoriaTickets,
+          as: 'subcategorias',
+          order: [['nome']],
+          attributes: [
+            'id',
+            'nome',
+            'descricao',
+            'ativo',
+            'dias_prazo',
+            'created_at',
+            'updated_at',
+          ],
+          separate: true,
+          required: false,
+        },
+      ],
+    });
+
+    return res.json(categorias);
   }
 
   async update(req, res) {
@@ -160,9 +218,37 @@ class CategoriaTicketsController {
       }
     );
 
-    const novos_dados = await CategoriaTickets.findByPk(req.body.id);
+    const categorias = await CategoriaTickets.findAll({
+      order: [['nome']],
+      attributes: [
+        'id',
+        'nome',
+        'descricao',
+        'ativo',
+        'created_at',
+        'updated_at',
+      ],
+      include: [
+        {
+          model: SubcategoriaTickets,
+          as: 'subcategorias',
+          order: [['nome']],
+          attributes: [
+            'id',
+            'nome',
+            'descricao',
+            'ativo',
+            'dias_prazo',
+            'created_at',
+            'updated_at',
+          ],
+          separate: true,
+          required: false,
+        },
+      ],
+    });
 
-    return res.json(novos_dados);
+    return res.json(categorias);
   }
 }
 
