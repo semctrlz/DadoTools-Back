@@ -34,7 +34,7 @@ class App {
     ];
     const corsOptions = {
       allowedHeaders: true,
-      origin: '*',
+      origin: process.env.HOST,
       exposedHeaders: [
         'Access-Control-Allow-Origin',
         'Vary',
