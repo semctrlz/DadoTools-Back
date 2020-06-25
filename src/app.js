@@ -34,7 +34,6 @@ class App {
 
     const corsOptions = {
       Origin: [whitelist],
-      allowedHeaders: ['Access-Control-Allow-Origin'],
       exposedHeaders: [
         'Access-Control-Allow-Origin',
         'Vary',
