@@ -29,8 +29,10 @@ class App {
       process.env.HOST,
       'https://server.zware.com.br',
       'https://server.zware.com.br/avatar',
+      'https://dadotools.netlify.app/',
     ];
     const corsOptions = {
+      Origin: [whitelist],
       exposedHeaders: [
         'Access-Control-Allow-Origin',
         'Vary',
