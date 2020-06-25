@@ -37,7 +37,6 @@ class App {
         'Content-Length',
         'X-Total-Count',
       ],
-      origin: whitelist,
     };
     this.server.use(cors(corsOptions));
   }
