@@ -31,6 +31,7 @@ class App {
       'https://server.zware.com.br/avatar',
       'https://dadotools.netlify.app/',
     ];
+
     const corsOptions = {
       Origin: [whitelist],
       exposedHeaders: [
