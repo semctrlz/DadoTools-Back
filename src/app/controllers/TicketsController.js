@@ -116,6 +116,9 @@ class TicketsController {
       texto_json: Yup.string('Formato inválido').required(
         'O campo é obrigatório'
       ),
+      anexo1: Yup.string(),
+      anexo2: Yup.string(),
+      anexo3: Yup.string(),
     });
 
     // const validate = await schema.validate(req.body, {
@@ -199,6 +202,25 @@ class TicketsController {
       id_ticket,
       texto_json,
     });
+
+    if (req.body.anexo1) {
+      await TicketsFile.create({
+        id_ticket,
+        id_anexo: req.body.anexo1,
+      });
+    }
+    if (req.body.anexo2) {
+      await TicketsFile.create({
+        id_ticket,
+        id_anexo: req.body.anexo2,
+      });
+    }
+    if (req.body.anexo3) {
+      await TicketsFile.create({
+        id_ticket,
+        id_anexo: req.body.anexo3,
+      });
+    }
 
     return res.json(ticket);
   }

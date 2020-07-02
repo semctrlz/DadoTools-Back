@@ -2,6 +2,8 @@ import { Router } from 'express';
 import multer from 'multer';
 import multerConfig from './config/multer';
 import multerTickets from './config/multerTickets';
+import multerS3 from './config/multerS3';
+
 import UserController from './app/controllers/UserController';
 import SessionController from './app/controllers/SessionController';
 import FileController from './app/controllers/FileController';
@@ -20,17 +22,19 @@ import TicketsController from './app/controllers/TicketsController';
 import UserTicketsController from './app/controllers/UserTicketsController';
 import TicketUpdatesController from './app/controllers/TicketUpdatesController';
 import EncerramentoTicketController from './app/controllers/EncerramentoTicketController';
-import AnexoController from './app/controllers/AnexoController';
 import AnexoUpdateController from './app/controllers/AnexoUpdateController';
 import TicketsGruposController from './app/controllers/TicketsGruposController';
 import RecoveryController from './app/controllers/RecoveryController';
 import GestaoTicketController from './app/controllers/GestaoTicketController';
+import AnexoController from './app/controllers/AnexoController';
+import UploadS3Controller from './app/controllers/UploadS3Controller';
 
 import authMiddleware from './app/middlewares/auth';
 
 const routes = new Router();
 const uploadAvatar = multer(multerConfig);
 const uploadFiles = multer(multerTickets);
+const uploadS3 = multer(multerS3);
 
 routes.post('/users', UserController.store);
 routes.post('/sessions', SessionController.store);
@@ -98,6 +102,11 @@ routes.post(
   uploadFiles.single('file'),
   AnexoController.store
 );
+
+routes.post('/upload', uploadS3.single('file'), UploadS3Controller.store);
+routes.delete('/upload/:id', UploadS3Controller.delete);
+routes.get('/upload', UploadS3Controller.index);
+
 routes.delete('/tickets/anexos', AnexoController.delete);
 
 routes.get('/tickets/inbox/:id', UserTicketsController.get_received);

@@ -5,16 +5,7 @@ class TicketsFile extends Model {
     super.init(
       {
         id_ticket: Sequelize.INTEGER,
-        path: Sequelize.STRING,
-        nome: Sequelize.STRING,
-        tipo: Sequelize.STRING,
-        tamanho: Sequelize.STRING,
-        url: {
-          type: Sequelize.VIRTUAL,
-          get() {
-            return `${process.env.SITE}/files/${this.path}`;
-          },
-        },
+        id_anexo: Sequelize.STRING,
       },
       {
         sequelize,
