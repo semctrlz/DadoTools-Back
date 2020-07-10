@@ -268,7 +268,7 @@ class TicketUpdatesController {
       usuario = ticketBase.destinatario;
     }
 
-    await Mail.sendMail({
+    Mail.sendMail({
       to: `${usuario.nome} <${usuario.email}>`,
       subject: 'Atualização em um ticket',
       template: 'UpdateTicket',
