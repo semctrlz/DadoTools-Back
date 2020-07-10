@@ -1,12 +1,11 @@
 import * as Yup from 'yup';
 import { Op } from 'sequelize';
 
-import { parseISO, format } from 'date-fns';
 import Ticket from '../models/Ticket';
 // import TicketsFile from '../models/TicketsFile';
 import User from '../models/User';
 import File from '../models/File';
-import TicketsFormatado from '../models/TicketsFormatado';
+
 import TicketsUpdates from '../models/TicketsUpdates';
 import TicketsUpdatesFormatados from '../models/TicketsUpdatesFormatados';
 import TicketsUpdatesFile from '../models/TicketsUpdatesFile';
