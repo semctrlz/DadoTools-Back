@@ -148,8 +148,14 @@ routes.delete('/tickets/componentes', TicketsGruposController.removeMembers);
 routes.put('/tickets/componentes', TicketsGruposController.updateMember);
 
 routes.get('/tickets/gestao/inbox/:id', GestaoTicketController.inbox);
+routes.get('/tickets/gestao/sent/:id', GestaoTicketController.get_sent);
+routes.get('/tickets/gestao/received/:id', GestaoTicketController.get_received);
 routes.get('/tickets/gestao/enviados/:id', GestaoTicketController.enviados);
 routes.get('/tickets/gestao/concluidos/:id', GestaoTicketController.concluidos);
+routes.get(
+  '/tickets/gestao/conclude/:id',
+  GestaoTicketController.get_concluidos
+);
 
 routes.get('/tickets/gestao/historico/:id', GestaoTicketController.historico);
 routes.get(

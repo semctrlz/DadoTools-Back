@@ -41,6 +41,7 @@ export default {
   },
   fileFilter: (req, file, cb) => {
     const allowedMimes = [
+      'text/plain',
       'image/jpeg',
       'image/pjpeg',
       'image/png',

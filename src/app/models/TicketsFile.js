@@ -6,6 +6,9 @@ class TicketsFile extends Model {
       {
         id_ticket: Sequelize.INTEGER,
         id_anexo: Sequelize.STRING,
+        nome: Sequelize.STRING,
+        size: Sequelize.NUMBER,
+        url: Sequelize.STRING,
       },
       {
         sequelize,

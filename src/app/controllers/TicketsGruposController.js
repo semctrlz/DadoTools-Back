@@ -1,4 +1,4 @@
-import Sequelize, { Op } from 'sequelize';
+import { Op } from 'sequelize';
 import * as Yup from 'yup';
 import TicketsGrupos from '../models/TicketsGrupos';
 import User from '../models/User';

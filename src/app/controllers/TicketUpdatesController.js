@@ -1,14 +1,17 @@
 import * as Yup from 'yup';
 import { Op } from 'sequelize';
 
+import { parseISO, format } from 'date-fns';
 import Ticket from '../models/Ticket';
 // import TicketsFile from '../models/TicketsFile';
 import User from '../models/User';
 import File from '../models/File';
+import TicketsFormatado from '../models/TicketsFormatado';
 import TicketsUpdates from '../models/TicketsUpdates';
 import TicketsUpdatesFormatados from '../models/TicketsUpdatesFormatados';
 import TicketsUpdatesFile from '../models/TicketsUpdatesFile';
 import Notification from '../schemas/Notification';
+import Mail from '../../utils/Mailer';
 
 class TicketUpdatesController {
   async index(req, res) {
@@ -133,6 +136,9 @@ class TicketUpdatesController {
       texto_json: Yup.string('Formato inválido').required(
         'O campo texto_json é obrigatório'
       ),
+      anexo1: Yup.object(),
+      anexo2: Yup.object(),
+      anexo3: Yup.object(),
     });
 
     // const validate = await schema.validate(req.body, {
@@ -235,6 +241,59 @@ class TicketUpdatesController {
       link,
       user: idUsuarioNot,
     });
+
+    if (req.body.anexo1) {
+      await TicketsUpdatesFile.create({
+        id_update: id_ticket_update,
+        id_anexo: req.body.anexo1.idupload,
+        nome: req.body.anexo1.nome,
+        size: req.body.anexo1.tamanho,
+        url: req.body.anexo1.url,
+      });
+    }
+
+    if (req.body.anexo2) {
+      await TicketsUpdatesFile.create({
+        id_update: id_ticket_update,
+        id_anexo: req.body.anexo2.idupload,
+        nome: req.body.anexo2.nome,
+        size: req.body.anexo2.tamanho,
+        url: req.body.anexo2.url,
+      });
+    }
+    let usuario = {};
+
+    if (ticketBase.id_usuario !== req.idUsuario) {
+      usuario = ticketBase.criador;
+    } else {
+      usuario = ticketBase.destinatario;
+    }
+
+    Mail.sendMail({
+      to: `${usuario.nome} <${usuario.email}>`,
+      subject: 'Atualização em um ticket',
+      template: 'UpdateTicket',
+      context: {
+        nome: ticketBase.destinatario.nome,
+        titulo: ticketBase.assunto,
+        body: ticketBase.texto,
+        link: `${process.env.HOST}/tickets`,
+
+        criador: ticketBase.criador.nome,
+        criadorUpdate: update.criador_update.nome,
+        textoDoUpdate: update.texto,
+      },
+    });
+
+    if (req.body.anexo3) {
+      await TicketsUpdatesFile.create({
+        id_update: id_ticket_update,
+        id_anexo: req.body.anexo3.idupload,
+        nome: req.body.anexo3.nome,
+        size: req.body.anexo3.tamanho,
+        url: req.body.anexo3.url,
+      });
+    }
 
     return res.json(update);
   }

@@ -159,14 +159,45 @@ class UserTicketsController {
       return res.status(400).json({ error: 'Validation fails' });
     }
 
+    const idGrupos = await GrupoUserTicket.findAll({
+      where: {
+        [Op.and]: [{ id_usuario: req.idUsuario }, { nivel: { [Op.gte]: 3 } }],
+      },
+      attributes: ['id_grupo'],
+    });
+
+    const ids = [];
+    idGrupos.forEach((idg) => {
+      ids.push(idg.id_grupo);
+    });
+
+    // Verificar se o usuário que está solicitando é gestor do usuário solicitado
+
+    const grupos = await TicketsGrupos.findAll({
+      attributes: ['id', 'nome', 'descricao'],
+      where: { id: ids },
+      include: [
+        {
+          where: {
+            id_usuario: req.params.id,
+          },
+          model: GrupoUserTicket,
+          as: 'componentes',
+          attributes: ['nivel'],
+          required: false,
+        },
+      ],
+    });
+
+    if (grupos.length === 0) {
+      return res.json({ error: 'Não tem acesso' });
+    }
+
     const tickets = await Ticket.findOne({
       where: {
         [Op.and]: [
           {
             id: req.params.id,
-          },
-          {
-            id_destinatario: req.params.id,
           },
           { status: 'I' },
         ],
@@ -243,7 +274,7 @@ class UserTicketsController {
       ],
     });
     if (tickets) {
-      const usuario = await User.findByPk(req.params.id, {
+      const usuario = await User.findByPk(tickets.id_destinatario, {
         attributes: ['nome', 'sobrenome'],
       });
 
@@ -398,16 +429,43 @@ class UserTicketsController {
       return res.status(400).json({ error: 'Validation fails' });
     }
 
+    const idGrupos = await GrupoUserTicket.findAll({
+      where: {
+        [Op.and]: [{ id_usuario: req.idUsuario }, { nivel: { [Op.gte]: 3 } }],
+      },
+      attributes: ['id_grupo'],
+    });
+
+    const ids = [];
+    idGrupos.forEach((idg) => {
+      ids.push(idg.id_grupo);
+    });
+
+    // Verificar se o usuário que está solicitando é gestor do usuário solicitado
+
+    const grupos = await TicketsGrupos.findAll({
+      attributes: ['id', 'nome', 'descricao'],
+      where: { id: ids },
+      include: [
+        {
+          where: {
+            id_usuario: req.params.id,
+          },
+          model: GrupoUserTicket,
+          as: 'componentes',
+          attributes: ['nivel'],
+          required: false,
+        },
+      ],
+    });
+
+    if (grupos.length === 0) {
+      return res.json({ error: 'Não tem acesso' });
+    }
+
     const ticket = await Ticket.findOne({
       where: {
-        [Op.and]: [
-          {
-            id: req.params.id,
-          },
-          {
-            id_usuario: req.idUsuario,
-          },
-        ],
+        id: req.params.id,
       },
       include: [
         {
@@ -481,7 +539,7 @@ class UserTicketsController {
       ],
     });
     if (ticket) {
-      return res.json(ticket);
+      return res.json({ tickets: ticket });
     }
     return res.status(401).json({
       message: 'Não existe ticket com este número. Verifique.',
@@ -497,16 +555,44 @@ class UserTicketsController {
       return res.status(400).json({ error: 'Validation fails' });
     }
 
+    const idGrupos = await GrupoUserTicket.findAll({
+      where: {
+        [Op.and]: [{ id_usuario: req.idUsuario }, { nivel: { [Op.gte]: 3 } }],
+      },
+      attributes: ['id_grupo'],
+    });
+
+    const ids = [];
+    idGrupos.forEach((idg) => {
+      ids.push(idg.id_grupo);
+    });
+
+    // Verificar se o usuário que está solicitando é gestor do usuário solicitado
+
+    const grupos = await TicketsGrupos.findAll({
+      attributes: ['id', 'nome', 'descricao'],
+      where: { id: ids },
+      include: [
+        {
+          where: {
+            id_usuario: req.params.id,
+          },
+          model: GrupoUserTicket,
+          as: 'componentes',
+          attributes: ['nivel'],
+          required: false,
+        },
+      ],
+    });
+
+    if (grupos.length === 0) {
+      return res.json({ error: 'Não tem acesso' });
+    }
+
     const ticket = await Ticket.findOne({
       where: {
         [Op.and]: [
           { id: req.params.id },
-          {
-            [Op.or]: [
-              { id_usuario: req.idUsuario },
-              { id_destinatario: req.idUsuario },
-            ],
-          },
           {
             [Op.or]: [{ status: 'F' }, { status: 'S' }],
           },
@@ -584,7 +670,7 @@ class UserTicketsController {
       ],
     });
     if (ticket) {
-      return res.json(ticket);
+      return res.json({ tickets: ticket });
     }
     return res.status(401).json({
       message: 'Não existe ticket com este número. Verifique.',

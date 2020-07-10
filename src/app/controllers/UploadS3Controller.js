@@ -31,7 +31,13 @@ class UploadS3Controller {
   }
 
   async index(req, res) {
-    const uploads = await Upload.find();
+    const uploads = await Upload.find({
+      _id: [
+        '5efb97ddd438fe850c1bf8d3',
+        '5efb97bed438fe850c1bf8d2',
+        '5efb9f37d438fe850c1bf8d4',
+      ],
+    });
     return res.json(uploads);
   }
 }

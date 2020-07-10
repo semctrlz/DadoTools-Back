@@ -13,7 +13,7 @@ module.exports = {
         onDelete: 'cascade',
         onUpdate: 'no action',
       },
-      path: {
+      id_anexo: {
         type: Sequelize.STRING,
         allowNull: false,
       },
@@ -21,12 +21,12 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      tipo: {
-        type: Sequelize.STRING(20),
+      size: {
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
-      tamanho: {
-        type: Sequelize.STRING(60),
+      url: {
+        type: Sequelize.STRING,
         allowNull: false,
       },
       created_at: {

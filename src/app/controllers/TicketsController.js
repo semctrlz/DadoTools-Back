@@ -116,9 +116,9 @@ class TicketsController {
       texto_json: Yup.string('Formato inválido').required(
         'O campo é obrigatório'
       ),
-      anexo1: Yup.string(),
-      anexo2: Yup.string(),
-      anexo3: Yup.string(),
+      anexo1: Yup.object(),
+      anexo2: Yup.object(),
+      anexo3: Yup.object(),
     });
 
     // const validate = await schema.validate(req.body, {
@@ -179,7 +179,7 @@ class TicketsController {
         break;
     }
 
-    await Mail.sendMail({
+    Mail.sendMail({
       to: `${userDest.nome} <${userDest.email}>`,
       subject: 'Você recebeu um ticket',
       template: 'NewTicket',
@@ -187,11 +187,11 @@ class TicketsController {
         nome: userDest.nome,
         titulo: assunto,
         body: texto,
-        link: `${process.env.HOST}/tickets/inbox/${ticket.id}`,
+        link: `${process.env.HOST}/tickets`,
         categoria,
         subcategoria,
         prioridade: priori,
-        prazo: format(parseISO(prazo), 'dd/MM/YYY HH:mm'),
+        prazo: prazo ? format(parseISO(prazo), 'dd/MM/YYY HH:mm') : 'sem prazo',
         criador: user.nome,
       },
     });
@@ -206,19 +206,28 @@ class TicketsController {
     if (req.body.anexo1) {
       await TicketsFile.create({
         id_ticket,
-        id_anexo: req.body.anexo1,
+        id_anexo: req.body.anexo1.idupload,
+        nome: req.body.anexo1.nome,
+        size: req.body.anexo1.tamanho,
+        url: req.body.anexo1.url,
       });
     }
     if (req.body.anexo2) {
       await TicketsFile.create({
         id_ticket,
-        id_anexo: req.body.anexo2,
+        id_anexo: req.body.anexo2.idupload,
+        nome: req.body.anexo2.nome,
+        size: req.body.anexo2.tamanho,
+        url: req.body.anexo2.url,
       });
     }
     if (req.body.anexo3) {
       await TicketsFile.create({
         id_ticket,
-        id_anexo: req.body.anexo3,
+        id_anexo: req.body.anexo3.idupload,
+        nome: req.body.anexo3.nome,
+        size: req.body.anexo3.tamanho,
+        url: req.body.anexo3.url,
       });
     }
 
