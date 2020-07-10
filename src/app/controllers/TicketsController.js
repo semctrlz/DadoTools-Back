@@ -179,7 +179,7 @@ class TicketsController {
         break;
     }
 
-    Mail.sendMail({
+    await Mail.sendMail({
       to: `${userDest.nome} <${userDest.email}>`,
       subject: 'Você recebeu um ticket',
       template: 'NewTicket',
