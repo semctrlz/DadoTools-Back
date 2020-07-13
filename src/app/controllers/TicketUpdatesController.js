@@ -232,8 +232,8 @@ class TicketUpdatesController {
 
     const link =
       req.idUsuario === ticketBase.criador.id
-        ? `tickets/inbox/${id_ticket}`
-        : `tickets/enviados/${id_ticket}`;
+        ? `tickets?tela=inbox&id=${id_ticket}`
+        : `tickets?tela=enviados&id=${id_ticket}`;
 
     await Notification.create({
       content: `${nomeUsuarioNot} enviou uma atualização para o ticket #${id_ticket}. `,
@@ -262,9 +262,12 @@ class TicketUpdatesController {
     }
     let usuario = {};
 
+    let link_ticket = '';
     if (ticketBase.id_usuario !== req.idUsuario) {
+      link_ticket = `${process.env.HOST}/tickets?tela=enviados&id=${id_ticket}`;
       usuario = ticketBase.criador;
     } else {
+      link_ticket = `${process.env.HOST}/tickets?tela=inbox&id=${id_ticket}`;
       usuario = ticketBase.destinatario;
     }
 
@@ -276,8 +279,7 @@ class TicketUpdatesController {
         nome: ticketBase.destinatario.nome,
         titulo: ticketBase.assunto,
         body: ticketBase.texto,
-        link: `${process.env.HOST}/tickets`,
-
+        link: link_ticket,
         criador: ticketBase.criador.nome,
         criadorUpdate: update.criador_update.nome,
         textoDoUpdate: update.texto,

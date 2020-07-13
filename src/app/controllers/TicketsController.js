@@ -156,7 +156,7 @@ class TicketsController {
 
     await Notification.create({
       content: `Você recebeu um ticket de ${user.nome}. `,
-      link: `tickets/inbox/${ticket.id}`,
+      link: `tickets?tela=inbox&id=${ticket.id}`,
       user: id_destinatario,
     });
 
@@ -187,7 +187,7 @@ class TicketsController {
         nome: userDest.nome,
         titulo: assunto,
         body: texto,
-        link: `${process.env.HOST}/tickets`,
+        link: `${process.env.HOST}/tickets?tela=inbox&id=${ticket.id}`,
         categoria,
         subcategoria,
         prioridade: priori,
