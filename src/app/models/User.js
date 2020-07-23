@@ -51,6 +51,12 @@ class User extends Model {
       foreignKey: 'id_usuario',
       as: 'criador_update',
     });
+
+    this.hasMany(models.FiltrosTabelasPrecos, {
+      foreignKey: 'id_usuario',
+      as: 'criador_config',
+    });
+
     this.hasMany(models.EncerramentoTicket, {
       foreignKey: 'id_usuario',
       as: 'criador_encerramento',

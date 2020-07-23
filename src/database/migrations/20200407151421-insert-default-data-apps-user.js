@@ -18,14 +18,14 @@ module.exports = {
       {
         id_usuario: 2,
         id_app: 1,
-        nivel: 1,
+        nivel: 5,
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
         id_usuario: 2,
         id_app: 2,
-        nivel: 1,
+        nivel: 5,
         created_at: new Date(),
         updated_at: new Date(),
       },

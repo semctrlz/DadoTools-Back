@@ -26,6 +26,7 @@ import AvaliacaoTicket from '../app/models/AvaliacaoTicket';
 import TicketsGrupos from '../app/models/TicketsGrupos';
 import Recoverys from '../app/models/Recoverys';
 import GrupoUserTicket from '../app/models/GrupoUserTicket';
+import FiltrosTabelasPrecos from '../app/models/FiltrosTabelasPrecos';
 
 const models = [
   User,
@@ -51,6 +52,7 @@ const models = [
   TicketsGrupos,
   Recoverys,
   GrupoUserTicket,
+  FiltrosTabelasPrecos,
 ];
 
 class Database {
