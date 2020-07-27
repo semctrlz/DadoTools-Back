@@ -106,9 +106,20 @@ module.exports = {
         allowNull: false,
       },
       segmento: {
-        type: Sequelize.STRING(2),
+        type: Sequelize.STRING(60),
         allowNull: false,
       },
+
+      atividade: {
+        type: Sequelize.STRING(60),
+        allowNull: false,
+      },
+
+      tabela: {
+        type: Sequelize.STRING(60),
+        allowNull: false,
+      },
+
       forma_pagto: {
         type: Sequelize.STRING(3),
         allowNull: false,
@@ -142,7 +153,7 @@ module.exports = {
     });
   },
 
-  down: (queryInterface, Sequelize) => {
+  down: (queryInterface) => {
     return queryInterface.dropTable('cadastro_clientes');
   },
 };

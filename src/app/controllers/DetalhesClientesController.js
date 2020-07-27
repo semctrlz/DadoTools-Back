@@ -4,7 +4,6 @@ import * as Yup from 'yup';
 import CadastroClientes from '../models/CadastrosClientes';
 import InfoCadastroClientes from '../models/InfoCadastroClientes';
 import CondicoesPagto from '../models/CondicoesPagto';
-import Segmentos from '../models/Segmento';
 import Responsabilidades from '../models/Responsabilidades';
 import FormasPagto from '../models/FormasPagto';
 import User from '../models/User';
@@ -51,15 +50,7 @@ class DetalhesClientesController {
         ['nome_condicao_pagto', 'descricao'],
       ],
     });
-    const segmento = await Segmentos.findOne({
-      where: {
-        cod_segmento: clientes.segmento,
-      },
-      attributes: [
-        ['cod_segmento', 'cod'],
-        ['nome_segmento', 'descricao'],
-      ],
-    });
+
     const Rota = await Responsabilidades.findOne({
       where: {
         cod_rota: clientes.rota,
@@ -129,6 +120,8 @@ class DetalhesClientesController {
       fone_fiscal,
       email_fiscal,
       status,
+      segmento,
+      atividade,
       valor_primeira_compra,
       obs_vendedor,
       createdAt,
@@ -162,6 +155,7 @@ class DetalhesClientesController {
       email_fiscal,
       rota: Rota,
       segmento,
+      atividade,
       forma_pagto: formaPagto,
       cond_pagto: condPagto,
       status,

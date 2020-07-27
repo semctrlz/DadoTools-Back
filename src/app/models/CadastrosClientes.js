@@ -29,6 +29,8 @@ class CadastroClientes extends Model {
         email_fiscal: Sequelize.STRING,
         rota: Sequelize.STRING,
         segmento: Sequelize.STRING,
+        atividade: Sequelize.STRING,
+        tabela: Sequelize.STRING,
         forma_pagto: Sequelize.STRING,
         cond_pagto: Sequelize.STRING,
         status: Sequelize.STRING,
