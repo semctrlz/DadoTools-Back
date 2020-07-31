@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import Sintegra from '../../utils/Sintegra';
 
 import CadastroClientes from '../models/CadastrosClientes';
 
@@ -104,6 +105,15 @@ class CadastroClientesController {
       const data = { ...req.body, ...{ id_usuario: req.idUsuario } };
 
       const resultado = await CadastroClientes.create(data);
+
+      const { pessoa_juridica, cnpj_cpf, data_nascimento = '' } = req.body;
+
+      if (pessoa_juridica) {
+        Sintegra.Consulta(resultado.id, cnpj_cpf);
+      } else {
+        Sintegra.Consulta(resultado.id, cnpj_cpf, data_nascimento);
+      }
+
       return res.json(resultado);
     } catch (err) {
       return res.status(401).json({

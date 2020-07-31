@@ -27,6 +27,8 @@ import TicketsGrupos from '../app/models/TicketsGrupos';
 import Recoverys from '../app/models/Recoverys';
 import GrupoUserTicket from '../app/models/GrupoUserTicket';
 import FiltrosTabelasPrecos from '../app/models/FiltrosTabelasPrecos';
+import SintegraConsultas from '../app/models/SintegraConsultas';
+import CadastrosDadosConsolidados from '../app/models/CadastrosDadosConsolidados';
 
 const models = [
   User,
@@ -53,6 +55,8 @@ const models = [
   Recoverys,
   GrupoUserTicket,
   FiltrosTabelasPrecos,
+  SintegraConsultas,
+  CadastrosDadosConsolidados,
 ];
 
 class Database {

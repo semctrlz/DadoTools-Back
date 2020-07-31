@@ -22,6 +22,7 @@ class InfoCadastroClientes extends Model {
 
     this.belongsTo(models.User, {
       foreignKey: 'id_usuario',
+      as: 'dadosUsuario',
     });
   }
 }

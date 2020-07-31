@@ -50,6 +50,19 @@ class CadastroClientes extends Model {
       foreignKey: 'id_cadastro',
       as: 'messages',
     });
+    this.hasOne(models.SintegraConsultas, {
+      foreignKey: 'id_cadastro',
+      as: 'constultaSintegra',
+    });
+    this.hasOne(models.CadastrosDadosConsolidados, {
+      foreignKey: 'id_cadastro',
+      as: 'dadosConsolidados',
+    });
+
+    this.belongsTo(models.User, {
+      foreignKey: 'id_usuario',
+      as: 'criadorCadastro',
+    });
   }
 }
 

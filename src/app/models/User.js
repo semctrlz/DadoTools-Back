@@ -41,6 +41,10 @@ class User extends Model {
       foreignKey: 'id_usuario',
       as: 'user_grupo',
     });
+    this.hasMany(models.CadastroClientes, {
+      foreignKey: 'id_usuario',
+      as: 'criadorCadastro',
+    });
 
     this.hasMany(models.Ticket, { foreignKey: 'id_usuario', as: 'criador' });
     this.hasMany(models.Ticket, {

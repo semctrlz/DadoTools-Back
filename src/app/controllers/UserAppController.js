@@ -26,6 +26,33 @@ class UserAppController {
     return res.json(retorno);
   }
 
+  async NivelApp(req, res) {
+    const schema = Yup.object().shape({
+      rota: Yup.string().required(),
+    });
+
+    if (!(await schema.isValid(req.params))) {
+      return res.status(400).json({ error: 'Validation fails' });
+    }
+
+    const retorno = await UserApp.findOne({
+      where: {
+        id_usuario: req.idUsuario,
+      },
+      attributes: ['nivel'],
+      include: [
+        {
+          model: App,
+          where: { rota: req.params.rota },
+          as: 'Apps',
+          attributes: ['rota', 'nome', 'descricao'],
+          required: true,
+        },
+      ],
+    });
+    return res.json(retorno);
+  }
+
   async store(req, res) {
     const schema = Yup.object().shape({
       id_usuario: Yup.number().required(),

@@ -28,6 +28,7 @@ import RecoveryController from './app/controllers/RecoveryController';
 import GestaoTicketController from './app/controllers/GestaoTicketController';
 import AnexoController from './app/controllers/AnexoController';
 import UploadS3Controller from './app/controllers/UploadS3Controller';
+import GerenciarCadastroController from './app/controllers/GerenciarCadastroController';
 
 import authMiddleware from './app/middlewares/auth';
 
@@ -59,6 +60,7 @@ routes.delete('/apps', AppController.delete);
 routes.put('/apps', AppController.update);
 
 routes.get('/userapps', UserAppController.index);
+routes.get('/userapps/:rota', UserAppController.NivelApp);
 routes.post('/userapps', UserAppController.store);
 
 routes.post('/apps', AppController.store);
@@ -161,6 +163,16 @@ routes.get('/tickets/gestao/historico/:id', GestaoTicketController.historico);
 routes.get(
   '/tickets/historico/:id/filtro',
   UserTicketsController.historico_filtro
+);
+
+routes.get('/cadastros/gerenciar', GerenciarCadastroController.index);
+routes.post(
+  '/cadastros/gerenciar/salvar',
+  GerenciarCadastroController.salvaConsolidado
+);
+routes.post(
+  '/cadastros/gerenciar/exportar',
+  GerenciarCadastroController.Exportar
 );
 
 module.exports = routes;
