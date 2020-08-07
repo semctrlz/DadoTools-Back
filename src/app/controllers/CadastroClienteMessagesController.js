@@ -5,6 +5,8 @@ import CadastrosClientes from '../models/CadastrosClientes';
 import User from '../models/User';
 import File from '../models/File';
 import Notification from '../schemas/Notification';
+import Utils from '../../utils/utils';
+import Mail from '../../utils/Mailer';
 
 class CadastroClienteMessagesController {
   async store(req, res) {
@@ -27,16 +29,18 @@ class CadastroClienteMessagesController {
 
     const {
       id_usuario: donoCadastro,
+      cnpj_cpf,
       nome_fantasia,
-    } = await CadastrosClientes.findByPk(id_cadastro);
-
-    if (donoCadastro !== req.idUsuario) {
-      const mensagemNot = `Você recebeu uma mensagem no cadastro de ${nome_fantasia}`;
-      await Notification.create({
-        content: mensagemNot,
-        user: donoCadastro,
-      });
-    }
+      razao_social,
+      criadorCadastro,
+    } = await CadastrosClientes.findByPk(id_cadastro, {
+      include: [
+        {
+          model: User,
+          as: 'criadorCadastro',
+        },
+      ],
+    });
 
     const usuario = await User.findByPk(req.idUsuario, {
       include: [
@@ -48,6 +52,28 @@ class CadastroClienteMessagesController {
       ],
       attributes: ['nome', 'cargo'],
     });
+
+    if (donoCadastro !== req.idUsuario) {
+      const mensagemNot = `Você recebeu uma mensagem no cadastro de ${nome_fantasia}`;
+      Notification.create({
+        content: mensagemNot,
+        user: donoCadastro,
+      });
+
+      Mail.sendMail({
+        to: `${criadorCadastro.nome} <${criadorCadastro.email}>`,
+        subject: 'Você recebeu um ticket',
+        template: 'NovaMensagemCadastro',
+        context: {
+          nome: criadorCadastro.nome,
+          criador: usuario.nome,
+          body: mensagem,
+          razao: razao_social,
+          link: `${process.env.HOST}/cadastros/view/${id_cadastro}`,
+          cnpj: Utils.FormatCnpjCpf(cnpj_cpf),
+        },
+      });
+    }
 
     return res.json({
       mensagem: retorno,
