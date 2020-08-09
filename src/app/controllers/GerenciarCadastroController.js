@@ -7,6 +7,7 @@ import UserApp from '../models/UserApp';
 import CadastrosDadosConsolidados from '../models/CadastrosDadosConsolidados';
 import User from '../models/User';
 import File from '../models/File';
+import Sintegra from '../../utils/Sintegra';
 
 class GerenciarCadastroController {
   async index(req, res) {
@@ -218,6 +219,12 @@ class GerenciarCadastroController {
     });
 
     return res.json(dados);
+  }
+
+  async SaldoSintegra(req, res){
+    const dados = await Sintegra.ConsultaSaldo();
+    return res.json(dados);
+
   }
 }
 

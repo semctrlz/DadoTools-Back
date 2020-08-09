@@ -175,4 +175,6 @@ routes.post(
   GerenciarCadastroController.Exportar
 );
 
+routes.get('/saldo_sintegra', GerenciarCadastroController.SaldoSintegra);
+
 module.exports = routes;
