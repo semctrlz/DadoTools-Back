@@ -67,6 +67,7 @@ routes.post('/apps', AppController.store);
 
 routes.post('/cadastro_empresas', CadastroClientes.store);
 routes.put('/cadastro_empresas', CadastroClientes.update);
+routes.put('/cadastro_empresas/status', CadastroClientes.changeStatus);
 routes.get('/cadastro_empresas/:id', CadastroClientes.index);
 routes.get('/cadastro_empresas', CadastroClientes.index);
 routes.get(

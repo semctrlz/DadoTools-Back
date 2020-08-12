@@ -189,6 +189,31 @@ class CadastroClientesController {
     });
     return res.json(dadosAlterados);
   }
+
+  async changeStatus(req, res) {
+    const schema = Yup.object().shape({
+      id: Yup.number().required(),
+      status: Yup.string().length(1).required(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validation fails' });
+    }
+    const {id:id_cadastro, status} = req.body;
+
+    await CadastroClientes.update(
+      {
+        status,
+      },
+      {
+        where: {
+          id: id_cadastro,
+        },
+      }
+    );
+
+    return res.json({message:"Ok"});
+  }
 }
 
 export default new CadastroClientesController();
