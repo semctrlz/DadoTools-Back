@@ -15,11 +15,6 @@ class GerenciarCadastroController {
     // Listar os cadastros que ainda não foram finalizados
 
     const dados = await CadastrosClientes.findAll({
-      where: {
-        status: {
-          [Op.or]: ['A', 'P'],
-        },
-      },
       include: [
         {
           model: User,
