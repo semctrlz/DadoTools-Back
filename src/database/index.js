@@ -29,6 +29,7 @@ import GrupoUserTicket from '../app/models/GrupoUserTicket';
 import FiltrosTabelasPrecos from '../app/models/FiltrosTabelasPrecos';
 import SintegraConsultas from '../app/models/SintegraConsultas';
 import CadastrosDadosConsolidados from '../app/models/CadastrosDadosConsolidados';
+import CigamCadastroStatus from '../app/models/CigamCadastroStatus';
 
 const models = [
   User,
@@ -57,6 +58,7 @@ const models = [
   FiltrosTabelasPrecos,
   SintegraConsultas,
   CadastrosDadosConsolidados,
+  CigamCadastroStatus
 ];
 
 class Database {

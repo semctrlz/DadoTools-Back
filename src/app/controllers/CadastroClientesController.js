@@ -2,6 +2,7 @@ import * as Yup from 'yup';
 import Sintegra from '../../utils/Sintegra';
 
 import CadastroClientes from '../models/CadastrosClientes';
+import CigamCadastroStatus from '../models/CigamCadastroStatus';
 
 class CadastroClientesController {
   async index(req, res) {
@@ -20,6 +21,13 @@ class CadastroClientesController {
         where: {
           id_usuario: req.idUsuario,
         },
+        include: [
+          {
+            model: CigamCadastroStatus,
+            as: 'status_cigam',
+
+          },
+        ],
       });
       return res.json(cadastros);
     }
