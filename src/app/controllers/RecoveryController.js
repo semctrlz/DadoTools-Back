@@ -22,6 +22,7 @@ class RecoveryController {
     // });
 
     // Verificar se o e-mail existe e retornar o id do dono desse email
+    try{
     const { id: id_usuario, nome } = await User.findOne({
       where: {
         email: req.body.email,
@@ -62,6 +63,11 @@ class RecoveryController {
     }
 
     return res.json({ response: 'Solicitação processada com sucesso!' });
+
+    }catch(err)
+    {
+      return res.json({ response: 'Erro ao enviar solicitação!' });
+    }
   }
 
   async index(req, res) {
