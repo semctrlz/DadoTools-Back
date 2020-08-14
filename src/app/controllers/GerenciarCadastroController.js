@@ -5,6 +5,7 @@ import InfoCadastroClientes from '../models/InfoCadastroClientes';
 import SintegraConsultas from '../models/SintegraConsultas';
 import UserApp from '../models/UserApp';
 import CadastrosDadosConsolidados from '../models/CadastrosDadosConsolidados';
+import CigamCadastroStatus from '../models/CigamCadastroStatus';
 import User from '../models/User';
 import File from '../models/File';
 import Sintegra from '../../utils/Sintegra';
@@ -47,6 +48,10 @@ class GerenciarCadastroController {
         {
           model: CadastrosDadosConsolidados,
           as: 'dadosConsolidados',
+        },
+        {
+          model: CigamCadastroStatus,
+          as: 'status_cigam',
         },
       ],
     });
