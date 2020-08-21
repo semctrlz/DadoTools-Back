@@ -37,7 +37,6 @@ const uploadAvatar = multer(multerConfig);
 const uploadFiles = multer(multerTickets);
 const uploadS3 = multer(multerS3);
 
-routes.post('/users', UserController.store);
 routes.post('/sessions', SessionController.store);
 routes.get('/sessions', SessionController.verify);
 
@@ -46,6 +45,7 @@ routes.put('/recovery', RecoveryController.alterarSenha);
 routes.get('/recovery/:token', RecoveryController.index);
 
 routes.use(authMiddleware);
+routes.post('/users', UserController.store);
 
 routes.post('/files', uploadAvatar.single('file'), FileController.store);
 
@@ -60,6 +60,7 @@ routes.delete('/apps', AppController.delete);
 routes.put('/apps', AppController.update);
 
 routes.get('/userapps', UserAppController.index);
+routes.delete('/userapps', UserAppController.delete);
 routes.get('/userapps/:rota', UserAppController.NivelApp);
 routes.post('/userapps', UserAppController.store);
 
@@ -177,5 +178,7 @@ routes.post(
 );
 
 routes.get('/saldo_sintegra', GerenciarCadastroController.SaldoSintegra);
+routes.get('/users', UserController.index);
+routes.put('/users/update', UserController.updateUser);
 
 module.exports = routes;

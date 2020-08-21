@@ -3,6 +3,7 @@ import { Op } from 'sequelize';
 
 import App from '../models/App';
 import UserApp from '../models/UserApp';
+import User from '../models/User';
 
 class UserAppController {
   async index(req, res) {
@@ -96,7 +97,7 @@ class UserAppController {
       // Se não existir, cadastra
 
       // Verificar se o app e o usuarios são validos
-      const existeUser = await UserApp.findOne({
+      const existeUser = await User.findOne({
         where: {
           id: req.body.id_usuario,
         },
@@ -120,7 +121,7 @@ class UserAppController {
           .json({ error: 'App informado não existe. Verifique.' });
       }
 
-      const { id, id_usuario, id_app, nivel } = UserApp.create(req.body);
+      const { id, id_usuario, id_app, nivel } = await UserApp.create(req.body);
       return res.json({
         id,
         id_usuario,
@@ -145,6 +146,25 @@ class UserAppController {
       id_app,
       nivel,
     });
+  }
+
+  async delete(req, res) {
+    const schema = Yup.object().shape({
+      id_usuario: Yup.number().required(),
+      id_app: Yup.number().required(),
+    });
+
+    if (!(await schema.isValid(req.query))) {
+      return res.status(400).json({ error: 'Validation fails' });
+    }
+
+    const { id_usuario, id_app } = req.query;
+
+    await UserApp.destroy({
+      where: { [Op.and]: [{ id_usuario }, { id_app }] },
+    });
+
+    return res.json({ status: 'ok' });
   }
 }
 

@@ -221,10 +221,9 @@ class GerenciarCadastroController {
     return res.json(dados);
   }
 
-  async SaldoSintegra(req, res){
+  async SaldoSintegra(req, res) {
     const dados = await Sintegra.ConsultaSaldo();
     return res.json(dados);
-
   }
 }
 

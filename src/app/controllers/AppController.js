@@ -21,9 +21,11 @@ class AppController {
       return res.status(400).json({ error: 'Validation fails' });
     }
 
+    const { nome, rota, descricao } = req.body;
+
     const rotaExiste = await App.findOne({
       where: {
-        [Op.or]: [{ nome: req.body.nome }, { rota: req.body.rota }],
+        [Op.or]: [{ nome }, { rota }],
       },
     });
 
@@ -34,7 +36,7 @@ class AppController {
       });
     }
 
-    const { id, nome, descricao, rota } = await App.create(req.body);
+    const { id } = await App.create(req.body);
 
     await UserApp.create({
       id_usuario: req.idUsuario,

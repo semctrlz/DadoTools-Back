@@ -2,8 +2,46 @@ import * as Yup from 'yup';
 
 import User from '../models/User';
 import File from '../models/File';
+import UserApp from '../models/UserApp';
+import App from '../models/App';
 
 class UserController {
+  async index(req, res) {
+    const usuarios = await User.findAll({
+      attributes: [
+        'id',
+        'nome',
+        'sobrenome',
+        'email',
+        'cargo',
+        'codigo_cigam',
+        'is_ativo',
+      ],
+      include: [
+        {
+          model: File,
+          as: 'avatar',
+          attributes: ['id', 'nome', 'path', 'url'],
+        },
+        {
+          model: UserApp,
+          as: 'userApp',
+          required: false,
+          attributes: ['nivel'],
+          include: [
+            {
+              model: App,
+              as: 'Apps',
+              attributes: ['rota', 'nome', 'descricao', 'id'],
+              required: false,
+            },
+          ],
+        },
+      ],
+    });
+    return res.json(usuarios);
+  }
+
   async store(req, res) {
     const schema = Yup.object().shape({
       nome: Yup.string().required(),
@@ -33,7 +71,7 @@ class UserController {
       sobrenome,
       email,
       codigo_cigam,
-      is_sales,
+      is_sales = 1,
       cargo,
     } = await User.create(req.body);
     return res.json({
@@ -146,6 +184,79 @@ class UserController {
       cargo,
       avatar,
     });
+  }
+
+  async updateUser(req, res) {
+    const schema = Yup.object().shape({
+      id_usuario: Yup.number().required(),
+      nome: Yup.string(),
+      sobrenome: Yup.string(),
+      cargo: Yup.string(),
+      codigo_cigam: Yup.string(),
+      is_ativo: Yup.boolean(),
+      apps: Yup.array().of(
+        Yup.object().shape({
+          id_app: Yup.number(),
+          nivel: Yup.number(),
+        })
+      ),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validation fails' });
+    }
+
+    const {
+      id_usuario,
+      nome,
+      sobrenome,
+      cargo,
+      codigo_cigam,
+      is_ativo,
+    } = req.body;
+
+    const user = await User.findByPk(id_usuario);
+    await user.update({
+      nome,
+      sobrenome,
+      cargo,
+      codigo_cigam,
+      is_ativo: is_ativo ? 1 : 0,
+    });
+
+    const usuarios = await User.findAll({
+      attributes: [
+        'id',
+        'nome',
+        'sobrenome',
+        'email',
+        'cargo',
+        'codigo_cigam',
+        'is_ativo',
+      ],
+      include: [
+        {
+          model: File,
+          as: 'avatar',
+          attributes: ['id', 'nome', 'path', 'url'],
+        },
+        {
+          model: UserApp,
+          as: 'userApp',
+          required: false,
+          attributes: ['nivel'],
+          include: [
+            {
+              model: App,
+              as: 'Apps',
+              attributes: ['rota', 'nome', 'descricao', 'id'],
+              required: false,
+            },
+          ],
+        },
+      ],
+    });
+    return res.json(usuarios);
   }
 }
 

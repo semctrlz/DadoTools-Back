@@ -12,6 +12,7 @@ class User extends Model {
         email: Sequelize.STRING,
         codigo_cigam: Sequelize.STRING,
         cargo: Sequelize.STRING,
+        is_ativo: Sequelize.BOOLEAN,
         is_sales: Sequelize.BOOLEAN,
         is_adm: Sequelize.BOOLEAN,
       },
@@ -35,7 +36,7 @@ class User extends Model {
       foreignKey: 'id_usuario',
       as: 'dadosUsuario',
     });
-    this.hasOne(models.UserApp, { foreignKey: 'id_usuario', as: 'userApp' });
+    this.hasMany(models.UserApp, { foreignKey: 'id_usuario', as: 'userApp' });
 
     this.hasMany(models.GrupoUserTicket, {
       foreignKey: 'id_usuario',
