@@ -20,7 +20,7 @@ class CadastroClientes extends Model {
         pais: Sequelize.STRING,
         fone_principal: Sequelize.STRING,
         email_xml: Sequelize.STRING,
-         fone_comprador: Sequelize.STRING,
+        fone_comprador: Sequelize.STRING,
         email_comprador: Sequelize.STRING,
         nome_comprador: Sequelize.STRING,
         fone_financeiro: Sequelize.STRING,
@@ -46,9 +46,10 @@ class CadastroClientes extends Model {
   }
 
   static associate(models) {
-
-
-    this.hasOne(models.CigamCadastroStatus, { foreignKey: 'id_cadastro', as: 'status_cigam' });
+    this.hasOne(models.CigamCadastroStatus, {
+      foreignKey: 'id_cadastro',
+      as: 'status_cigam',
+    });
 
     this.hasMany(models.InfoCadastroClientes, {
       foreignKey: 'id_cadastro',

@@ -10,6 +10,7 @@ import TicketsUpdates from '../models/TicketsUpdates';
 import TicketsUpdatesFormatados from '../models/TicketsUpdatesFormatados';
 import TicketsUpdatesFile from '../models/TicketsUpdatesFile';
 import Notification from '../schemas/Notification';
+import TicketNotification from '../schemas/TicketNotification';
 import Mail from '../../utils/Mailer';
 
 class TicketUpdatesController {
@@ -131,10 +132,6 @@ class TicketUpdatesController {
       texto: Yup.string('Formato inválido')
         .max(1000, 'Tamanho máximo para o campo: 1000 caracteres')
         .required('O campo texto é obrigatório'),
-
-      texto_json: Yup.string('Formato inválido').required(
-        'O campo texto_json é obrigatório'
-      ),
       anexo1: Yup.object(),
       anexo2: Yup.object(),
       anexo3: Yup.object(),
@@ -149,7 +146,7 @@ class TicketUpdatesController {
 
     // Insere o ticket e pega os dados
 
-    const { id_ticket, texto, texto_json } = req.body;
+    const { id_ticket, texto } = req.body;
 
     const id_usuario = req.idUsuario;
 
@@ -160,11 +157,6 @@ class TicketUpdatesController {
     });
 
     const { id: id_ticket_update } = ticketUpdate;
-
-    await TicketsUpdatesFormatados.create({
-      id_ticket_update,
-      texto_json,
-    });
 
     const update = await TicketsUpdates.findByPk(id_ticket_update, {
       include: [
@@ -240,6 +232,20 @@ class TicketUpdatesController {
       link,
       user: idUsuarioNot,
     });
+
+    if (req.idUsuario !== ticketBase.criador.id) {
+      TicketNotification.create({
+        ticket: ticketBase.id,
+        user: ticketBase.criador.id,
+      });
+    }
+
+    if (req.idUsuario !== ticketBase.destinatario.id) {
+      TicketNotification.create({
+        ticket: ticketBase.id,
+        user: ticketBase.destinatario.id,
+      });
+    }
 
     if (req.body.anexo1) {
       await TicketsUpdatesFile.create({

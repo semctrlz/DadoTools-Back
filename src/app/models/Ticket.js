@@ -107,6 +107,10 @@ class Ticket extends Model {
       foreignKey: 'id_ticket',
       as: 'avaliacao',
     });
+    this.hasMany(models.TicketsEncaminhados, {
+      foreignKey: 'id_ticket',
+      as: 'encaminhados',
+    });
   }
 }
 

@@ -25,7 +25,6 @@ class CadastroClientesController {
           {
             model: CigamCadastroStatus,
             as: 'status_cigam',
-
           },
         ],
       });
@@ -207,7 +206,7 @@ class CadastroClientesController {
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation fails' });
     }
-    const {id:id_cadastro, status} = req.body;
+    const { id: id_cadastro, status } = req.body;
 
     await CadastroClientes.update(
       {
@@ -220,7 +219,7 @@ class CadastroClientesController {
       }
     );
 
-    return res.json({message:"Ok"});
+    return res.json({ message: 'Ok' });
   }
 }
 

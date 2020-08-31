@@ -111,7 +111,7 @@ class TicketUpdatesController {
     //   abortEarly: false,
     // });
     if (!(await schema.isValid(req.body))) {
-      return res.status(400).json({ error: 'Validation fails' });
+      return res.json({ message: 'Validation fails', success: false });
     }
 
     // Insere o ticket e pega os dados
@@ -232,14 +232,66 @@ class TicketUpdatesController {
         });
       }
 
-      return res.json({ message: 'Solicitação enviada com sucesso!' });
+      return res.json({
+        message: 'Solicitação enviada com sucesso!',
+        success: true,
+      });
     }
 
     // Usuário é o destinatário
 
-    return res
-      .status(401)
-      .json({ error: 'VocÊ não tem permissão para acessar este ticket' });
+    return res.json({
+      message: 'VocÊ não tem permissão para acessar este ticket',
+      success: false,
+    });
+  }
+
+  async avaliacao(req, res) {
+    const schema = Yup.object().shape({
+      id_ticket: Yup.number('Formato inválido').required(
+        'O campo id_ticket é obrigatório'
+      ),
+      avaliacao: Yup.number().min(0).max(5),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.json({ message: 'Validation fails', success: false });
+    }
+
+    const { id_ticket, avaliacao: nota } = req.body;
+
+    // Usuário é o criador do ticket
+    const { id_usuario } = await Ticket.findByPk(id_ticket);
+
+    if (id_usuario !== req.idUsuario) {
+      return res.json({
+        message: 'Somente o criador do ticket pode avaliá-lo.',
+        success: false,
+      });
+    }
+    // Tíket ainda não foi avaliado
+
+    const avaliacaoExistente = await AvaliacaoTicket.findAll({
+      where: { id_ticket },
+    });
+
+    if (avaliacaoExistente.length > 0) {
+      return res.json({
+        message: 'Já existe avaliação para este ticket.',
+        success: false,
+      });
+    }
+
+    await AvaliacaoTicket.create({
+      id_usuario,
+      id_ticket,
+      nota,
+    });
+
+    return res.json({
+      message: 'Avaliação salva com sucesso.',
+      success: true,
+    });
   }
 }
 

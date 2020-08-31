@@ -18,6 +18,7 @@ class CategoriaTicketsController {
         'created_at',
         'updated_at',
       ],
+      where: { ativo: true },
       include: [
         {
           model: SubcategoriaTickets,
@@ -32,6 +33,7 @@ class CategoriaTicketsController {
             'created_at',
             'updated_at',
           ],
+          where: { ativo: true },
           separate: true,
           required: false,
         },

@@ -8,10 +8,11 @@ import User from '../models/User';
 import File from '../models/File';
 import TicketsUpdates from '../models/TicketsUpdates';
 import TicketsUpdatesFormatados from '../models/TicketsUpdatesFormatados';
-import UserApp from '../models/UserApp';
 import TicketsUpdatesFile from '../models/TicketsUpdatesFile';
 import Notification from '../schemas/Notification';
 import Mail from '../../utils/Mailer';
+import UserApp from '../models/UserApp';
+import TicketsEncaminhados from '../models/TicketsEncaminhados';
 
 class TicketsController {
   async index(req, res) {
@@ -73,11 +74,6 @@ class TicketsController {
                   attributes: ['id', 'nome', 'path', 'url'],
                 },
               ],
-            },
-            {
-              model: TicketsUpdatesFormatados,
-              as: 'update_formatado',
-              required: false,
             },
           ],
         },
@@ -460,6 +456,81 @@ class TicketsController {
     });
 
     return res.json(novoTicket);
+  }
+
+  async encaminharTicket(req, res) {
+    const schema = Yup.object().shape({
+      id_ticket: Yup.number('Formato inválido').required(
+        'O campo prazo é obrigatório'
+      ),
+
+      email_destinatario: Yup.string('Formato inválido').required(
+        'O campo id_ticket é obrigatório'
+      ),
+    });
+
+    // const validate = await schema.validate(req.body, {
+    //   abortEarly: false,
+    // });
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validation fails' });
+    }
+
+    const ticket = await Ticket.findByPk(req.body.id_ticket);
+
+    // Obter o id do destinatário
+    const { id: idDestinatario = 0, nome, email } = await User.findOne({
+      where: { email: req.body.email_destinatario },
+    });
+
+    // obter ticket
+    if (!ticket || ticket.id_usuario === idDestinatario) {
+      return res.json({ message: 'Erro ao encaminhar', success: false });
+    }
+
+    // Altera o destinatário do Ticket
+    await ticket.update({
+      id_destinatario: idDestinatario,
+    });
+
+    // Criar Update informando que houve o encaminhamento
+
+    const texto = 'Ticket encaminhado para @nome - @email';
+    const mensagem = texto.replace('@nome', nome).replace('@email', email);
+
+    const ticketUpdate = await TicketsUpdates.create({
+      id_usuario: req.idUsuario,
+      id_ticket: ticket.id,
+      texto: mensagem,
+    });
+
+    const msgFormatada =
+      '{"blocks":[{"key":"374ql","text":"Ticket encaminhado para @nome - @email","type":"unstyled","depth":0,"inlineStyleRanges":[{"offset":0,"length":23,"style":"BOLD"}],"entityRanges":[],"data":{}}],"entityMap":{}}';
+    const mensagemFormatada = msgFormatada
+      .replace('@nome', nome)
+      .replace('@email', email);
+
+    const { id: id_ticket_update } = ticketUpdate;
+
+    await TicketsUpdatesFormatados.create({
+      id_ticket_update,
+      texto_json: mensagemFormatada,
+    });
+
+    if (idDestinatario === 0) {
+      return res.json({ message: 'Erro ao encaminhar', success: false });
+    }
+
+    await TicketsEncaminhados.create({
+      id_usuario: req.idUsuario,
+      id_destinatario: idDestinatario,
+      id_ticket: ticket.id,
+    });
+
+    return res.json({
+      message: 'Ticket encaminhado com sucesso',
+      success: true,
+    });
   }
 }
 
