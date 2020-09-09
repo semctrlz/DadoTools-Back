@@ -994,6 +994,12 @@ class UserTicketsController {
           model: TicketsEncaminhados,
           as: 'encaminhados',
           where: { id_destinatario: req.idUsuario },
+          required: false,
+        },
+        {
+          model: TicketsFormatado,
+          as: 'formatado',
+          required: false,
         },
         {
           model: User,

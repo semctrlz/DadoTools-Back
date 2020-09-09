@@ -10,7 +10,7 @@ class Configs extends Model {
         json_obj: {
           type: Sequelize.VIRTUAL,
           get() {
-            return JSON.parse(this.json);
+            return JSON.parse(this.json ? this.json : '{}');
           },
         },
       },

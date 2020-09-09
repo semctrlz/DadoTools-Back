@@ -10,6 +10,11 @@ routes.delete('/', ConfigsController.delete);
 // Rotas onde buscamos apenas as configurações mais recentes
 routes.get('/produtos', ConfigsController.produtos);
 routes.get('/impostos', ConfigsController.impostos);
+routes.get('/custos', ConfigsController.custos);
+routes.get('/despesas', ConfigsController.despesas);
+routes.get('/fretes', ConfigsController.fretes);
 routes.get('/produtosBase', ConfigsController.produtosBase);
+
+routes.get('/parametros', ConfigsController.parametros);
 
 module.exports = routes;

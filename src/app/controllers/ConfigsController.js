@@ -17,6 +17,18 @@ const nomes = {
     descricao:
       'Armazenar impostos atuais atuais com dados ligados a cada estado',
   },
+  custos: {
+    nome: 'custos',
+    descricao: 'Armazenar os custos de cada produto',
+  },
+  fretes: {
+    nome: 'fretes',
+    descricao: 'Armazenar os fretes diretos e distribuição para os produtos',
+  },
+  despesas: {
+    nome: 'despesas',
+    descricao: 'Armazenar as despesas que serão deduzidas da receita',
+  },
 };
 
 class ConfisController {
@@ -79,17 +91,83 @@ class ConfisController {
   }
 
   async impostos(req, res) {
-    const prod = await Configs.findAll({
+    const imp = await Configs.findAll({
       order: [['createdAt', 'DESC']],
-      attributes: [['json_obj', 'config']],
       where: {
         nome_config: nomes.impostos.nome,
       },
       limit: 1,
     });
+    const impostos = imp.length === 0 ? {} : imp[0];
+    return res.json({ impostos, success: true });
+  }
+
+  async custos(req, res) {
+    const cus = await Configs.findAll({
+      order: [['createdAt', 'DESC']],
+      where: {
+        nome_config: nomes.custos.nome,
+      },
+      limit: 1,
+    });
+    const custos = cus.length === 0 ? {} : cus[0];
+    return res.json({ custos, success: true });
+  }
+
+  async despesas(req, res) {
+    const desp = await Configs.findAll({
+      order: [['createdAt', 'DESC']],
+      where: {
+        nome_config: nomes.despesas.nome,
+      },
+      limit: 1,
+    });
+    const despesas = desp.length === 0 ? {} : desp[0];
+    return res.json({ despesas, success: true });
+  }
+
+  async fretes(req, res) {
+    const fre = await Configs.findAll({
+      order: [['createdAt', 'DESC']],
+      where: {
+        nome_config: nomes.fretes.nome,
+      },
+      limit: 1,
+    });
+    const fretes = fre.length === 0 ? {} : fre[0];
+    return res.json({ fretes, success: true });
+  }
+
+  async parametros(req, res) {
+    const imp = await Configs.findAll({
+      order: [['createdAt', 'DESC']],
+      where: {
+        nome_config: nomes.impostos.nome,
+      },
+      limit: 1,
+    });
+    const impostos = imp.length === 0 ? {} : imp[0];
+
+    const cus = await Configs.findAll({
+      order: [['createdAt', 'DESC']],
+      where: {
+        nome_config: nomes.custos.nome,
+      },
+      limit: 1,
+    });
+    const custos = cus.length === 0 ? {} : cus[0];
+
+    const prod = await Configs.findAll({
+      order: [['createdAt', 'DESC']],
+      where: {
+        nome_config: nomes.produtos.nome,
+      },
+      limit: 1,
+    });
 
     const produtos = prod.length === 0 ? [] : prod[0];
-    return res.json({ produtos, success: true });
+
+    return res.json({ impostos, custos, produtos, success: true });
   }
 
   async produtosBase(req, res) {
