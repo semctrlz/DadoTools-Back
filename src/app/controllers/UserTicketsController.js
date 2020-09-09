@@ -993,8 +993,8 @@ class UserTicketsController {
         {
           model: TicketsEncaminhados,
           as: 'encaminhados',
-          where: { id_destinatario: req.idUsuario },
-          required: false,
+          where: { id_usuario: req.idUsuario },
+          required: true,
         },
         {
           model: TicketsFormatado,
