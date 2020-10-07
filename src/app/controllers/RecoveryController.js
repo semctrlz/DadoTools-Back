@@ -22,50 +22,48 @@ class RecoveryController {
     // });
 
     // Verificar se o e-mail existe e retornar o id do dono desse email
-    try{
-    const { id: id_usuario, nome } = await User.findOne({
-      where: {
-        email: req.body.email,
-      },
-    });
-
-    const token = crypto
-      .createHash('sha1')
-      .update(req.body.email + String(new Date()))
-      .digest('hex');
-
-    if (id_usuario) {
-      // desativa todos os tokens para o usuario
-      await Recoverys.update(
-        {
-          ativo: false,
-        },
-        {
-          where: {
-            id_usuario,
-          },
-        }
-      );
-
-      // Cria um novo token
-      await Recoverys.create({ id_usuario, token });
-
-      await Mail.sendMail({
-        to: `${nome} <${req.body.email}>`,
-        subject: 'Recuperação de senha Dado Tools',
-        template: 'recovery',
-        context: {
-          nome,
-          token,
-          site: process.env.HOST,
+    try {
+      const { id: id_usuario, nome } = await User.findOne({
+        where: {
+          email: req.body.email,
         },
       });
-    }
 
-    return res.json({ response: 'Solicitação processada com sucesso!' });
+      const token = crypto
+        .createHash('sha1')
+        .update(req.body.email + String(new Date()))
+        .digest('hex');
 
-    }catch(err)
-    {
+      if (id_usuario) {
+        // desativa todos os tokens para o usuario
+        await Recoverys.update(
+          {
+            ativo: false,
+          },
+          {
+            where: {
+              id_usuario,
+            },
+          }
+        );
+
+        // Cria um novo token
+        await Recoverys.create({ id_usuario, token });
+
+        await Mail.sendMail({
+          to: `${nome} <${req.body.email}>`,
+          subject: 'Recuperação de senha Dado Tools',
+          template: 'recovery',
+          context: {
+            nome,
+            token,
+            site: process.env.HOST,
+          },
+        });
+      }
+
+      return res.json({ response: 'Solicitação processada com sucesso!' });
+    } catch (err) {
       return res.json({ response: 'Erro ao enviar solicitação!' });
     }
   }

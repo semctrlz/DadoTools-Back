@@ -20,7 +20,9 @@ const routes = new Router();
 routes.get('/', TicketsController.index);
 routes.post('/', TicketsController.store);
 
+// Ignorar. Os usuários são geridos por outra página
 routes.get('/usuarios', UsuariosTicketsController.index);
+// Ignorar. Os usuários são geridos por outra página
 routes.post('/usuarios', TicketsController.criaUsuario);
 
 routes.put('/prazo', TicketsController.alterarPrazo);

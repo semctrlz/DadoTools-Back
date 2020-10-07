@@ -167,7 +167,34 @@ class ConfisController {
 
     const produtos = prod.length === 0 ? [] : prod[0];
 
-    return res.json({ impostos, custos, produtos, success: true });
+    const fre = await Configs.findAll({
+      order: [['createdAt', 'DESC']],
+      where: {
+        nome_config: nomes.fretes.nome,
+      },
+      limit: 1,
+    });
+
+    const fretes = fre.length === 0 ? [] : fre[0];
+
+    const des = await Configs.findAll({
+      order: [['createdAt', 'DESC']],
+      where: {
+        nome_config: nomes.despesas.nome,
+      },
+      limit: 1,
+    });
+
+    const despesas = des.length === 0 ? [] : des[0];
+
+    return res.json({
+      impostos,
+      custos,
+      produtos,
+      fretes,
+      despesas,
+      success: true,
+    });
   }
 
   async produtosBase(req, res) {

@@ -13,6 +13,8 @@ import Notification from '../schemas/Notification';
 import Mail from '../../utils/Mailer';
 import UserApp from '../models/UserApp';
 import TicketsEncaminhados from '../models/TicketsEncaminhados';
+import CategoriaTickets from '../models/CategoriaTickets';
+import TicketCategoriaAutoEncs from '../models/TicketCategoriaAutoEncs';
 
 class TicketsController {
   async index(req, res) {
@@ -199,6 +201,73 @@ class TicketsController {
       texto_json,
     });
 
+    // Verificar encaminhamentos
+    // Encaminharemos o ticket para todos os encaminhamentos na categoria
+    // exceto para o remetente e destinatario do ticket
+    const cat = await CategoriaTickets.findOne({
+      where: { nome: categoria },
+      include: [
+        {
+          model: TicketCategoriaAutoEncs,
+          as: 'encaminhamentos',
+          include: [
+            {
+              model: User,
+              as: 'usuario_enc',
+              attributes: [
+                'id',
+                'nome',
+                'sobrenome',
+                'email',
+                'created_at',
+                'updated_at',
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
+    if (cat.encaminhamentos) {
+      if (cat.encaminhamentos.length > 0) {
+        const encaminhar = cat.encaminhamentos.filter((enc) => {
+          return (
+            enc.id_usuario !== req.idUsuario &&
+            enc.id_usuario !== id_destinatario
+          );
+        });
+
+        if (encaminhar.length > 0) {
+          encaminhar.forEach((element) => {
+            TicketsEncaminhados.create({
+              id_usuario: element.id_usuario,
+              id_destinatario: req.idUsuario,
+              id_ticket,
+            });
+            // Enviar email para cada pessoa que está em cópia
+            Mail.sendMail({
+              to: `${element.usuario_enc.nome} <${element.usuario_enc.email}>`,
+              subject: 'Você está em cópia de um novo ticket',
+              template: 'NewTicketEnc',
+              context: {
+                nome: userDest.nome,
+                titulo: assunto,
+                body: texto,
+                link: `${process.env.HOST}/tickets?tela=encaminhados&id=${ticket.id}`,
+                categoria,
+                subcategoria,
+                prioridade: priori,
+                prazo: prazo
+                  ? format(parseISO(prazo), 'dd/MM/YYY HH:mm')
+                  : 'sem prazo',
+                criador: user.nome,
+              },
+            });
+          });
+        }
+      }
+    }
+
     if (req.body.anexo1) {
       await TicketsFile.create({
         id_ticket,
@@ -335,9 +404,7 @@ class TicketsController {
 
   async alterarPrazo(req, res) {
     const schema = Yup.object().shape({
-      prazo: Yup.date('Formato inválido').required(
-        'O campo prazo é obrigatório'
-      ),
+      prazo: Yup.date('Formato inválido'),
       id_ticket: Yup.number('Formato inválido').required(
         'O campo id_ticket é obrigatório'
       ),
@@ -347,12 +414,12 @@ class TicketsController {
     //   abortEarly: false,
     // });
     if (!(await schema.isValid(req.body))) {
-      return res.status(400).json({ error: 'Validation fails' });
+      return res.json({ message: 'Validation fails', success: false });
     }
 
     // Verificar se o usuário é dono do ticket e se o mesmo encontra-se aberto
 
-    const { id_ticket, prazo } = req.body;
+    const { id_ticket, prazo: prazoAlt = '' } = req.body;
 
     const ticket = await Ticket.findOne({
       where: {
@@ -365,15 +432,18 @@ class TicketsController {
     });
 
     if (!ticket) {
-      return res.status(401).json({
-        error:
+      return res.json({
+        message:
           'Impossível realizar esta operação. Verifique se o solicitante é o criador do ticket e se este ticket se encontra aberto (status = I)',
+        success: false,
       });
     }
 
+    const { prazo: prazoAnterior = '' } = ticket;
+
     await Ticket.update(
       {
-        prazo,
+        prazo: prazoAlt === '' ? null : prazoAlt,
       },
       {
         where: {
@@ -455,7 +525,37 @@ class TicketsController {
       ],
     });
 
-    return res.json(novoTicket);
+    // Verificar se o prazo foi alterado, inserido ou removido
+
+    let updateText = '';
+
+    if (prazoAnterior === null && novoTicket.prazo !== null) {
+      updateText = `${
+        novoTicket.criador.nome
+      } definiu o prazo deste tícket para ${format(
+        novoTicket.prazo,
+        'dd/MM/yyy'
+      )}`;
+    } else if (prazoAnterior !== null && novoTicket.prazo === null) {
+      updateText = `${novoTicket.criador.nome} removeu o prazo deste ticket`;
+    } else if (prazoAnterior !== novoTicket.prazo) {
+      updateText = `${
+        novoTicket.criador.nome
+      } alterou o prazo deste ticket de ${format(
+        prazoAnterior,
+        'dd/MM/yyy'
+      )} para ${format(novoTicket.prazo, 'dd/MM/yyy')}`;
+    }
+
+    if (updateText !== '') {
+      await TicketsUpdates.create({
+        id_usuario: req.idUsuario,
+        id_ticket,
+        texto: updateText,
+      });
+    }
+
+    return res.json({ ticket: novoTicket, success: true });
   }
 
   async encaminharTicket(req, res) {

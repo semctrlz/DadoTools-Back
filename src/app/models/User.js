@@ -74,6 +74,10 @@ class User extends Model {
       foreignKey: 'id_usuario',
       as: 'criador_grupo',
     });
+    this.hasOne(models.TicketCategoriaAutoEncs, {
+      foreignKey: 'id_usuario',
+      as: 'usuario_enc',
+    });
   }
 
   checkPassword(password) {

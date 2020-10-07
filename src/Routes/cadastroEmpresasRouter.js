@@ -5,12 +5,13 @@ import DetalhesClientesController from '../app/controllers/DetalhesClientesContr
 
 const routes = new Router();
 
+routes.get('/', CadastroClientes.index);
+routes.get('/:id', DetalhesClientesController.index);
 routes.post('/', CadastroClientes.store);
 routes.put('/', CadastroClientes.update);
+
 routes.put('/status', CadastroClientes.changeStatus);
-routes.get('/:id', DetalhesClientesController.index);
 routes.get('/edit/:id', CadastroClientes.index);
-routes.get('/', CadastroClientes.index);
 
 routes.post('/detalhes', CadastroClienteMessagesController.store);
 module.exports = routes;

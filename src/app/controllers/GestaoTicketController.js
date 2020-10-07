@@ -720,33 +720,37 @@ class UserTicketsController {
       return res.json({ error: 'Não tem acesso' });
     }
 
-    const { page = 1 } = req.query;
-    const registrosPorPagina = 20;
-
-    const quantidade = await Ticket.count({
-      where: {
-        [Op.and]: [
-          { id_usuario: req.params.id },
-          { [Op.or]: [{ status: 'F' }, { status: 'S' }] },
-        ],
-      },
-    });
-    res.header('X-Total-Count', quantidade);
-
     const tickets = await Ticket.findAll({
       where: {
         [Op.and]: [
-          { id_usuario: req.params.id },
+          { id_usuario: req.idUsuario },
 
           { [Op.or]: [{ status: 'F' }, { status: 'S' }] },
         ],
       },
-      limit: registrosPorPagina,
-      offset: (page - 1) * registrosPorPagina,
+      order: ['createdAt'],
       include: [
         {
           model: AvaliacaoTicket,
           as: 'avaliacao',
+        },
+        {
+          model: TicketsFormatado,
+          as: 'formatado',
+          required: false,
+        },
+        {
+          model: User,
+          as: 'criador',
+          required: false,
+          attributes: ['id', 'nome', 'sobrenome', 'email', 'cargo'],
+          include: [
+            {
+              model: File,
+              as: 'avatar',
+              attributes: ['id', 'nome', 'path', 'url'],
+            },
+          ],
         },
         {
           model: User,
@@ -767,6 +771,38 @@ class UserTicketsController {
           required: false,
         },
         {
+          model: TicketsUpdates,
+          order: [['createdAt', 'DESC']],
+          as: 'updates',
+          required: true,
+          separate: true,
+          include: [
+            {
+              model: User,
+              as: 'criador_update',
+              required: false,
+              attributes: ['id', 'nome', 'sobrenome', 'email', 'cargo'],
+              include: [
+                {
+                  model: File,
+                  as: 'avatar',
+                  attributes: ['id', 'nome', 'path', 'url'],
+                },
+              ],
+            },
+            {
+              model: TicketsUpdatesFormatados,
+              as: 'update_formatado',
+              required: false,
+            },
+            {
+              model: TicketsUpdatesFile,
+              as: 'anexos_update',
+              required: false,
+            },
+          ],
+        },
+        {
           model: EncerramentoTicket,
           separate: true,
           as: 'encerramentos',
@@ -779,7 +815,7 @@ class UserTicketsController {
       attributes: ['nome', 'sobrenome'],
     });
 
-    return res.header('X-Total-Count', quantidade).json({ tickets, usuario });
+    return res.json({ tickets, usuario });
   }
 
   async concluidos_filtro(req, res) {
@@ -958,36 +994,37 @@ class UserTicketsController {
       return res.json({ error: 'Não tem acesso' });
     }
 
-    const { page = 1 } = req.query;
-    const registrosPorPagina = 20;
-
-    const quantidade = await Ticket.count({
-      where: {
-        [Op.and]: [
-          { id_destinatario: req.params.id },
-          { [Op.or]: [{ status: 'F' }, { status: 'S' }] },
-        ],
-      },
-    });
-
     const tickets = await Ticket.findAll({
       where: {
         [Op.and]: [
-          { id_destinatario: req.params.id },
+          { id_destinatario: req.idUsuario },
 
           { [Op.or]: [{ status: 'F' }, { status: 'S' }] },
         ],
       },
-      limit: registrosPorPagina,
-      offset: (page - 1) * registrosPorPagina,
+      order: ['createdAt'],
       include: [
         {
-          model: AvaliacaoTicket,
-          as: 'avaliacao',
+          model: TicketsFormatado,
+          as: 'formatado',
+          required: false,
         },
         {
           model: User,
           as: 'criador',
+          required: false,
+          attributes: ['id', 'nome', 'sobrenome', 'email', 'cargo'],
+          include: [
+            {
+              model: File,
+              as: 'avatar',
+              attributes: ['id', 'nome', 'path', 'url'],
+            },
+          ],
+        },
+        {
+          model: User,
+          as: 'destinatario',
           required: false,
           attributes: ['id', 'nome', 'sobrenome', 'email', 'cargo'],
           include: [
@@ -1008,6 +1045,39 @@ class UserTicketsController {
           separate: true,
           as: 'encerramentos',
           order: [['createdAt', 'DESC']],
+          limit: 1,
+        },
+        {
+          model: TicketsUpdates,
+          order: [['createdAt', 'DESC']],
+          as: 'updates',
+          required: true,
+          separate: true,
+          include: [
+            {
+              model: User,
+              as: 'criador_update',
+              required: false,
+              attributes: ['id', 'nome', 'sobrenome', 'email', 'cargo'],
+              include: [
+                {
+                  model: File,
+                  as: 'avatar',
+                  attributes: ['id', 'nome', 'path', 'url'],
+                },
+              ],
+            },
+            {
+              model: TicketsUpdatesFormatados,
+              as: 'update_formatado',
+              required: false,
+            },
+            {
+              model: TicketsUpdatesFile,
+              as: 'anexos_update',
+              required: false,
+            },
+          ],
         },
       ],
     });
@@ -1016,7 +1086,7 @@ class UserTicketsController {
       attributes: ['nome', 'sobrenome'],
     });
 
-    return res.header('X-Total-Count', quantidade).json({ tickets, usuario });
+    return res.json({ tickets, usuario });
   }
 
   async historico_filtro(req, res) {

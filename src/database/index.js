@@ -32,6 +32,7 @@ import CadastrosDadosConsolidados from '../app/models/CadastrosDadosConsolidados
 import CigamCadastroStatus from '../app/models/CigamCadastroStatus';
 import TicketsEncaminhados from '../app/models/TicketsEncaminhados';
 import Configs from '../app/models/Configs';
+import TicketCategoriaAutoEncs from '../app/models/TicketCategoriaAutoEncs';
 
 const models = [
   User,
@@ -63,6 +64,7 @@ const models = [
   CigamCadastroStatus,
   TicketsEncaminhados,
   Configs,
+  TicketCategoriaAutoEncs,
 ];
 
 class Database {

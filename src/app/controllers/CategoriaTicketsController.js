@@ -5,6 +5,8 @@ import IsTicketAdmin from '../middlewares/AdminTickets';
 
 import CategoriaTickets from '../models/CategoriaTickets';
 import SubcategoriaTickets from '../models/SubcategoriaTickets';
+import TicketCategoriaAutoEncs from '../models/TicketCategoriaAutoEncs';
+import User from '../models/User';
 
 class CategoriaTicketsController {
   async index(req, res) {
@@ -18,7 +20,6 @@ class CategoriaTicketsController {
         'created_at',
         'updated_at',
       ],
-      where: { ativo: true },
       include: [
         {
           model: SubcategoriaTickets,
@@ -37,6 +38,24 @@ class CategoriaTicketsController {
           separate: true,
           required: false,
         },
+        {
+          model: TicketCategoriaAutoEncs,
+          as: 'encaminhamentos',
+          include: [
+            {
+              model: User,
+              as: 'usuario_enc',
+              attributes: [
+                'id',
+                'nome',
+                'sobrenome',
+                'email',
+                'created_at',
+                'updated_at',
+              ],
+            },
+          ],
+        },
       ],
     });
 
@@ -47,6 +66,11 @@ class CategoriaTicketsController {
     const schema = Yup.object().shape({
       nome: Yup.string().max(64).required(),
       descricao: Yup.string().max(255),
+      encaminhamentos: Yup.array(
+        Yup.object().shape({
+          email: Yup.string(),
+        })
+      ),
     });
 
     if (!(await schema.isValid(req.body))) {
@@ -75,7 +99,26 @@ class CategoriaTicketsController {
       });
     }
 
-    await CategoriaTickets.create(req.body);
+    const categ = await CategoriaTickets.create(req.body);
+    const { encaminhamentos } = req.body;
+
+    if (encaminhamentos && encaminhamentos.length > 0) {
+      const mailList = encaminhamentos.map((mail) => {
+        return mail.email;
+      });
+
+      const users = await User.findAll({
+        where: { email: mailList },
+      });
+
+      const dados = users.map((u) => {
+        return {
+          id_categoria: categ.id,
+          id_usuario: u.id,
+        };
+      });
+      await TicketCategoriaAutoEncs.bulkCreate(dados);
+    }
 
     const categorias = await CategoriaTickets.findAll({
       order: [['nome']],
@@ -103,6 +146,24 @@ class CategoriaTicketsController {
           ],
           separate: true,
           required: false,
+        },
+        {
+          model: TicketCategoriaAutoEncs,
+          as: 'encaminhamentos',
+          include: [
+            {
+              model: User,
+              as: 'usuario_enc',
+              attributes: [
+                'id',
+                'nome',
+                'sobrenome',
+                'email',
+                'created_at',
+                'updated_at',
+              ],
+            },
+          ],
         },
       ],
     });
@@ -171,9 +232,10 @@ class CategoriaTicketsController {
   async update(req, res) {
     const schema = Yup.object().shape({
       id: Yup.number().required(),
-      nome: Yup.string().max(25).required(),
+      nome: Yup.string().max(64).required(),
       descricao: Yup.string(255),
       ativo: Yup.boolean(),
+      encaminhamentos: Yup.array(),
     });
 
     if (!(await schema.isValid(req.body))) {
@@ -220,6 +282,30 @@ class CategoriaTicketsController {
       }
     );
 
+    await TicketCategoriaAutoEncs.destroy({
+      where: { id_categoria: req.body.id },
+    });
+
+    const { encaminhamentos } = req.body;
+
+    if (encaminhamentos && encaminhamentos.length > 0) {
+      const mailList = encaminhamentos.map((mail) => {
+        return mail.email;
+      });
+
+      const users = await User.findAll({
+        where: { email: mailList },
+      });
+
+      const dados = users.map((u) => {
+        return {
+          id_categoria: req.body.id,
+          id_usuario: u.id,
+        };
+      });
+      await TicketCategoriaAutoEncs.bulkCreate(dados);
+    }
+
     const categorias = await CategoriaTickets.findAll({
       order: [['nome']],
       attributes: [
@@ -246,6 +332,24 @@ class CategoriaTicketsController {
           ],
           separate: true,
           required: false,
+        },
+        {
+          model: TicketCategoriaAutoEncs,
+          as: 'encaminhamentos',
+          include: [
+            {
+              model: User,
+              as: 'usuario_enc',
+              attributes: [
+                'id',
+                'nome',
+                'sobrenome',
+                'email',
+                'created_at',
+                'updated_at',
+              ],
+            },
+          ],
         },
       ],
     });

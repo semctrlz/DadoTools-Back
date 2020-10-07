@@ -21,6 +21,10 @@ class CategoriaTickets extends Model {
       foreignKey: 'id_categoria',
       as: 'subcategorias',
     });
+    this.hasMany(models.TicketCategoriaAutoEncs, {
+      foreignKey: 'id_categoria',
+      as: 'encaminhamentos',
+    });
   }
 }
 

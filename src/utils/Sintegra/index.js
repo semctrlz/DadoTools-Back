@@ -74,7 +74,7 @@ class Sintegra {
     return this.ConsultaCpf(id, cnpjCpf, new Date(nascimento));
   }
 
-  async ConsultaSaldo(){
+  async ConsultaSaldo() {
     const dados = await apiSintegra.get(
       `api/v1/consulta-saldo.php?token=${process.env.SINTEGRA_TOKEN}`
     );
