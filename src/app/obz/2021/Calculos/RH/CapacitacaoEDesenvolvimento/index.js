@@ -201,11 +201,12 @@ export const variaveis = {
       valor: 3260,
     },
   ],
-
-  MensalidadePesquisaSalarial: {
-    mes: 1,
-    valor: 144.9,
-  },
+  MensalidadePesquisaSalarial: [
+    {
+      mes: 2,
+      valor: 144.9,
+    },
+  ],
   Workshops: [
     { mes: 3, Empresa: 'FALE / Alexandre Garcia ', valor: 3900 },
     { mes: 5, Empresa: 'FALE / Alexandre Garcia ', valor: 3900 },
@@ -255,7 +256,7 @@ export const variaveis = {
   },
   PlataformaAvaliacaoDesempenho: {
     mesImplantacao: 6,
-    valorImplantacao: 0,
+    valorImplantacao: 1355,
     Mensalidade: 1355,
   },
   Educacao: [
@@ -319,6 +320,7 @@ export default function CapacitacaoEDesenvolvimento(ano, mes) {
       Utils.SomaArray(variaveis.CapacitacaoGerentes.Coffee.map(v => v.valor)) *
       (QlGerencial.length + 3); // Adicionado 3 para palestrantes/treinadores
   }
+
   // #endregion
 
   // #region Cursos diversos
@@ -340,9 +342,17 @@ export default function CapacitacaoEDesenvolvimento(ano, mes) {
   );
 
   // Pesquisa salarial
-  const valorPesquisaSalarial = Utils.SomaArray(
+  let valorPesquisaSalarial = Utils.SomaArray(
     variaveis.PesquisaSalarial.filter(p => p.mes === mes).map(p => p.valor)
   );
+
+  let mensalidadePesquisa = 0;
+  variaveis.MensalidadePesquisaSalarial.forEach(m => {
+    if (m.mes <= mes) mensalidadePesquisa = m.valor;
+  });
+
+  valorPesquisaSalarial += mensalidadePesquisa;
+
   // #endregion
 
   // #region Workshops, palestras e treinamentos

@@ -1,343 +1,754 @@
 import path from 'path';
-import OBZ2021 from '..';
+import { format } from 'date-fns';
+import Cenarios from '../../../models/SimuladorCenarios';
 
 const xl = require('excel4node');
 
-const estiloCabecalhosColuna = {
+const percentual0cTabela = {
   font: {
     color: '#111111',
-    size: 12,
-    bold: true,
+    size: 11,
   },
-  alignment: {
-    horizontal: 'center',
+  numberFormat: '0.0%',
+  border: {
+    left: {
+      style: 'thin',
+      color: '#000000',
+    },
+    right: {
+      style: 'thin',
+      color: '#000000',
+    },
+    top: {
+      style: 'thin',
+      color: '#000000',
+    },
+    bottom: {
+      style: 'thin',
+      color: '#000000',
+    },
   },
 };
-const estiloCabecalhosLinha = {
+const percentual1cTabela = {
   font: {
     color: '#111111',
-    size: 12,
-    bold: true,
+    size: 11,
   },
-  alignment: {
-    horizontal: 'left',
+  numberFormat: '0.0%',
+  border: {
+    left: {
+      style: 'thin',
+      color: '#000000',
+    },
+    right: {
+      style: 'thin',
+      color: '#000000',
+    },
+    top: {
+      style: 'thin',
+      color: '#000000',
+    },
+    bottom: {
+      style: 'thin',
+      color: '#000000',
+    },
   },
 };
-const estiloValores = {
+
+const estiloVolumeTabela = {
+  font: {
+    color: '#111111',
+    size: 11,
+  },
+  numberFormat: '#,##0',
+  border: {
+    left: {
+      style: 'thin',
+      color: '#000000',
+    },
+    right: {
+      style: 'thin',
+      color: '#000000',
+    },
+    top: {
+      style: 'thin',
+      color: '#000000',
+    },
+    bottom: {
+      style: 'thin',
+      color: '#000000',
+    },
+  },
+};
+
+const dinheiroTabela = {
   font: {
     color: '#111111',
     size: 11,
   },
   numberFormat: '#,##0.00; (#,##0.00); -',
+  border: {
+    left: {
+      style: 'thin',
+      color: '#000000',
+    },
+    right: {
+      style: 'thin',
+      color: '#000000',
+    },
+    top: {
+      style: 'thin',
+      color: '#000000',
+    },
+    bottom: {
+      style: 'thin',
+      color: '#000000',
+    },
+  },
 };
 
-function getMes(mes) {
-  switch (mes) {
-    case 1:
-      return 'JAN';
-    case 2:
-      return 'FEV';
-    case 3:
-      return 'MAR';
-    case 4:
-      return 'ABR';
-    case 5:
-      return 'MAI';
-    case 6:
-      return 'JUN';
-    case 7:
-      return 'JUL';
-    case 8:
-      return 'AGO';
-    case 9:
-      return 'SET';
-    case 10:
-      return 'OUT';
-    case 11:
-      return 'NOV';
-    case 12:
-      return 'DEZ';
-    default:
-      return '';
-  }
-}
+const estiloCabecalhosTabelaColuna = {
+  font: {
+    color: '#111111',
+    size: 12,
+    bold: true,
+  },
+  fill: {
+    type: 'pattern',
+    patternType: 'solid',
+    bgColor: '#cccccc',
+    fgColor: '#cccccc',
+  },
+  alignment: {
+    horizontal: 'center',
+  },
+  border: {
+    left: {
+      style: 'thin',
+      color: '#000000',
+    },
+    right: {
+      style: 'thin',
+      color: '#000000',
+    },
+    top: {
+      style: 'thin',
+      color: '#000000',
+    },
+    bottom: {
+      style: 'thin',
+      color: '#000000',
+    },
+  },
+};
 
-export default async function ExportaExcel(mes = 0) {
+const estiloCabecalhosTabelaLinha = {
+  font: {
+    color: '#111111',
+    size: 12,
+    bold: true,
+  },
+  fill: {
+    type: 'pattern',
+    patternType: 'solid',
+    bgColor: '#cccccc',
+    fgColor: '#cccccc',
+  },
+  alignment: {
+    horizontal: 'left',
+  },
+  border: {
+    left: {
+      style: 'thin',
+      color: '#000000',
+    },
+    right: {
+      style: 'thin',
+      color: '#000000',
+    },
+    top: {
+      style: 'thin',
+      color: '#000000',
+    },
+    bottom: {
+      style: 'thin',
+      color: '#000000',
+    },
+  },
+};
+
+const estiloTituloTabelaLinha = {
+  font: {
+    color: '#ffffff',
+    size: 12,
+    bold: true,
+  },
+  fill: {
+    type: 'pattern',
+    patternType: 'solid',
+    bgColor: '#222222',
+    fgColor: '#222222',
+  },
+  alignment: {
+    horizontal: 'center',
+  },
+  border: {
+    left: {
+      style: 'thin',
+      color: '#000000',
+    },
+    right: {
+      style: 'thin',
+      color: '#000000',
+    },
+    top: {
+      style: 'thin',
+      color: '#000000',
+    },
+    bottom: {
+      style: 'thin',
+      color: '#000000',
+    },
+  },
+};
+
+export default async function ExportaCenario(id) {
   // caso o mes esteja 0, rodar todos os meses
   const wb = new xl.Workbook();
-  const ws = wb.addWorksheet('OBZ 2021');
-  const cabecalhoColuna = wb.createStyle(estiloCabecalhosColuna);
-  const cabecalhoLinha = wb.createStyle(estiloCabecalhosLinha);
-  const valores = wb.createStyle(estiloValores);
+  const ws = wb.addWorksheet('CENARIO');
+  const ws_r = wb.addWorksheet('RESUMO');
 
-  const obzz = await OBZ2021.OBZ2021_Sintetico(mes);
-  const obz = obzz.Mes;
+  const EPercentual0CTabela = wb.createStyle(percentual0cTabela);
+  const EPercentual1CTabela = wb.createStyle(percentual1cTabela);
+  const EVolumeTabela = wb.createStyle(estiloVolumeTabela);
+  const EDinheiroTabela = wb.createStyle(dinheiroTabela);
+  const ECabecalhoColunaTabela = wb.createStyle(estiloCabecalhosTabelaColuna);
+  const ECabecalhoLinhaTabela = wb.createStyle(estiloCabecalhosTabelaLinha);
+  const ETituloTabela = wb.createStyle(estiloTituloTabelaLinha);
 
-  // eslint-disable-next-line no-shadow
-  obz.forEach((mes, i) => {
-    if (i === 0) {
-      // Desenha os cabeçalhos
-      ws.cell(1, 1).string('Pacote').style(cabecalhoColuna);
-      ws.cell(1, 2).string('Conta').style(cabecalhoColuna);
-      ws.cell(1, 3).string('Conta contábil').style(cabecalhoColuna);
-    }
-    ws.cell(1, 4 + i)
-      .string(getMes(mes.Mes))
-      .style(cabecalhoColuna);
+  const cenario = await Cenarios.findOne({ where: { id } });
 
-    const linhaInicialRH = 2;
-    const { RH } = mes.OBZ.Fixos;
+  const { nome: nomeCenario, json_obj } = cenario;
+  ws.cell(1, 1).string('Nome cenário:').style(ETituloTabela);
+  ws.cell(1, 2).string(nomeCenario).style(ECabecalhoLinhaTabela);
+  ws.cell(2, 1).string('Data exportação:').style(ETituloTabela);
+  ws.cell(2, 2)
+    .string(format(new Date(), 'dd/MM/yyyy'))
+    .style(ECabecalhoLinhaTabela);
 
-    RH.forEach((element, j) => {
-      if (i === 0) {
-        ws.cell(linhaInicialRH + j, 1)
-          .string('RH')
-          .style(cabecalhoLinha);
-        ws.cell(linhaInicialRH + j, 2)
-          .string(element.NomeConta)
-          .style(cabecalhoLinha);
-        ws.cell(linhaInicialRH + j, 3)
-          .string(element.ContaContabil)
-          .style(cabecalhoLinha);
-      }
-      ws.cell(linhaInicialRH + j, 4 + i)
-        .number(element.Valor)
-        .style(valores);
-    });
+  let linhaI = 4;
 
-    const linhaInicialTerceiros = linhaInicialRH + RH.length;
-    const { Terceiros } = mes.OBZ.Fixos;
+  json_obj.forEach((prod, index) => {
+    const { nome: nomeProd } = prod;
+    ws.cell(linhaI, 1).string('CÓDIGO').style(ETituloTabela);
+    ws.cell(linhaI, 2).string(nomeProd).style(ETituloTabela);
+    ws.cell(linhaI, 3).string('RS').style(ETituloTabela);
+    ws.cell(linhaI, 4).string('SC').style(ETituloTabela);
+    ws.cell(linhaI, 5).string('PR').style(ETituloTabela);
+    const [dadosRS] = prod.estados.filter(e => e.uf === 'RS');
+    const [dadosSC] = prod.estados.filter(e => e.uf === 'SC');
+    const [dadosPR] = prod.estados.filter(e => e.uf === 'PR');
 
-    Terceiros.forEach((element, j) => {
-      if (i === 0) {
-        ws.cell(linhaInicialTerceiros + j, 1)
-          .string('Terceiros')
-          .style(cabecalhoLinha);
-        ws.cell(linhaInicialTerceiros + j, 2)
-          .string(element.NomeConta)
-          .style(cabecalhoLinha);
-        ws.cell(linhaInicialTerceiros + j, 3)
-          .string(element.ContaContabil)
-          .style(cabecalhoLinha);
-      }
+    const codProd = prod.cod;
 
-      ws.cell(linhaInicialTerceiros + j, 4 + i)
-        .number(element.Valor)
-        .style(valores);
-    });
+    linhaI++;
+    // #region Volume
+    ws.cell(linhaI, 1).string(codProd).style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 2).string('Volume').style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 3)
+      .number(Number(String(dadosRS.volume).split('.').join('')))
+      .style(EVolumeTabela);
+    ws.cell(linhaI, 4)
+      .number(Number(String(dadosSC.volume).split('.').join('')))
+      .style(EVolumeTabela);
+    ws.cell(linhaI, 5)
+      .number(Number(String(dadosPR.volume).split('.').join('')))
+      .style(EVolumeTabela);
+    // #endregion
 
-    const linhaInicialDGO = linhaInicialTerceiros + Terceiros.length;
-    const { DGO } = mes.OBZ.Fixos;
-    DGO.forEach((element, j) => {
-      if (i === 0) {
-        ws.cell(linhaInicialDGO + j, 1)
-          .string('DGO')
-          .style(cabecalhoLinha);
-        ws.cell(linhaInicialDGO + j, 2)
-          .string(element.NomeConta)
-          .style(cabecalhoLinha);
-        ws.cell(linhaInicialDGO + j, 3)
-          .string(element.ContaContabil)
-          .style(cabecalhoLinha);
-      }
-      ws.cell(linhaInicialDGO + j, 4 + i)
-        .number(element.Valor)
-        .style(valores);
-    });
+    linhaI++;
+    // #region Preço Médio
+    ws.cell(linhaI, 1).string(codProd).style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 2).string('Preço (SKU)').style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 3)
+      .number(Number(String(dadosRS.precoMed).split(',').join('.')) || 0)
+      .style(EDinheiroTabela);
+    ws.cell(linhaI, 4)
+      .number(Number(String(dadosSC.precoMed).split(',').join('.')) || 0)
+      .style(EDinheiroTabela);
+    ws.cell(linhaI, 5)
+      .number(Number(String(dadosPR.precoMed).split(',').join('.')) || 0)
+      .style(EDinheiroTabela);
+    // #endregion
 
-    const linhaInicialTributos = linhaInicialDGO + DGO.length;
-    const { Tributos } = mes.OBZ.Fixos;
+    linhaI++;
+    // #region Pauta
+    ws.cell(linhaI, 1).string(codProd).style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 2).string('Pauta').style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 3)
+      .number(dadosRS.pauta || 0)
+      .style(EDinheiroTabela);
+    ws.cell(linhaI, 4)
+      .number(dadosSC.pauta || 0)
+      .style(EDinheiroTabela);
+    ws.cell(linhaI, 5)
+      .number(dadosPR.pauta || 0)
+      .style(EDinheiroTabela);
+    // #endregion
 
-    Tributos.forEach((element, j) => {
-      if (i === 0) {
-        ws.cell(linhaInicialTributos + j, 1)
-          .string('Tributos')
-          .style(cabecalhoLinha);
-        ws.cell(linhaInicialTributos + j, 2)
-          .string(element.NomeConta)
-          .style(cabecalhoLinha);
-        ws.cell(linhaInicialTributos + j, 3)
-          .string(element.ContaContabil)
-          .style(cabecalhoLinha);
-      }
-      ws.cell(linhaInicialTributos + j, 4 + i)
-        .number(element.Valor)
-        .style(valores);
-    });
+    linhaI++;
+    // #region % Atacado
+    ws.cell(linhaI, 1).string(codProd).style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 2).string('% Atacado').style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 3)
+      .number(dadosRS.atacadoP / 100 || 0)
+      .style(EPercentual0CTabela);
+    ws.cell(linhaI, 4)
+      .number(dadosSC.atacadoP / 100 || 0)
+      .style(EPercentual0CTabela);
+    ws.cell(linhaI, 5)
+      .number(dadosPR.atacadoP / 100 || 0)
+      .style(EPercentual0CTabela);
+    // #endregion
 
-    const linhaInicialFinanceiro = linhaInicialTributos + Tributos.length;
-    const { Financeiro } = mes.OBZ.Fixos;
+    linhaI++;
+    // #region % Frete Direto
+    ws.cell(linhaI, 1).string(codProd).style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 2).string('% Frete direto').style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 3)
+      .number((100 - dadosRS.distribuicaoP) / 100 || 0)
+      .style(EPercentual0CTabela);
+    ws.cell(linhaI, 4)
+      .number((100 - dadosSC.distribuicaoP) / 100 || 0)
+      .style(EPercentual0CTabela);
+    ws.cell(linhaI, 5)
+      .number((100 - dadosPR.distribuicaoP) / 100 || 0)
+      .style(EPercentual0CTabela);
+    // #endregion
 
-    Financeiro.forEach((element, j) => {
-      if (i === 0) {
-        ws.cell(linhaInicialFinanceiro + j, 1)
-          .string('Financeiro')
-          .style(cabecalhoLinha);
-        ws.cell(linhaInicialFinanceiro + j, 2)
-          .string(element.NomeConta)
-          .style(cabecalhoLinha);
-        ws.cell(linhaInicialFinanceiro + j, 3)
-          .string(element.ContaContabil)
-          .style(cabecalhoLinha);
-      }
-      ws.cell(linhaInicialFinanceiro + j, 4 + i)
-        .number(element.Valor)
-        .style(valores);
-    });
-    const linhaInicialTI = linhaInicialFinanceiro + Financeiro.length;
-    const { TI } = mes.OBZ.Fixos;
-    TI.forEach((element, j) => {
-      if (i === 0) {
-        ws.cell(linhaInicialTI + j, 1)
-          .string('TI')
-          .style(cabecalhoLinha);
-        ws.cell(linhaInicialTI + j, 2)
-          .string(element.NomeConta)
-          .style(cabecalhoLinha);
-        ws.cell(linhaInicialTI + j, 3)
-          .string(element.ContaContabil)
-          .style(cabecalhoLinha);
-      }
-      ws.cell(linhaInicialTI + j, 4 + i)
-        .number(element.Valor)
-        .style(valores);
-    });
-    const linhaInicialSeguros = linhaInicialTI + TI.length;
-    const { Seguros } = mes.OBZ.Fixos;
+    linhaI++;
+    // #region Receita Bruta
+    const receitaBrutaRS =
+      ((Number(String(dadosRS.precoMed).split(',').join('.')) || 0) /
+        prod.volumeUnitario) *
+      Number(String(dadosRS.volume).split('.').join(''));
+    const receitaBrutaSC =
+      ((Number(String(dadosSC.precoMed).split(',').join('.')) || 0) /
+        prod.volumeUnitario) *
+      Number(String(dadosSC.volume).split('.').join(''));
+    const receitaBrutaPR =
+      ((Number(String(dadosPR.precoMed).split(',').join('.')) || 0) /
+        prod.volumeUnitario) *
+      Number(String(dadosPR.volume).split('.').join(''));
+    ws.cell(linhaI, 1).string(codProd).style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 2).string('Receita Bruta').style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 3)
+      .number(receitaBrutaRS || 0)
+      .style(EDinheiroTabela);
+    ws.cell(linhaI, 4)
+      .number(receitaBrutaSC || 0)
+      .style(EDinheiroTabela);
+    ws.cell(linhaI, 5)
+      .number(receitaBrutaPR || 0)
+      .style(EDinheiroTabela);
+    // #endregion
 
-    Seguros.forEach((element, j) => {
-      if (i === 0) {
-        ws.cell(linhaInicialSeguros + j, 1)
-          .string('Seguros')
-          .style(cabecalhoLinha);
-        ws.cell(linhaInicialSeguros + j, 2)
-          .string(element.NomeConta)
-          .style(cabecalhoLinha);
-        ws.cell(linhaInicialSeguros + j, 3)
-          .string(element.ContaContabil)
-          .style(cabecalhoLinha);
-      }
-      ws.cell(linhaInicialSeguros + j, 4 + i)
-        .number(element.Valor)
-        .style(valores);
-    });
-    const linhaInicialDespForcaVendas = linhaInicialSeguros + Seguros.length;
-    const { DespForcaVendas } = mes.OBZ.Fixos;
-    DespForcaVendas.forEach((element, j) => {
-      if (i === 0) {
-        ws.cell(linhaInicialDespForcaVendas + j, 1)
-          .string('Despesas com força de vendas')
-          .style(cabecalhoLinha);
-        ws.cell(linhaInicialDespForcaVendas + j, 2)
-          .string(element.NomeConta)
-          .style(cabecalhoLinha);
-        ws.cell(linhaInicialDespForcaVendas + j, 3)
-          .string(element.ContaContabil)
-          .style(cabecalhoLinha);
-      }
-      ws.cell(linhaInicialDespForcaVendas + j, 4 + i)
-        .number(element.Valor)
-        .style(valores);
-    });
-    const linhaInicialOcupacao =
-      linhaInicialDespForcaVendas + DespForcaVendas.length;
-    const { Ocupacao } = mes.OBZ.Fixos;
-    Ocupacao.forEach((element, j) => {
-      if (i === 0) {
-        ws.cell(linhaInicialOcupacao + j, 1)
-          .string('Ocupação')
-          .style(cabecalhoLinha);
-        ws.cell(linhaInicialOcupacao + j, 2)
-          .string(element.NomeConta)
-          .style(cabecalhoLinha);
-        ws.cell(linhaInicialOcupacao + j, 3)
-          .string(element.ContaContabil)
-          .style(cabecalhoLinha);
-      }
-      ws.cell(linhaInicialOcupacao + j, 4 + i)
-        .number(element.Valor)
-        .style(valores);
-    });
-  });
+    linhaI++;
+    // #region ST
+    ws.cell(linhaI, 1).string(codProd).style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 2).string('ST').style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 3)
+      .number(
+        dadosRS.impostos.valorTotal !== undefined
+          ? dadosRS.impostos.valorTotal.icmsSt
+          : 0
+      )
+      .style(EDinheiroTabela);
+    ws.cell(linhaI, 4)
+      .number(
+        dadosSC.impostos.valorTotal !== undefined
+          ? dadosSC.impostos.valorTotal.icmsSt
+          : 0
+      )
+      .style(EDinheiroTabela);
+    ws.cell(linhaI, 5)
+      .number(
+        dadosPR.impostos.valorTotal !== undefined
+          ? dadosPR.impostos.valorTotal.icmsSt
+          : 0
+      )
+      .style(EDinheiroTabela);
+    // #endregion
 
-  const ws_r = wb.addWorksheet('OBZ 2021 RECEITAS MERC INT');
+    linhaI++;
+    // #region FCP
+    ws.cell(linhaI, 1).string(codProd).style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 2).string('ST-FCP').style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 3)
+      .number(
+        dadosRS.impostos.valorTotal !== undefined
+          ? dadosRS.impostos.valorTotal.icmsStFCP
+          : 0
+      )
+      .style(EDinheiroTabela);
+    ws.cell(linhaI, 4)
+      .number(
+        dadosSC.impostos.valorTotal !== undefined
+          ? dadosSC.impostos.valorTotal.icmsStFCP
+          : 0
+      )
+      .style(EDinheiroTabela);
+    ws.cell(linhaI, 5)
+      .number(
+        dadosPR.impostos.valorTotal !== undefined
+          ? dadosPR.impostos.valorTotal.icmsStFCP
+          : 0
+      )
+      .style(EDinheiroTabela);
+    // #endregion
 
-  obz.forEach((mesR, i) => {
-    if (i === 0) {
-      // Desenha os cabeçalhos
-      ws_r.cell(1, 1).string('Pacote').style(cabecalhoColuna);
-      ws_r.cell(1, 2).string('Conta').style(cabecalhoColuna);
-      ws_r.cell(1, 3).string('Conta contábil').style(cabecalhoColuna);
-    }
+    linhaI++;
+    // #region IPI
+    ws.cell(linhaI, 1).string(codProd).style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 2).string('IPI').style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 3)
+      .number(
+        dadosRS.impostos.valorTotal !== undefined
+          ? dadosRS.impostos.valorTotal.ipi
+          : 0
+      )
+      .style(EDinheiroTabela);
+    ws.cell(linhaI, 4)
+      .number(
+        dadosSC.impostos.valorTotal !== undefined
+          ? dadosSC.impostos.valorTotal.ipi
+          : 0
+      )
+      .style(EDinheiroTabela);
+    ws.cell(linhaI, 5)
+      .number(
+        dadosPR.impostos.valorTotal !== undefined
+          ? dadosPR.impostos.valorTotal.ipi
+          : 0
+      )
+      .style(EDinheiroTabela);
+    // #endregion
+
+    linhaI++;
+    // #region ICMS
+    ws.cell(linhaI, 1).string(codProd).style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 2).string('ICMS').style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 3)
+      .number(
+        dadosRS.impostos.valorTotal !== undefined
+          ? dadosRS.impostos.valorTotal.icms
+          : 0
+      )
+      .style(EDinheiroTabela);
+    ws.cell(linhaI, 4)
+      .number(
+        dadosSC.impostos.valorTotal !== undefined
+          ? dadosSC.impostos.valorTotal.icms
+          : 0
+      )
+      .style(EDinheiroTabela);
+    ws.cell(linhaI, 5)
+      .number(
+        dadosPR.impostos.valorTotal !== undefined
+          ? dadosPR.impostos.valorTotal.icms
+          : 0
+      )
+      .style(EDinheiroTabela);
+    // #endregion
+
+    linhaI++;
+    // #region PIS
+    ws.cell(linhaI, 1).string(codProd).style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 2).string('PIS').style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 3)
+      .number(
+        dadosRS.impostos.valorTotal !== undefined
+          ? dadosRS.impostos.valorTotal.pis
+          : 0
+      )
+      .style(EDinheiroTabela);
+    ws.cell(linhaI, 4)
+      .number(
+        dadosSC.impostos.valorTotal !== undefined
+          ? dadosSC.impostos.valorTotal.pis
+          : 0
+      )
+      .style(EDinheiroTabela);
+    ws.cell(linhaI, 5)
+      .number(
+        dadosPR.impostos.valorTotal !== undefined
+          ? dadosPR.impostos.valorTotal.pis
+          : 0
+      )
+      .style(EDinheiroTabela);
+    // #endregion
+
+    linhaI++;
+    // #region PIS
+    ws.cell(linhaI, 1).string(codProd).style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 2).string('COFINS').style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 3)
+      .number(
+        dadosRS.impostos.valorTotal !== undefined
+          ? dadosRS.impostos.valorTotal.cofins
+          : 0
+      )
+      .style(EDinheiroTabela);
+    ws.cell(linhaI, 4)
+      .number(
+        dadosSC.impostos.valorTotal !== undefined
+          ? dadosSC.impostos.valorTotal.cofins
+          : 0
+      )
+      .style(EDinheiroTabela);
+    ws.cell(linhaI, 5)
+      .number(
+        dadosPR.impostos.valorTotal !== undefined
+          ? dadosPR.impostos.valorTotal.cofins
+          : 0
+      )
+      .style(EDinheiroTabela);
+    // #endregion
+
+    linhaI++;
+    // #region Receita Liquida
+    ws.cell(linhaI, 1).string(codProd).style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 2).string('Receita Líquida').style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 3)
+      .formula(`C${linhaI - 7} - SUM(C${linhaI - 6} : C${linhaI - 1}) `)
+      .style(EDinheiroTabela);
+    ws.cell(linhaI, 4)
+      .formula(`D${linhaI - 7} - SUM(D${linhaI - 6} : D${linhaI - 1}) `)
+      .style(EDinheiroTabela);
+    ws.cell(linhaI, 5)
+      .formula(`E${linhaI - 7} - SUM(E${linhaI - 6} : E${linhaI - 1}) `)
+      .style(EDinheiroTabela);
+    // #endregion
+
+    linhaI++;
+    // #region cpv
+    ws.cell(linhaI, 1).string(codProd).style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 2).string('CPV').style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 3)
+      .number(dadosRS.custoTotal || 0)
+      .style(EDinheiroTabela);
+    ws.cell(linhaI, 4)
+      .number(dadosSC.custoTotal || 0)
+      .style(EDinheiroTabela);
+    ws.cell(linhaI, 5)
+      .number(dadosPR.custoTotal || 0)
+      .style(EDinheiroTabela);
+    // #endregion
+
+    linhaI++;
+    // #region Descontos Concedidos
+    ws.cell(linhaI, 1).string(codProd).style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 2)
+      .string('Descontos concedidos')
+      .style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 3)
+      .number(dadosRS.descConced || 0)
+      .style(EDinheiroTabela);
+    ws.cell(linhaI, 4)
+      .number(dadosSC.descConced || 0)
+      .style(EDinheiroTabela);
+    ws.cell(linhaI, 5)
+      .number(dadosPR.descConced || 0)
+      .style(EDinheiroTabela);
+    // #endregion
+
+    linhaI++;
+    // #region Marketing
+    ws.cell(linhaI, 1).string(codProd).style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 2).string('Marketing').style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 3)
+      .number(dadosRS.marketing || 0)
+      .style(EDinheiroTabela);
+    ws.cell(linhaI, 4)
+      .number(dadosSC.marketing || 0)
+      .style(EDinheiroTabela);
+    ws.cell(linhaI, 5)
+      .number(dadosPR.marketing || 0)
+      .style(EDinheiroTabela);
+    // #endregion
+
+    linhaI++;
+    // #region Frete
+    ws.cell(linhaI, 1).string(codProd).style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 2).string('Frete').style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 3)
+      .number(dadosRS.totalFrete || 0)
+      .style(EDinheiroTabela);
+    ws.cell(linhaI, 4)
+      .number(dadosSC.totalFrete || 0)
+      .style(EDinheiroTabela);
+    ws.cell(linhaI, 5)
+      .number(dadosPR.totalFrete || 0)
+      .style(EDinheiroTabela);
+    // #endregion
+
+    linhaI++;
+    // #region Margem $
+    ws.cell(linhaI, 1).string(codProd).style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 2).string('Margem $').style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 3)
+      .formula(`C${linhaI - 5} - SUM(C${linhaI - 4} : C${linhaI - 1}) `)
+      .style(EDinheiroTabela);
+    ws.cell(linhaI, 4)
+      .formula(`D${linhaI - 5} - SUM(D${linhaI - 4} : D${linhaI - 1}) `)
+      .style(EDinheiroTabela);
+    ws.cell(linhaI, 5)
+      .formula(`E${linhaI - 5} - SUM(E${linhaI - 4} : E${linhaI - 1}) `)
+      .style(EDinheiroTabela);
+    // #endregion
+
+    linhaI++;
+    // #region Margem %
+    ws.cell(linhaI, 1).string(codProd).style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 2).string('Margem %').style(ECabecalhoLinhaTabela);
+    ws.cell(linhaI, 3)
+      .formula(`C${linhaI - 1} / C${linhaI - 6}`)
+      .style(EPercentual1CTabela);
+    ws.cell(linhaI, 4)
+      .formula(`D${linhaI - 1} / D${linhaI - 6}`)
+      .style(EPercentual1CTabela);
+    ws.cell(linhaI, 5)
+      .formula(`E${linhaI - 1} / E${linhaI - 6}`)
+      .style(EPercentual1CTabela);
+    // #endregion
+    linhaI += 2;
+
+    const linhaInicialResumo = index * 6 + 1;
+    const distEntreItens = 21;
+    const linhaVolumeInicial = 5;
+    const linhaMargemValorInicial = 22;
+    const linhaReceitaLiquidaInicial = 17;
+
+    // #region Titulo
     ws_r
-      .cell(1, 4 + i)
-      .string(getMes(mesR.Mes))
-      .style(cabecalhoColuna);
+      .cell(linhaInicialResumo, 1, linhaInicialResumo, 5, true)
+      .string(nomeProd)
+      .style(ETituloTabela);
+    ws_r
+      .cell(linhaInicialResumo + 1, 1)
+      .string('')
+      .style(ECabecalhoColunaTabela);
+    ws_r
+      .cell(linhaInicialResumo + 1, 2)
+      .string('RS')
+      .style(ECabecalhoColunaTabela);
+    ws_r
+      .cell(linhaInicialResumo + 1, 3)
+      .string('SC')
+      .style(ECabecalhoColunaTabela);
+    ws_r
+      .cell(linhaInicialResumo + 1, 4)
+      .string('PR')
+      .style(ECabecalhoColunaTabela);
+    ws_r
+      .cell(linhaInicialResumo + 1, 5)
+      .string('TOTAL')
+      .style(ECabecalhoColunaTabela);
+    // #endregion
 
-    const linhaInicialReceita = 2;
-    const { Receitas } = mesR.OBZ.Fixos;
-    Receitas.MercadoInterno.forEach((element, j) => {
-      if (i === 0) {
-        ws_r
-          .cell(linhaInicialReceita + j, 1)
-          .string('RECEITAS')
-          .style(cabecalhoLinha);
-        ws_r
-          .cell(linhaInicialReceita + j, 2)
-          .string(element.NomeConta)
-          .style(cabecalhoLinha);
-        ws_r
-          .cell(linhaInicialReceita + j, 3)
-          .string(element.Conta)
-          .style(cabecalhoLinha);
-      }
-      ws_r
-        .cell(linhaInicialReceita + j, 4 + i)
-        .number(element.Valor)
-        .style(valores);
-    });
-  });
+    // #region Volume
+    ws_r
+      .cell(linhaInicialResumo + 2, 1)
+      .string('VOLUME')
+      .style(ECabecalhoLinhaTabela);
+    ws_r
+      .cell(linhaInicialResumo + 2, 2)
+      .formula(`CENARIO!C${linhaVolumeInicial + distEntreItens * index}`)
+      .style(EVolumeTabela);
+    ws_r
+      .cell(linhaInicialResumo + 2, 3)
+      .formula(`CENARIO!D${linhaVolumeInicial + distEntreItens * index}`)
+      .style(EVolumeTabela);
+    ws_r
+      .cell(linhaInicialResumo + 2, 4)
+      .formula(`CENARIO!E${linhaVolumeInicial + distEntreItens * index}`)
+      .style(EVolumeTabela);
+    ws_r
+      .cell(linhaInicialResumo + 2, 5)
+      .formula(`SUM(B${linhaInicialResumo + 2}:D${linhaInicialResumo + 2})`)
+      .style(EVolumeTabela);
 
-  const ws_e = wb.addWorksheet('OBZ 2021 RECEITAS EXPORT');
+    // #endregion
 
-  obz.forEach((mesE, i) => {
-    if (i === 0) {
-      // Desenha os cabeçalhos
-      ws_e.cell(1, 1).string('Pacote').style(cabecalhoColuna);
-      ws_e.cell(1, 2).string('Conta').style(cabecalhoColuna);
-      ws_e.cell(1, 3).string('Conta contábil').style(cabecalhoColuna);
-    }
-    ws_e
-      .cell(1, 4 + i)
-      .string(getMes(mesE.Mes))
-      .style(cabecalhoColuna);
+    // #region Margem $
+    ws_r
+      .cell(linhaInicialResumo + 3, 1)
+      .string('MARGEM $')
+      .style(ECabecalhoLinhaTabela);
+    ws_r
+      .cell(linhaInicialResumo + 3, 2)
+      .formula(`CENARIO!C${linhaMargemValorInicial + distEntreItens * index}`)
+      .style(EDinheiroTabela);
+    ws_r
+      .cell(linhaInicialResumo + 3, 3)
+      .formula(`CENARIO!D${linhaMargemValorInicial + distEntreItens * index}`)
+      .style(EDinheiroTabela);
+    ws_r
+      .cell(linhaInicialResumo + 3, 4)
+      .formula(`CENARIO!E${linhaMargemValorInicial + distEntreItens * index}`)
+      .style(EDinheiroTabela);
+    ws_r
+      .cell(linhaInicialResumo + 3, 5)
+      .formula(`SUM(B${linhaInicialResumo + 3}:D${linhaInicialResumo + 3})`)
+      .style(EDinheiroTabela);
+    // #endregion
 
-    const linhaInicialReceita = 2;
-    const { Receitas } = mesE.OBZ.Fixos;
-    Receitas.Exportacoes.forEach((element, j) => {
-      if (i === 0) {
-        ws_e
-          .cell(linhaInicialReceita + j, 1)
-          .string('RECEITAS')
-          .style(cabecalhoLinha);
-        ws_e
-          .cell(linhaInicialReceita + j, 2)
-          .string(element.NomeConta)
-          .style(cabecalhoLinha);
-        ws_e
-          .cell(linhaInicialReceita + j, 3)
-          .string(element.Conta)
-          .style(cabecalhoLinha);
-      }
-      ws_e
-        .cell(linhaInicialReceita + j, 4 + i)
-        .number(element.Valor)
-        .style(valores);
-    });
+    // #region Margem %
+    ws_r
+      .cell(linhaInicialResumo + 4, 1)
+      .string('MARGEM %')
+      .style(ECabecalhoLinhaTabela);
+
+    ws_r
+      .cell(linhaInicialResumo + 4, 2)
+      .formula(
+        `CENARIO!C${
+          linhaMargemValorInicial + distEntreItens * index
+        }/CENARIO!C${linhaReceitaLiquidaInicial + distEntreItens * index}`
+      )
+      .style(EPercentual1CTabela);
+    ws_r
+      .cell(linhaInicialResumo + 4, 3)
+      .formula(
+        `CENARIO!D${
+          linhaMargemValorInicial + distEntreItens * index
+        }/CENARIO!D${linhaReceitaLiquidaInicial + distEntreItens * index}`
+      )
+      .style(EPercentual1CTabela);
+    ws_r
+      .cell(linhaInicialResumo + 4, 4)
+      .formula(
+        `CENARIO!E${
+          linhaMargemValorInicial + distEntreItens * index
+        }/CENARIO!E${linhaReceitaLiquidaInicial + distEntreItens * index}`
+      )
+      .style(EPercentual1CTabela);
+    ws_r
+      .cell(linhaInicialResumo + 4, 5)
+      .formula(
+        `SUM(CENARIO!C${
+          linhaMargemValorInicial + distEntreItens * index
+        }:CENARIO!E${linhaMargemValorInicial + distEntreItens * index})/
+        SUM(CENARIO!C${linhaReceitaLiquidaInicial + distEntreItens * index}:
+          CENARIO!E${linhaReceitaLiquidaInicial + distEntreItens * index})
+        `
+      )
+      .style(EPercentual1CTabela);
+    // #endregion
   });
 
   const agora = new Date();
-  const nome = `${agora.getTime()}_OBZ2021.xlsx`;
+  const nome = `${agora.getTime()}_Cenario.xlsx`;
   // Cria o arquivo
   wb.write(
     path.resolve(
@@ -350,9 +761,10 @@ export default async function ExportaExcel(mes = 0) {
       'temp',
       'uploads',
       'files',
+      'cenarios',
       nome
     )
   );
 
-  return `${process.env.SITE}/files/obz/${nome}`;
+  return `${process.env.SITE}/files/cenarios/${nome}`;
 }

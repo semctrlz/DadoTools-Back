@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import GlobalVars from '../../app/obz/2021/GlobalVars';
-import Conta from '../../app/obz/2021/Calculos/TI/ServicosInformatica';
+import Conta from '../../app/obz/2021/Calculos/RH/ServicosContratados';
 import MercadoInterno from '../../app/obz/2021/Calculos/Receitas/MercadoInterno';
 import Sim from '../../app/obz/2021/GlobalVars/Simulador/Volumes';
 

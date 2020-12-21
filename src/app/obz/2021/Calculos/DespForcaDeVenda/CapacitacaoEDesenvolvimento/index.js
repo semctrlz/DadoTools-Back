@@ -94,7 +94,7 @@ const variaveis = {
 
 export default function CapacitacaoEDesenvolvimento(ano, mes) {
   const QLComMes = QLComercial(ano, mes).value;
-  const QLVendedores = QLComMes.Vendedores;
+  const QLVendedores = QLComMes.QLEfetivos;
 
   let TotalCapacitacaoVendedores = 0;
   if (variaveis.CapacitacaoVendedores.Calendario.includes(mes)) {
