@@ -33,6 +33,7 @@ import CigamCadastroStatus from '../app/models/CigamCadastroStatus';
 import TicketsEncaminhados from '../app/models/TicketsEncaminhados';
 import Configs from '../app/models/Configs';
 import TicketCategoriaAutoEncs from '../app/models/TicketCategoriaAutoEncs';
+import SimuladorCenarios from '../app/models/SimuladorCenarios';
 
 const models = [
   User,
@@ -65,6 +66,7 @@ const models = [
   TicketsEncaminhados,
   Configs,
   TicketCategoriaAutoEncs,
+  SimuladorCenarios,
 ];
 
 class Database {
@@ -76,10 +78,8 @@ class Database {
   init() {
     this.connection = new Sequelize(databaseConfig);
     models
-      .map((model) => model.init(this.connection))
-      .map(
-        (model) => model.associate && model.associate(this.connection.models)
-      );
+      .map(model => model.init(this.connection))
+      .map(model => model.associate && model.associate(this.connection.models));
   }
 
   mongo() {

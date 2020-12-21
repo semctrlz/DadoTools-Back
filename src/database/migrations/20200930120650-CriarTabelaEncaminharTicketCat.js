@@ -32,7 +32,7 @@ module.exports = {
     });
   },
 
-  down: (queryInterface) => {
+  down: queryInterface => {
     return queryInterface.dropTable('ticket_categoria_auto_encs');
   },
 };

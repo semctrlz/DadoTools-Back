@@ -1,14 +1,12 @@
-var fs = require('fs');
-var path = require('path');
-module.exports = async function DeletarImagem(nome){
-  try
-  {
-    const caminho = path.resolve(__dirname,nome);
+const fs = require('fs');
+const path = require('path');
+
+module.exports = async function DeletarImagem(nome) {
+  try {
+    const caminho = path.resolve(__dirname, nome);
     fs.unlinkSync(caminho);
     return true;
-  }
-  catch(err)
-  {
+  } catch (err) {
     return false;
   }
-}
+};

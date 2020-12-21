@@ -4,7 +4,7 @@ class Configs extends Model {
   static init(sequelize) {
     super.init(
       {
-        id_usuario: Sequelize.STRING,
+        id_usuario: Sequelize.INTEGER,
         nome_config: Sequelize.STRING,
         json: Sequelize.TEXT,
         json_obj: {

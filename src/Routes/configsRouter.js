@@ -12,6 +12,7 @@ routes.get('/produtos', ConfigsController.produtos);
 routes.get('/impostos', ConfigsController.impostos);
 routes.get('/custos', ConfigsController.custos);
 routes.get('/despesas', ConfigsController.despesas);
+routes.get('/marketing', ConfigsController.marketing);
 routes.get('/fretes', ConfigsController.fretes);
 routes.get('/produtosBase', ConfigsController.produtosBase);
 

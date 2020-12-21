@@ -96,6 +96,42 @@ class Utils {
     const returnValue = await bcrypt.hash(texto, 8);
     return returnValue;
   }
+
+  Mes(ano, mes) {
+    if (mes > 0 && mes <= 12) {
+      return new Date(ano, mes - 1);
+    }
+
+    return new Date(ano, 0);
+  }
+
+  UniqueValues(value, index, self) {
+    return self.indexOf(value) === index;
+  }
+
+  DaysDif(data1, date2) {
+    const diffTime = Math.abs(date2 - data1);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  }
+
+  DatasIguais(data1, data2) {
+    return data1.getTime() === data2.getTime();
+  }
+
+  DatasIguaisAM(data1, ano, mes) {
+    return data1.getTime() === this.Mes(ano, mes).getTime();
+  }
+
+  SomaArray(arr) {
+    if (!arr || arr.length === 0) {
+      return 0;
+    }
+    const valor = arr.reduce((p, c) => {
+      return p + c;
+    });
+    return valor;
+  }
 }
 
 export default new Utils();

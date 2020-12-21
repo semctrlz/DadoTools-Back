@@ -230,7 +230,7 @@ class TicketsController {
 
     if (cat.encaminhamentos) {
       if (cat.encaminhamentos.length > 0) {
-        const encaminhar = cat.encaminhamentos.filter((enc) => {
+        const encaminhar = cat.encaminhamentos.filter(enc => {
           return (
             enc.id_usuario !== req.idUsuario &&
             enc.id_usuario !== id_destinatario
@@ -238,7 +238,7 @@ class TicketsController {
         });
 
         if (encaminhar.length > 0) {
-          encaminhar.forEach((element) => {
+          encaminhar.forEach(element => {
             TicketsEncaminhados.create({
               id_usuario: element.id_usuario,
               id_destinatario: req.idUsuario,

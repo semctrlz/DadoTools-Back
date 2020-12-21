@@ -49,7 +49,7 @@ class AnexoController {
       nome_arquivo
     );
 
-    fs.unlink(file, (err) => {
+    fs.unlink(file, err => {
       console.log(err);
     });
 
