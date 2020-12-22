@@ -1,5 +1,8 @@
 import Utils from '../../../../../../utils/utils';
 
+export const donoConta = 'Vanessa';
+export const dataValidacao = '21/12/2020';
+
 export const NomeConta = 'EQUIPAMENTOS DE PROTECAO INDIVIDUAL';
 export const ContaContabil = '3.1.1.1.03.01.021.001';
 

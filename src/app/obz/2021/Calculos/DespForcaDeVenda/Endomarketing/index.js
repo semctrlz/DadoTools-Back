@@ -1,6 +1,9 @@
 import QlComercial from '../../../GlobalVars/ql/qlComercial';
 import Utils from '../../../../../../utils/utils';
 
+export const donoConta = 'Gabriele';
+export const dataValidacao = '22/12/2020';
+
 export const NomeConta = 'ENDOMARKETING - COMERCIAL';
 export const ContaContabil = '3.1.1.1.06.01.002.008';
 const politicas = {

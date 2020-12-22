@@ -29,6 +29,7 @@ const percentual0cTabela = {
     },
   },
 };
+
 const percentual1cTabela = {
   font: {
     color: '#111111',

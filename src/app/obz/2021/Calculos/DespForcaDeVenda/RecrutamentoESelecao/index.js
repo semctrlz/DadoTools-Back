@@ -1,6 +1,9 @@
 import Utils from '../../../../../../utils/utils';
 import RES from '../../../VariaveisEPoliticas/variaveis/qlRecrutamentoConsultoria';
 
+export const donoConta = 'Gabriele';
+export const dataValidacao = '22/12/2020';
+
 export const NomeConta = 'RECRUTAMENTO E SELECAO - COMERCIAL';
 export const ContaContabil = '3.1.1.1.06.01.002.009';
 const politicas = {};

@@ -2,6 +2,9 @@ import QlAdm from '../../../GlobalVars/ql/qlAdm';
 import QLComercial from '../../../GlobalVars/ql/qlComercial';
 import Utils from '../../../../../../utils/utils';
 
+export const donoConta = 'Vanessa';
+export const dataValidacao = '21/12/2020';
+
 export const NomeConta = 'CAPACITACAO E DESENVOLVIMENTO';
 export const ContaContabil = '3.1.1.1.03.01.020.060';
 const politicas = {

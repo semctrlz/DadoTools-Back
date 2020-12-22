@@ -1,6 +1,6 @@
 export default [
   {
-    mes: 1,
+    mes: 2,
     ql: [
       {
         salarioBase: 2500,
@@ -17,7 +17,7 @@ export default [
     ],
   },
   {
-    mes: 2,
+    mes: 3,
     ql: [
       {
         salarioBase: 7150,

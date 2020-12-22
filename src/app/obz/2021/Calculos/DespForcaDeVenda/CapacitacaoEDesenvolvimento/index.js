@@ -2,6 +2,9 @@ import QLComercial from '../../../GlobalVars/ql/qlComercial';
 import Utils from '../../../../../../utils/utils';
 import { variaveis as variaveisRH } from '../../RH/CapacitacaoEDesenvolvimento';
 
+export const donoConta = 'Vanessa';
+export const dataValidacao = '21/12/2020';
+
 export const NomeConta = 'CAPACITACAO E DESENV PROFISSIONAL - COML';
 export const ContaContabil = '3.1.1.1.06.01.002.010';
 const politicas = {

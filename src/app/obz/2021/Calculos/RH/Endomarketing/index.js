@@ -5,6 +5,9 @@ import Areas from '../../../GlobalVars/ql/areas';
 import QlRH from '../../../GlobalVars/ql/qlRH';
 import Utils from '../../../../../../utils/utils';
 
+export const donoConta = 'Gabriele';
+export const dataValidacao = '22/12/2020';
+
 export const NomeConta = 'ENDOMARKETING';
 export const ContaContabil = '3.1.1.1.03.01.020.010';
 const politicas = {
@@ -83,6 +86,7 @@ const variaveis = {
   PercentualDeIndicadosContratados: 0.6,
   Brindes: {
     mesCompraTempoCasa: [1],
+    quantidadeExtraTempoDeCasa: 10,
     TempoDeCasa: [
       { item: 'Chaveiro ', valor: 15.0 },
       { item: 'Bottom ', valor: 2.5 },
@@ -98,6 +102,7 @@ const variaveis = {
       { item: 'Brinde ', valor: 20.0 },
       { item: 'Impressões ', valor: 1.5 },
     ],
+    QuantidadeExtraDiaMaes: 1,
     DiaDasMaes: [
       { item: 'Brinde', valor: 30.0 },
       { item: 'Impressões ', valor: 1.5 },
@@ -111,8 +116,8 @@ const variaveis = {
     OutubroRosa: [{ item: 'Brinde ', valor: 20.0 }],
     TopSerHumano: [{ item: 'Brinde ', valor: 20.0 }],
     GPTW: [
-      { item: 'Brinde 1', valor: 15.0 },
-      { item: 'Brinde 2', valor: 15.0 },
+      { item: 'Brinde 1', valor: 15.0, mes: 7 },
+      { item: 'Brinde 2', valor: 15.0, mes: 11 },
     ],
     Indicacoes: [{ item: 'Brinde', valor: 20.0 }],
     BoasVindas: [
@@ -220,25 +225,29 @@ export default function Endomarketing(ano, mes) {
     totalReuniaoNatal =
       QLFinalAno.length * valorCoffeeRunaoNatal +
       valorSalaReuniaoNatal +
-      valorPresenteReuniaoNatal;
+      valorPresenteReuniaoNatal * QLFinalAno.length;
   }
 
   // Brindes
 
   // Tempo de casa
   let totalBrindeTempoCasa = 0;
+  let valorBrindeTempoCasa = 0;
 
   // Considerados no OBZ os valores quando forem comprados os brindes
   if (variaveis.Brindes.mesCompraTempoCasa.includes(mes)) {
-    const valorBrindeTempoCasa = Utils.SomaArray(
+    valorBrindeTempoCasa = Utils.SomaArray(
       variaveis.Brindes.TempoDeCasa.map(b => {
         return b.valor;
       })
     );
 
     // Aqui dividimos o valor total dos brindes a serem comprados pelas datas das compras
+
     totalBrindeTempoCasa =
-      (QLFinalAno.length * valorBrindeTempoCasa) /
+      ((QLFinalAno.filter(ql => ql.admissao.getFullYear() < 2021).length +
+        variaveis.Brindes.quantidadeExtraTempoDeCasa) *
+        valorBrindeTempoCasa) /
       variaveis.Brindes.mesCompraTempoCasa.length;
   }
 
@@ -300,8 +309,24 @@ export default function Endomarketing(ano, mes) {
       })
     );
     totalBrindeDiaDasMaes =
-      QlGeralMensal.filter(ql => {
+      (QlGeralMensal.filter(ql => {
         return ql.sexo === 'F' && ql.qtdFilhos > 0;
+      }).length +
+        variaveis.Brindes.QuantidadeExtraDiaMaes) *
+      valorBrindeDiaDasMaes;
+  }
+
+  // brinde dia dos pais
+  let totalBrindeDiaDosPais = 0;
+  if (mes === 8) {
+    const valorBrindeDiaDasMaes = Utils.SomaArray(
+      variaveis.Brindes.DiaDasMaes.map(b => {
+        return b.valor;
+      })
+    );
+    totalBrindeDiaDosPais =
+      QlGeralMensal.filter(ql => {
+        return ql.sexo === 'M' && ql.qtdFilhos > 0;
       }).length * valorBrindeDiaDasMaes;
   }
 
@@ -318,7 +343,7 @@ export default function Endomarketing(ano, mes) {
 
   // brinde check de competencias
   let totalBrindeCheckCompetencias = 0;
-  if (mes === 8) {
+  if (mes === 9) {
     const valorBrindeCheckCompetencias = Utils.SomaArray(
       variaveis.Brindes.CheckCompetencias.map(b => {
         return b.valor;
@@ -424,20 +449,21 @@ export default function Endomarketing(ano, mes) {
   let totalIngressosGPTW = 0;
   let totalPeçasGPTW = 0;
 
-  if (variaveis.GPTW.mes === mes) {
-    const valorBrindeGPTW = Utils.SomaArray(
-      variaveis.Brindes.GPTW.map(b => {
-        return b.valor;
-      })
-    );
+  const valorBrindeGPTW = Utils.SomaArray(
+    variaveis.Brindes.GPTW.filter(m => m.mes === mes).map(b => {
+      return b.valor;
+    })
+  );
 
+  totalBrindeGPTW = valorBrindeGPTW * QlGeralMensal.length;
+
+  if (variaveis.GPTW.mes === mes) {
     const valorPecasGPTW = Utils.SomaArray(
       variaveis.GPTW.pecas.map(b => {
         return b.valor * b.quantidade;
       })
     );
 
-    totalBrindeGPTW = valorBrindeGPTW * QlGeralMensal.length;
     totalIngressosGPTW =
       variaveis.GPTW.valorIngresso *
       (QlGerencial.length + QlRHMesAtual.length + QlAreaMesAtual.length);
@@ -457,6 +483,7 @@ export default function Endomarketing(ano, mes) {
         totalBrindeDiaDaMulher +
         totalBrindePascoa +
         totalBrindeDiaDasMaes +
+        totalBrindeDiaDosPais +
         totalBrindeDiaDaCerveja +
         totalBrindeCheckCompetencias +
         totalBrindeOutubroRosa +
@@ -470,6 +497,7 @@ export default function Endomarketing(ano, mes) {
       DiaDaMulher: totalBrindeDiaDaMulher,
       Pascoa: totalBrindePascoa,
       DiaDasMaes: totalBrindeDiaDasMaes,
+      DiaDosPais: totalBrindeDiaDosPais,
       DiaDaCerveja: totalBrindeDiaDaCerveja,
       CheckCompetencias: totalBrindeCheckCompetencias,
       OutubroRosa: totalBrindeOutubroRosa,
