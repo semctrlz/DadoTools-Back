@@ -5,6 +5,8 @@ import Areas from '../../../GlobalVars/ql/areas';
 import QlRH from '../../../GlobalVars/ql/qlRH';
 import Utils from '../../../../../../utils/utils';
 
+// VALIDADO Com Gabi em 22/10/20
+
 export const donoConta = 'Gabriele';
 export const dataValidacao = '22/12/2020';
 

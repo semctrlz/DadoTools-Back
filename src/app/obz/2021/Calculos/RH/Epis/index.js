@@ -1,5 +1,7 @@
 import Utils from '../../../../../../utils/utils';
 
+// VALIDADO Com Vanessa em 21/10/20
+
 export const donoConta = 'Vanessa';
 export const dataValidacao = '21/12/2020';
 
@@ -20,9 +22,9 @@ const variaveis = {
     { epi: 'Respirador semifcial + cartucho de gases', valor: 216 },
   ],
   NecessidadeEpis: [
-    { mes: 2, epi: 'Mascáras para proteção ', quantidade: 100 },
-    { mes: 6, epi: 'Mascáras para proteção ', quantidade: 100 },
-    { mes: 10, epi: 'Mascáras para proteção ', quantidade: 100 },
+    { mes: 2, epi: 'Mascáras para proteção ', quantidade: 200 },
+    { mes: 6, epi: 'Mascáras para proteção ', quantidade: 200 },
+    { mes: 10, epi: 'Mascáras para proteção ', quantidade: 200 },
     { mes: 1, epi: 'Botas de Segurança com resistência a água', quantidade: 3 },
     { mes: 7, epi: 'Botas de Segurança com resistência a água', quantidade: 3 },
     { mes: 1, epi: 'Bota de Segurança normal', quantidade: 1 },

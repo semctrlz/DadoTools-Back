@@ -1,6 +1,8 @@
 import Utils from '../../../../../../utils/utils';
 import RES from '../../../VariaveisEPoliticas/variaveis/qlRecrutamentoConsultoria';
 
+// VALIDADO Com Gabi em 22/10/20
+
 export const donoConta = 'Gabriele';
 export const dataValidacao = '22/12/2020';
 

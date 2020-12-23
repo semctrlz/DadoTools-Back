@@ -2,6 +2,8 @@ import QlAdm from '../../../GlobalVars/ql/qlAdm';
 import QLComercial from '../../../GlobalVars/ql/qlComercial';
 import Utils from '../../../../../../utils/utils';
 
+// VALIDADO Com Vanessa em 21/10/20
+
 export const donoConta = 'Vanessa';
 export const dataValidacao = '21/12/2020';
 

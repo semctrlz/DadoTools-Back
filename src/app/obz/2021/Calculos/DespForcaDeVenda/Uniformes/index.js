@@ -2,7 +2,7 @@ import Utils from '../../../../../../utils/utils';
 
 export const NomeConta = 'UNIFORMES';
 export const ContaContabil = '3.1.1.1.03.01.020.070';
-// FALTOU  paulo Preencher
+
 const EUniformes = {
   Camisa: 'Camisa',
   Polo: 'Polo',

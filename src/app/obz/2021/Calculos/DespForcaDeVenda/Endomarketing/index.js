@@ -1,6 +1,8 @@
 import QlComercial from '../../../GlobalVars/ql/qlComercial';
 import Utils from '../../../../../../utils/utils';
 
+// VALIDADO Com Gabi em 22/10/20
+
 export const donoConta = 'Gabriele';
 export const dataValidacao = '22/12/2020';
 

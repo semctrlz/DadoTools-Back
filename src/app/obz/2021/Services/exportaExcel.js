@@ -1,4 +1,8 @@
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-undef */
+/* eslint-disable no-shadow */
 import path from 'path';
+import fs from 'fs';
 import OBZ2021 from '..';
 
 const xl = require('excel4node');
@@ -13,6 +17,7 @@ const estiloCabecalhosColuna = {
     horizontal: 'center',
   },
 };
+
 const estiloCabecalhosLinha = {
   font: {
     color: '#111111',
@@ -23,6 +28,7 @@ const estiloCabecalhosLinha = {
     horizontal: 'left',
   },
 };
+
 const estiloValores = {
   font: {
     color: '#111111',
@@ -258,6 +264,24 @@ export default async function ExportaExcel(mes = 0) {
         .number(element.Valor)
         .style(valores);
     });
+    const linhaInicialJuridico = linhaInicialOcupacao + Ocupacao.length;
+    const { Juridico } = mes.OBZ.Fixos;
+    Juridico.forEach((element, j) => {
+      if (i === 0) {
+        ws.cell(linhaInicialJuridico + j, 1)
+          .string('Jurídico')
+          .style(cabecalhoLinha);
+        ws.cell(linhaInicialJuridico + j, 2)
+          .string(element.NomeConta)
+          .style(cabecalhoLinha);
+        ws.cell(linhaInicialJuridico + j, 3)
+          .string(element.ContaContabil)
+          .style(cabecalhoLinha);
+      }
+      ws.cell(linhaInicialJuridico + j, 4 + i)
+        .number(element.Valor)
+        .style(valores);
+    });
   });
 
   const ws_r = wb.addWorksheet('OBZ 2021 RECEITAS MERC INT');
@@ -336,24 +360,32 @@ export default async function ExportaExcel(mes = 0) {
     });
   });
 
+  const caminho = path.resolve(
+    __dirname,
+    '..',
+    '..',
+    '..',
+    '..',
+    '..',
+    'temp',
+    'uploads',
+    'files',
+    'obz'
+  );
+
+  fs.readdir(caminho, (err, files) => {
+    if (err) throw err;
+    for (const file of files) {
+      fs.unlink(path.join(caminho, file), err => {
+        if (err) throw err;
+      });
+    }
+  });
+
   const agora = new Date();
   const nome = `${agora.getTime()}_OBZ2021.xlsx`;
   // Cria o arquivo
-  wb.write(
-    path.resolve(
-      __dirname,
-      '..',
-      '..',
-      '..',
-      '..',
-      '..',
-      'temp',
-      'uploads',
-      'files',
-      'obz',
-      nome
-    )
-  );
+  wb.write(path.join(caminho, nome));
 
   return `${process.env.SITE}/files/obz/${nome}`;
 }

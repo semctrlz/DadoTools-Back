@@ -6,8 +6,6 @@ import {
   SalarioBase,
 } from '../../../VariaveisEPoliticas/variaveis/desligamentosAdm';
 
-// TODO Alterar o cálculo para prever a forma de cálculo de ter veba para desligemnetos
-
 const vars = {
   MediaDiasIndenizados: 39,
   SaldoFgts,

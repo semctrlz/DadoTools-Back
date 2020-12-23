@@ -6,7 +6,6 @@ export const ContaContabil = '3.1.1.1.08.01.010.050';
 
 export const politicas = {};
 
-// FALTOU Vinicius preencher as variáveis
 export const variaveis = {
   cambiosMes: [
     {

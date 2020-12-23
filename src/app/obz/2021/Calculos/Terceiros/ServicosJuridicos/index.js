@@ -1,5 +1,9 @@
 import Utils from '../../../../../../utils/utils';
 
+// VALIDADO Com luca em 22/10/20
+export const donoConta = 'Luca';
+export const dataValidacao = '22/12/21';
+
 export const NomeConta = 'SERVICOS JURIDICOS';
 export const ContaContabil = '3.1.1.1.05.01.010.030';
 const politicas = {};

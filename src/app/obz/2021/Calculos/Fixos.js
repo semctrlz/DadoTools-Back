@@ -341,6 +341,12 @@ import Aluguel, {
   ContaContabil as Aluguel_CC,
 } from './Ocupacao/Aluguel';
 
+// Juridico
+import ProcessosJuridicosIndenizacoes, {
+  NomeConta as ProcessosJuridicosIndenizacoes_C,
+  ContaContabil as ProcessosJuridicosIndenizacoes_CC,
+} from './Juridico/ProcessosJuridicosIndenizacoes';
+
 // Receitas
 import MercadoInterno from './Receitas/MercadoInterno';
 import Exportacoes from './Receitas/Exportacoes';
@@ -781,6 +787,13 @@ class Fixos {
         MercadoInterno: await MercadoInterno(ano, mes),
         Exportacoes: Exportacoes(ano, mes),
       },
+      Juridico: [
+        {
+          NomeConta: ProcessosJuridicosIndenizacoes_C,
+          ContaContabil: ProcessosJuridicosIndenizacoes_CC,
+          Valor: ProcessosJuridicosIndenizacoes(ano, mes),
+        },
+      ],
     };
   }
 
@@ -1221,6 +1234,13 @@ class Fixos {
         MercadoInterno: ValoresMercadoInterno,
         Exportacoes: Exportacoes(ano, mes),
       },
+      Juridico: [
+        {
+          NomeConta: ProcessosJuridicosIndenizacoes_C,
+          ContaContabil: ProcessosJuridicosIndenizacoes_CC,
+          Valor: ProcessosJuridicosIndenizacoes(ano, mes).value.Total,
+        },
+      ],
     };
   }
 }

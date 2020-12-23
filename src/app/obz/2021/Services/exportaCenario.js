@@ -1,5 +1,10 @@
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-undef */
+/* eslint-disable no-shadow */
+
 import path from 'path';
 import { format } from 'date-fns';
+import fs from 'fs';
 import Cenarios from '../../../models/SimuladorCenarios';
 
 const xl = require('excel4node');
@@ -748,24 +753,33 @@ export default async function ExportaCenario(id) {
     // #endregion
   });
 
+  // Cria o arquivo
+  const caminho = path.resolve(
+    __dirname,
+    '..',
+    '..',
+    '..',
+    '..',
+    '..',
+    'temp',
+    'uploads',
+    'files',
+    'cenarios'
+  );
+
+  fs.readdir(caminho, (err, files) => {
+    if (err) throw err;
+    for (const file of files) {
+      fs.unlink(path.join(caminho, file), err => {
+        if (err) throw err;
+      });
+    }
+  });
+
   const agora = new Date();
   const nome = `${agora.getTime()}_Cenario.xlsx`;
-  // Cria o arquivo
-  wb.write(
-    path.resolve(
-      __dirname,
-      '..',
-      '..',
-      '..',
-      '..',
-      '..',
-      'temp',
-      'uploads',
-      'files',
-      'cenarios',
-      nome
-    )
-  );
+
+  wb.write(path.join(caminho, nome));
 
   return `${process.env.SITE}/files/cenarios/${nome}`;
 }

@@ -1,5 +1,7 @@
 import Utils from '../../../../../../utils/utils';
 
+// VALIDADO Com Vanessa em 21/10/20
+
 export const donoConta = 'Vanessa';
 export const dataValidacao = '21/12/2020';
 
@@ -78,6 +80,15 @@ const variaveis = {
     { mes: 11, valor: 9780 },
     { mes: 12, valor: 9780 },
   ],
+  TemporarioAdm: [
+    { mes: 1, valor: 4500 },
+    { mes: 2, valor: 4500 },
+    { mes: 3, valor: 4500 },
+    { mes: 4, valor: 4500 },
+    { mes: 5, valor: 4500 },
+    { mes: 6, valor: 4500 },
+    { mes: 7, valor: 4500 },
+  ],
 };
 
 export default function ServicosContratados(ano, mes) {
@@ -104,16 +115,21 @@ export default function ServicosContratados(ano, mes) {
   const TI = Utils.SomaArray(
     variaveis.TI.filter(t => t.mes === mes).map(t => t.valor)
   );
+  // Valor Temporário Adm
+  const TemporarioAdm = Utils.SomaArray(
+    variaveis.TemporarioAdm.filter(t => t.mes === mes).map(t => t.valor)
+  );
 
   return {
     value: {
-      Total: Designer + Comex + CEO + PeD + TI,
+      Total: Designer + Comex + CEO + PeD + TI + TemporarioAdm,
       Descricao: {
         Designer,
         Comex,
         CEO,
         PeD,
         TI,
+        TemporarioAdm,
       },
       politicas,
       variaveis,
