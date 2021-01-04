@@ -26,6 +26,13 @@ const variaveis = {
     { mesInicial: 1, mesFinal: 12, estado: 'RS', rota: 'VALES' },
     { mesInicial: 1, mesFinal: 12, estado: 'RS', rota: 'ZONA SUL' },
     { mesInicial: 1, mesFinal: 12, estado: 'SC', rota: 'NORTE / SC' },
+    { mesInicial: 1, mesFinal: 12, estado: 'RS', rota: 'NOVA ROTA 01' },
+    { mesInicial: 1, mesFinal: 12, estado: 'RS', rota: 'NOVA ROTA 02' },
+    { mesInicial: 1, mesFinal: 12, estado: 'RS', rota: 'NOVA ROTA 03' },
+    { mesInicial: 2, mesFinal: 12, estado: 'RS', rota: 'NOVA ROTA 04' },
+    { mesInicial: 2, mesFinal: 12, estado: 'RS', rota: 'NOVA ROTA 05' },
+    { mesInicial: 3, mesFinal: 12, estado: 'RS', rota: 'NOVA ROTA 06' },
+    { mesInicial: 3, mesFinal: 12, estado: 'RS', rota: 'NOVA ROTA 07' },
   ],
 };
 export default function Rotas(ano, mes) {

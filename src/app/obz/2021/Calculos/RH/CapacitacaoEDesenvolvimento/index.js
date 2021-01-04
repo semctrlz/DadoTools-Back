@@ -203,7 +203,7 @@ export const variaveis = {
   PesquisaSalarial: [
     {
       mes: 1,
-      valor: 3260,
+      valor: 4600,
     },
   ],
   MensalidadePesquisaSalarial: [
@@ -254,6 +254,7 @@ export const variaveis = {
       valor: 1000,
     },
   ],
+  // VALIDAR Com Andresa
   PlataformaTreinamentos: {
     valorImplantacao: 4000,
     mesImplantacao: 4,

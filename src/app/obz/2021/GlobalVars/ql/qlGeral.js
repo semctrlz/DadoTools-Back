@@ -172,22 +172,37 @@ export default function ql_geral(ano, mes) {
 
       // Cálculo salários variáveis
       if (funcionario.comercial) {
-        let atingimentoMeta = 0;
-        const valorBase = Utils.SomaArray(
-          varFvRemVar.valorBasePorCargo
-            .filter(am => am.cargo === funcionario.nomeCargo)
-            .map(v => v.valorBase)
+        let valorPrecoMedio = 0;
+        let valorVolume = 0;
+        let valorCoberturaQuant = 0;
+        let valorCoberturaQuali = 0;
+        let valorAdicional = 0;
+
+        const [valoresMeta] = varFvRemVar.valoresRemuneracao.filter(
+          v => v.cargo === funcionario.nomeCargo
+        );
+        const [atingimentos] = varFvRemVar.atingimentosMeta.filter(
+          v => v.cargo === funcionario.nomeCargo && v.mes === mes
         );
 
-        try {
-          const atingimentosMetaMes = varFvRemVar.atingimentoMeta.filter(am => {
-            return am.mes === mes && am.cargo === funcionario.nomeCargo;
-          })[0];
-          atingimentoMeta = atingimentosMetaMes.atingimento;
-        } catch (err) {
-          atingimentoMeta = 0;
+        if (valoresMeta && atingimentos) {
+          if (atingimentos.preco) valorPrecoMedio = valoresMeta.precoMedio;
+          if (atingimentos.volume === 1) valorVolume = valoresMeta.volume1;
+          if (atingimentos.volume === 2) valorVolume = valoresMeta.volume2;
+          if (atingimentos.volume === 3) valorVolume = valoresMeta.volume3;
+          if (atingimentos.volume > 1 && atingimentos.preco)
+            valorAdicional = valoresMeta.adicional;
+          if (atingimentos.coberturaNum)
+            valorCoberturaQuant = valoresMeta.coberturaNumerica;
+          if (atingimentos.coberturaQual)
+            valorCoberturaQuali = valoresMeta.coberturaQualificada;
         }
-        salarioVariavel = valorBase * atingimentoMeta;
+        salarioVariavel =
+          valorPrecoMedio +
+          valorVolume +
+          valorCoberturaQuant +
+          valorCoberturaQuali +
+          valorAdicional;
       }
     }
 

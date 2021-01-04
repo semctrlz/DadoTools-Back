@@ -18,20 +18,24 @@ const variaveis = {
 export default function HorasExtras(ano, mes) {
   let baseRemuneracao = 0;
   let horasExtras = 0;
-  // Pegamos cada funcionário (exceto gerentes) no mês base do cálculo e
-  // multiplicamos pela quantidade estimada de horas, percentual do valor da hora
-  // e pelo valor/hora da base de remuneração
-  const qlMesAtual = QlAdm(ano, mes).value;
-  const novoQL = qlMesAtual.QLEfetivos.filter(ql => {
-    return !cargosGerenciais.includes(ql.nomeCargo);
-  });
-  novoQL.forEach(e => {
-    baseRemuneracao += e.baseDeRemuneracao;
-    horasExtras +=
-      (e.baseDeRemuneracao / PoliticasDP.cargaHorariaBaseMensal) *
-      variaveis.EstimativaHorasExtrasMesPorFunc *
-      politicas.PercentualValorHora;
-  });
+  if (politicas.MesPagamento === mes) {
+    // Calculamos as horas extras acumuladas co ano todo
+
+    // Pegamos cada funcionário (exceto gerentes) no mês base do cálculo e
+    // multiplicamos pela quantidade estimada de horas, percentual do valor da hora
+    // e pelo valor/hora da base de remuneração
+    const qlMesAtual = QlAdm(ano, mes).value;
+    const novoQL = qlMesAtual.QLEfetivos.filter(ql => {
+      return !cargosGerenciais.includes(ql.nomeCargo);
+    });
+    novoQL.forEach(e => {
+      baseRemuneracao += e.baseDeRemuneracao;
+      horasExtras +=
+        (e.baseDeRemuneracao / PoliticasDP.cargaHorariaBaseMensal) *
+        variaveis.EstimativaHorasExtrasMesPorFunc *
+        politicas.PercentualValorHora;
+    });
+  }
 
   return {
     value: {

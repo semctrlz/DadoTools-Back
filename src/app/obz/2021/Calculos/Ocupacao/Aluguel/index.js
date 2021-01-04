@@ -5,7 +5,7 @@ const variaveis = {
   Aluguel: [
     {
       mes: 1,
-      valor: 10000,
+      valor: 7000,
     },
   ],
 };

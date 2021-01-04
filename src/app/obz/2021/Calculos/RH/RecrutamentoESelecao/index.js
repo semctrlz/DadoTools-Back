@@ -14,6 +14,7 @@ const variaveis = {
   QLRecrutamentoConsultoria: RES,
   PEFechadoComConsultoria: 0.3,
   ValorInfoJobs: { mes: 11, valor: 6000 },
+  // VALIDAR Com Andresa
   ValorSoftwareRecrutamento: { mes: 9, valor: 6000 },
   TestesPDA: {
     valorTeste: 153,

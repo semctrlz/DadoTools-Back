@@ -2,6 +2,7 @@ export const politicas = {
   cargaHorariaBaseMensal: 220, // OK
   AdicionalFerias: 0.3, // ok Variáveis Enviadas pela Cris
   Inss: 0.288,
+  InssProLabore: 0.2,
   Fgts: 0.08, // OK
   FgtsJovemAprendiz: 0.02, // ok Enviada pela Cris
   multaFGTS: 0.4, // ok Enviada pela Cris

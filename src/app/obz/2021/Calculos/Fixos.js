@@ -100,6 +100,14 @@ import ValeTransporte, {
   NomeConta as ValeTransporte_C,
   ContaContabil as ValeTransporte_CC,
 } from './RH/ValeTransporte';
+import ProLabore, {
+  NomeConta as ProLabore_C,
+  ContaContabil as ProLabore_CC,
+} from './RH/ProLabore';
+import InssSobreProLabore, {
+  NomeConta as InssSobreProLabore_C,
+  ContaContabil as InssSobreProLabore_CC,
+} from './RH/InssSobreProLabore';
 
 // DGO
 import LegaisJuduciais, {
@@ -334,6 +342,10 @@ import ForcaVendas_ConducaoETransporte, {
   NomeConta as ForcaVendas_ConducaoETransporte_C,
   ContaContabil as ForcaVendas_ConducaoETransporte_CC,
 } from './DespForcaDeVenda/ConducaoETransporte';
+import ComissaoSobreVendas, {
+  NomeConta as ComissaoSobreVendas_C,
+  ContaContabil as ComissaoSobreVendas_CC,
+} from './DespForcaDeVenda/ComissaoSobreVendas';
 
 // Ocupacao
 import Aluguel, {
@@ -485,6 +497,16 @@ class Fixos {
           NomeConta: MedicinaTrabalho_C,
           ContaContabil: MedicinaTrabalho_CC,
           Valor: MedicinaTrabalho(ano, mes),
+        },
+        {
+          NomeConta: ProLabore_C,
+          ContaContabil: ProLabore_CC,
+          Valor: ProLabore(ano, mes),
+        },
+        {
+          NomeConta: InssSobreProLabore_C,
+          ContaContabil: InssSobreProLabore_CC,
+          Valor: InssSobreProLabore(ano, mes),
         },
       ],
       Terceiros: [
@@ -775,6 +797,11 @@ class Fixos {
           ContaContabil: ForcaVendas_AluguelMaquinetas_CC,
           Valor: ForcaVendas_AluguelMaquinetas(ano, mes),
         },
+        {
+          NomeConta: ComissaoSobreVendas_C,
+          ContaContabil: ComissaoSobreVendas_CC,
+          Valor: ComissaoSobreVendas(ano, mes),
+        },
       ],
       Ocupacao: [
         {
@@ -931,6 +958,16 @@ class Fixos {
           NomeConta: MedicinaTrabalho_C,
           ContaContabil: MedicinaTrabalho_CC,
           Valor: MedicinaTrabalho(ano, mes).value.Total,
+        },
+        {
+          NomeConta: ProLabore_C,
+          ContaContabil: ProLabore_CC,
+          Valor: ProLabore(ano, mes).value.Total,
+        },
+        {
+          NomeConta: InssSobreProLabore_C,
+          ContaContabil: InssSobreProLabore_CC,
+          Valor: InssSobreProLabore(ano, mes).value.Total,
         },
       ],
       Terceiros: [
@@ -1221,6 +1258,11 @@ class Fixos {
           NomeConta: ForcaVendas_AluguelMaquinetas_C,
           ContaContabil: ForcaVendas_AluguelMaquinetas_CC,
           Valor: ForcaVendas_AluguelMaquinetas(ano, mes).value.Total,
+        },
+        {
+          NomeConta: ComissaoSobreVendas_C,
+          ContaContabil: ComissaoSobreVendas_CC,
+          Valor: ComissaoSobreVendas(ano, mes).value.Total,
         },
       ],
       Ocupacao: [

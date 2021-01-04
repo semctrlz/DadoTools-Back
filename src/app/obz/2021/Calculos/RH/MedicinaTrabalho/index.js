@@ -1,4 +1,5 @@
 import QlAdm from '../../../GlobalVars/ql/qlAdm';
+import QlComercial from '../../../GlobalVars/ql/qlComercial';
 import Utils from '../../../../../../utils/utils';
 
 export const NomeConta = 'MEDICINA DO TRABALHO';
@@ -25,6 +26,7 @@ const variaveis = {
 };
 
 export default function MedicinaTrabalho(ano, mes) {
+  const QlComercialMes = QlComercial(ano, mes).value.QLEfetivos;
   const QlMesAtualT = QlAdm(ano, mes).value;
   const QlMensal = QlMesAtualT.qlTotal;
   const QlEfetivosT = QlMesAtualT.QLEfetivos;
@@ -46,7 +48,8 @@ export default function MedicinaTrabalho(ano, mes) {
     }
   });
 
-  const valorMensalPCMSO = QlEfetivosT.length * valorPCMSO;
+  const valorMensalPCMSO =
+    (QlEfetivosT.length + QlComercialMes.length) * valorPCMSO;
 
   return {
     value: {
@@ -54,6 +57,7 @@ export default function MedicinaTrabalho(ano, mes) {
       Descricao: {
         ValorExames: valorTotal,
         ValorPCMSO: valorMensalPCMSO,
+        QLConsiderado: QlEfetivosT.length + QlComercialMes.length,
       },
       politicas,
       variaveis,

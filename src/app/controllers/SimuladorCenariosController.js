@@ -86,12 +86,12 @@ class SimuladorCenariosController {
       id: Yup.number().required(),
     });
 
-    if (!(await schema.isValid(req.body))) {
+    if (!(await schema.isValid(req.query))) {
       return res
         .status(400)
         .json({ message: 'Validation fails', success: false });
     }
-    const { id } = req.body;
+    const { id } = req.query;
     const id_usuario = req.idUsuario;
     // VErificar se o usuário é dono do cenário
     const cenario = await Cenarios.findOne({ where: { id } });

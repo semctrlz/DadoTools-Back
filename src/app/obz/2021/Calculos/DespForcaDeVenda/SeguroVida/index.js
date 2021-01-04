@@ -29,6 +29,7 @@ export default function SeguroVida(ano, mes) {
       Descricao: {
         Valor: valor,
         DescontoEmFolha: desconto,
+        QLConsiderado: QlEfetivos.length,
       },
       politicas,
       variaveis,
