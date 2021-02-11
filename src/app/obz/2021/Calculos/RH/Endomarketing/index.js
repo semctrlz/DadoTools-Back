@@ -87,7 +87,7 @@ const variaveis = {
   ],
   PercentualDeIndicadosContratados: 0.6,
   Brindes: {
-    mesCompraTempoCasa: [1],
+    mesCompraTempoCasa: [2],
     quantidadeExtraTempoDeCasa: 10,
     TempoDeCasa: [
       { item: 'Chaveiro ', valor: 15.0 },
@@ -131,7 +131,7 @@ const variaveis = {
       { item: 'Caderno', valor: 15.0 },
     ],
     Jubilados: [
-      { item: 'Baldes', valor: 620, mesCompra: 1 },
+      { item: 'Baldes', valor: 620, mesCompra: 2 },
       { item: 'FardosCerveja', valor: 72, mesCompra: 12 },
     ],
     NovembroAzul: [{ item: 'Brinde', valor: 20.0 }],

@@ -1,3 +1,5 @@
+import { versao, versoes } from '../../versions';
+
 const variaveis = {
   Rotas: [
     { mesInicial: 1, mesFinal: 12, estado: 'RS', rota: 'EXEC GPOA / LITORAL' },
@@ -28,11 +30,6 @@ const variaveis = {
     { mesInicial: 1, mesFinal: 12, estado: 'SC', rota: 'NORTE / SC' },
     { mesInicial: 1, mesFinal: 12, estado: 'RS', rota: 'NOVA ROTA 01' },
     { mesInicial: 1, mesFinal: 12, estado: 'RS', rota: 'NOVA ROTA 02' },
-    { mesInicial: 1, mesFinal: 12, estado: 'RS', rota: 'NOVA ROTA 03' },
-    { mesInicial: 2, mesFinal: 12, estado: 'RS', rota: 'NOVA ROTA 04' },
-    { mesInicial: 2, mesFinal: 12, estado: 'RS', rota: 'NOVA ROTA 05' },
-    { mesInicial: 3, mesFinal: 12, estado: 'RS', rota: 'NOVA ROTA 06' },
-    { mesInicial: 3, mesFinal: 12, estado: 'RS', rota: 'NOVA ROTA 07' },
   ],
 };
 export default function Rotas(ano, mes) {
@@ -40,8 +37,29 @@ export default function Rotas(ano, mes) {
     return r.mesInicial <= mes && (r.mesFinal === null || r.mesFinal >= mes);
   });
 
+  let rotas = rotasMes;
+
+  if (
+    versao.Versao === versoes.Cenario25MMNovoPortfolioCenario2 ||
+    versao.Versao === versoes.Cenario22MMNovoPortfolioCenario3
+  ) {
+    rotas = rotasMes.filter(r => {
+      return (
+        r.rota !== 'EXEC PARANA' &&
+        r.rota !== 'OESTE SC' &&
+        r.rota !== 'NORTE / SC' &&
+        r.rota !== 'GFLORIPA' &&
+        r.rota !== 'SUL SC'
+      );
+    });
+  } else {
+    rotas = rotasMes.filter(r => {
+      return r.rota !== 'NOVA ROTA 01' && r.rota !== 'NOVA ROTA 02';
+    });
+  }
+
   return {
-    value: { Rotas: rotasMes },
+    value: { Rotas: rotas },
     vars: variaveis,
   };
 }

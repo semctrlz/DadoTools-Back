@@ -38,34 +38,34 @@ const variaveis = {
     // Faltou
     {
       mes: 1,
-      ValorTinta: 0,
-      ValorRecargaToner: 0,
+      ValorTinta: 40,
+      ValorRecargaToner: 40,
     },
   ],
   ConsumoTintaImpressora: {
     // Faltou
-    ConsumoTinta: 1,
-    RecargasTonner: 1,
+    ConsumoTinta: 2,
+    RecargasTonner: 2,
   },
   ValorFolhaPapel: [
     // Faltou
     {
       mes: 1,
-      ValorResma: 0,
+      ValorResma: 15,
     },
   ],
   ConsumoFolhasPapel: [
     // Faltou
     {
       mes: 1,
-      ConsumoResma: 0,
+      ConsumoResma: 6,
     },
   ],
   ValorMesMateriaisDiversos: [
     // Faltou
     {
       mes: 1,
-      valor: 0,
+      valor: 200,
     },
   ],
 };

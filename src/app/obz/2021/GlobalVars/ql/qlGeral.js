@@ -27,7 +27,7 @@ export const cargosGerenciais = [
   Cargos.GerenteJurídicoERh,
   Cargos.GerenteFinanceiro,
   Cargos.GerenteDeVendas,
-  Cargos.GerenteLogística,
+  Cargos.GerenteLogistica,
   Cargos.GerenteIndustrial,
 ];
 const estagiariosEJA = [Cargos.Estagiario, Cargos.JovemAprendiz];
@@ -65,7 +65,11 @@ export default function ql_geral(ano, mes) {
         });
 
         const quantFuncSetor = qlmes.filter(v => {
-          return v.setor === funcionario.setor;
+          return (
+            v.setor === funcionario.setor &&
+            v.nomeCargo !== Cargos.Estagiario &&
+            v.nomeCargo !== Cargos.JovemAprendiz
+          );
         }).length;
 
         const valorRateio = valor / quantFuncSetor;
@@ -75,7 +79,11 @@ export default function ql_geral(ano, mes) {
           matricula: funcionario.matricula,
           valorDissidio:
             (funcionario.salarioBaseInicial + valorRateio) *
-            politicasFolha.PercentualAumentoDiscidio,
+              funcionario.nomeCargo !==
+              Cargos.Estagiario &&
+            funcionario.nomeCargo !== Cargos.JovemAprendiz
+              ? politicasFolha.PercentualAumentoDiscidio
+              : 0,
         };
       }),
     ];
@@ -131,11 +139,17 @@ export default function ql_geral(ano, mes) {
           politicasFolha.PercentualAumentoDiscidio
         : 0;
 
-    const salarioBaseAlterado =
-      funcionario.salarioBaseInicial +
-      valorRateio +
-      rateioDissidio +
-      valorAumentoDissidio;
+    let salarioBaseAlterado = funcionario.salarioBaseInicial;
+    if (
+      funcionario.nomeCargo !== Cargos.Estagiario &&
+      funcionario.nomeCargo !== Cargos.JovemAprendiz
+    ) {
+      salarioBaseAlterado =
+        funcionario.salarioBaseInicial +
+        valorRateio +
+        rateioDissidio +
+        valorAumentoDissidio;
+    }
 
     // Ignorar cálculo de base de remuneração para estagiários e
     // jovens aprendizes

@@ -11,6 +11,7 @@ const variaveis = {
     { mes: 3, valor: 60 },
     { mes: 10, valor: 60 },
   ],
+  VacinaGripe: [{ mes: 3, valor: 5000 }],
   ValorExamesAdm: [
     {
       mes: 1,
@@ -51,12 +52,17 @@ export default function MedicinaTrabalho(ano, mes) {
   const valorMensalPCMSO =
     (QlEfetivosT.length + QlComercialMes.length) * valorPCMSO;
 
+  const valorVacinacao = Utils.SomaArray(
+    variaveis.VacinaGripe.filter(m => m.mes === mes).map(v => v.valor)
+  );
+
   return {
     value: {
-      Total: valorTotal + valorMensalPCMSO,
+      Total: valorTotal + valorMensalPCMSO + valorVacinacao,
       Descricao: {
         ValorExames: valorTotal,
         ValorPCMSO: valorMensalPCMSO,
+        ValorVacinacaoGripe: valorVacinacao,
         QLConsiderado: QlEfetivosT.length + QlComercialMes.length,
       },
       politicas,

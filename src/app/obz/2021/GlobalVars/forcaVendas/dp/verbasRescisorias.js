@@ -1,9 +1,13 @@
 import Utils from '../../../../../../utils/utils';
 // import QlAdm from '../../ql/qlAdm';
+import { versoes, versao } from '../../../versions';
+
 import { politicas } from '../../fixas/dp/variasFolha';
 import {
   SaldoFgts,
   SalarioBase,
+  SalarioBaseReducao,
+  SaldoFgtsReducao,
 } from '../../../VariaveisEPoliticas/variaveis/desligamentosFv';
 
 const vars = {
@@ -43,14 +47,29 @@ export default function VerbasRescisorias(ano, mes) {
   //     })
   //   );
   // }
+  let BaseSaldo = 0;
+  let SalarioBaseConsiderado = 0;
 
-  const BaseSaldo = Utils.SomaArray(
-    vars.SaldoFgts.filter(m => m.mes === mes).map(v => v.valor)
-  );
+  if (
+    versao.Versao === versoes.Cenario25MMNovoPortfolioCenario2 ||
+    versao.Versao === versoes.Cenario22MMNovoPortfolioCenario3
+  ) {
+    BaseSaldo = Utils.SomaArray(
+      SaldoFgtsReducao.filter(m => m.mes === mes).map(v => v.valor)
+    );
 
-  const SalarioBaseConsiderado = Utils.SomaArray(
-    vars.SalarioBase.filter(m => m.mes === mes).map(v => v.valor)
-  );
+    SalarioBaseConsiderado = Utils.SomaArray(
+      SalarioBaseReducao.filter(m => m.mes === mes).map(v => v.valor)
+    );
+  } else {
+    BaseSaldo = Utils.SomaArray(
+      SaldoFgts.filter(m => m.mes === mes).map(v => v.valor)
+    );
+
+    SalarioBaseConsiderado = Utils.SomaArray(
+      SalarioBase.filter(m => m.mes === mes).map(v => v.valor)
+    );
+  }
 
   const totalAvisoPrevioMes =
     (SalarioBaseConsiderado / 30) * vars.MediaDiasIndenizados;

@@ -2,6 +2,7 @@ import { Router } from 'express';
 
 import authMiddleware from '../app/middlewares/auth';
 
+import Chat from './chatRouter';
 import SessionsRouter from './sessionsRouter';
 import RecoveryRouter from './recoveryRouter';
 import UsersRouter from './usersRouter';
@@ -19,6 +20,7 @@ const routes = new Router();
 
 routes.use('/sessions', SessionsRouter);
 routes.use('/recovery', RecoveryRouter);
+routes.use('/socket.io', Chat);
 
 routes.use(authMiddleware);
 
@@ -29,8 +31,6 @@ routes.use('/configs', Configs);
 routes.use('/uploads', UploadsRouter);
 routes.use('/cadastro_empresas', CadastroEmpresasRouter);
 routes.use('/testes_obz', TestesObz);
-routes.use('/testes_obz', TestesObz);
-routes.use('/obz2021', Obz2021);
 routes.use('/obz2021', Obz2021);
 routes.use('/simulador', Simulador);
 

@@ -334,8 +334,8 @@ const variaveis = {
 
 export default async function ServicosContabilidade(ano, mes) {
   // Reveita bruta interna do mês atual
-  const ValorReceitaBruta = (await ReceitaBruta(ano, mes)).ReceitaBrutaInterna
-    .Total;
+  const ValorReceitaBruta = (await ReceitaBruta(ano, mes - 1))
+    .ReceitaBrutaInterna.Total;
 
   // Servicos de contabilidade
   // Fixos

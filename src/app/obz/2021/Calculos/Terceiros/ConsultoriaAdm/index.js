@@ -29,7 +29,7 @@ const variaveis = {
     { mes: 10, empresa: 'Fernanda', valor: 7000 },
     { mes: 11, empresa: 'Fernanda', valor: 7000 },
     { mes: 12, empresa: 'Fernanda', valor: 7000 },
-    { mes: 6, empresa: 'Auditoria Interna', valor: 50000 },
+    // { mes: 6, empresa: 'Auditoria Interna', valor: 50000 },
     { mes: 1, empresa: 'Mapeamento de processos', valor: 3000 },
     { mes: 2, empresa: 'Mapeamento de processos', valor: 3000 },
     { mes: 3, empresa: 'Mapeamento de processos', valor: 3000 },

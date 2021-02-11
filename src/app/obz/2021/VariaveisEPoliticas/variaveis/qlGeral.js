@@ -1,4 +1,6 @@
+/* eslint-disable import/no-mutable-exports */
 import Utils from '../../../../../utils/utils';
+import { versoes, versao } from '../../versions';
 
 export const Regioes = {
   GPOA: 'GPOA',
@@ -19,6 +21,7 @@ export const Cargos = {
   AnalistaFinanceiro: 'AnalistaFinanceiro',
   AnalistaMarketing: 'AnalistaMarketing',
   AnalistaSocialMidia: 'AnalistaSocialMidia',
+  AnalistaLogistica: 'AnalistaLogistica',
   AssistenteAdministrativo: 'AssistenteAdministrativo',
   AssistenteContabil: 'AssistenteContabil',
   AssistenteDeAdmPessoal: 'AssistenteDeAdmPessoal',
@@ -54,7 +57,7 @@ export const Cargos = {
   Vendedor: 'Vendedor',
 };
 
-export default [
+const qlBase = [
   {
     matricula: 111249,
     setor: 'COMERCIAL',
@@ -644,7 +647,7 @@ export default [
     dataLimite: null,
     temAdicionalNoturno: true,
     dataNascimento: Utils.Mes(1979, 6),
-    comercial: true,
+    comercial: false,
     estadoResidencia: 'RS',
     sexo: 'M',
     qtdFilhos: 1,
@@ -923,23 +926,6 @@ export default [
     regiao: Regioes.GPOA,
   },
   {
-    matricula: 111258,
-    setor: 'COMERCIAL',
-    nomeCargo: Cargos.Vendedor,
-    admissao: Utils.Mes(2020, 3),
-    salarioBase: 0,
-    salarioBaseInicial: 1965,
-    funcaoGratificada: false,
-    dataLimite: null,
-    temAdicionalNoturno: true,
-    dataNascimento: Utils.Mes(1989, 6),
-    comercial: true,
-    estadoResidencia: 'RS',
-    sexo: 'M',
-    qtdFilhos: 2,
-    regiao: Regioes.GPOA,
-  },
-  {
     matricula: 611217,
     setor: 'FINANCEIRO',
     nomeCargo: Cargos.GerenteFinanceiro,
@@ -977,7 +963,7 @@ export default [
     matricula: 700001,
     setor: 'LOGISTICA',
     nomeCargo: Cargos.AssistenteAdministrativo,
-    admissao: Utils.Mes(2021, 1),
+    admissao: Utils.Mes(2020, 12),
     salarioBase: 0,
     salarioBaseInicial: 2500,
     funcaoGratificada: false,
@@ -993,10 +979,10 @@ export default [
   {
     matricula: 700002,
     setor: 'LOGISTICA',
-    nomeCargo: Cargos.AssistenteAdministrativo,
-    admissao: Utils.Mes(2021, 1),
+    nomeCargo: Cargos.AnalistaLogistica,
+    admissao: Utils.Mes(2021, 2),
     salarioBase: 0,
-    salarioBaseInicial: 2500,
+    salarioBaseInicial: 3000,
     funcaoGratificada: false,
     dataLimite: null,
     temAdicionalNoturno: true,
@@ -1014,23 +1000,6 @@ export default [
     admissao: Utils.Mes(2021, 1),
     salarioBase: 0,
     salarioBaseInicial: 2500,
-    funcaoGratificada: false,
-    dataLimite: null,
-    temAdicionalNoturno: true,
-    dataNascimento: Utils.Mes(1900, 1),
-    comercial: false,
-    estadoResidencia: 'RS',
-    sexo: 'M',
-    qtdFilhos: 0,
-    regiao: Regioes.GPOA,
-  },
-  {
-    matricula: 700004,
-    setor: 'FINANCEIRO',
-    nomeCargo: Cargos.SupervisorDeControladoria,
-    admissao: Utils.Mes(2021, 2),
-    salarioBase: 0,
-    salarioBaseInicial: 7150,
     funcaoGratificada: false,
     dataLimite: null,
     temAdicionalNoturno: true,
@@ -1110,41 +1079,7 @@ export default [
     regiao: Regioes.GPOA,
   },
   {
-    matricula: 700009,
-    setor: 'MARKETING',
-    nomeCargo: Cargos.Estagiario,
-    admissao: Utils.Mes(2021, 2),
-    salarioBase: 0,
-    salarioBaseInicial: 1500,
-    funcaoGratificada: false,
-    dataLimite: null,
-    temAdicionalNoturno: true,
-    dataNascimento: Utils.Mes(1900, 1),
-    comercial: false,
-    estadoResidencia: 'RS',
-    sexo: 'F',
-    qtdFilhos: 0,
-    regiao: Regioes.GPOA,
-  },
-  {
     matricula: 700010,
-    setor: 'COMERCIAL',
-    nomeCargo: Cargos.ExecutivoDeContas,
-    admissao: Utils.Mes(2021, 2),
-    salarioBase: 0,
-    salarioBaseInicial: 2567,
-    funcaoGratificada: false,
-    dataLimite: null,
-    temAdicionalNoturno: true,
-    dataNascimento: Utils.Mes(1900, 1),
-    comercial: true,
-    estadoResidencia: 'RS',
-    sexo: 'M',
-    qtdFilhos: 0,
-    regiao: Regioes.GPOA,
-  },
-  {
-    matricula: 700011,
     setor: 'COMERCIAL',
     nomeCargo: Cargos.ExecutivoDeContas,
     admissao: Utils.Mes(2021, 2),
@@ -1178,74 +1113,6 @@ export default [
     regiao: Regioes.SCSul,
   },
   {
-    matricula: 700013,
-    setor: 'COMERCIAL',
-    nomeCargo: Cargos.Vendedor,
-    admissao: Utils.Mes(2021, 3),
-    salarioBase: 0,
-    salarioBaseInicial: 1965,
-    funcaoGratificada: false,
-    dataLimite: null,
-    temAdicionalNoturno: true,
-    dataNascimento: Utils.Mes(1900, 1),
-    comercial: true,
-    estadoResidencia: 'RS',
-    sexo: 'M',
-    qtdFilhos: 0,
-    regiao: Regioes.GPOA,
-  },
-  {
-    matricula: 700014,
-    setor: 'COMERCIAL',
-    nomeCargo: Cargos.Vendedor,
-    admissao: Utils.Mes(2021, 1),
-    salarioBase: 0,
-    salarioBaseInicial: 1965,
-    funcaoGratificada: false,
-    dataLimite: null,
-    temAdicionalNoturno: true,
-    dataNascimento: Utils.Mes(1900, 1),
-    comercial: true,
-    estadoResidencia: 'RS',
-    sexo: 'M',
-    qtdFilhos: 0,
-    regiao: Regioes.GPOA,
-  },
-  {
-    matricula: 700015,
-    setor: 'COMERCIAL',
-    nomeCargo: Cargos.Vendedor,
-    admissao: Utils.Mes(2021, 1),
-    salarioBase: 0,
-    salarioBaseInicial: 1965,
-    funcaoGratificada: false,
-    dataLimite: null,
-    temAdicionalNoturno: true,
-    dataNascimento: Utils.Mes(1900, 1),
-    comercial: true,
-    estadoResidencia: 'RS',
-    sexo: 'M',
-    qtdFilhos: 0,
-    regiao: Regioes.GPOA,
-  },
-  {
-    matricula: 700016,
-    setor: 'COMERCIAL',
-    nomeCargo: Cargos.Vendedor,
-    admissao: Utils.Mes(2021, 1),
-    salarioBase: 0,
-    salarioBaseInicial: 1965,
-    funcaoGratificada: false,
-    dataLimite: null,
-    temAdicionalNoturno: true,
-    dataNascimento: Utils.Mes(1900, 1),
-    comercial: true,
-    estadoResidencia: 'RS',
-    sexo: 'M',
-    qtdFilhos: 0,
-    regiao: Regioes.GPOA,
-  },
-  {
     matricula: 700017,
     setor: 'COMERCIAL',
     nomeCargo: Cargos.Assistente_AnalistaComercial,
@@ -1263,44 +1130,10 @@ export default [
     regiao: Regioes.GPOA,
   },
   {
-    matricula: 700018,
-    setor: 'MARKETING',
-    nomeCargo: Cargos.AnalistaMarketing,
-    admissao: Utils.Mes(2021, 2),
-    salarioBase: 0,
-    salarioBaseInicial: 3000,
-    funcaoGratificada: false,
-    dataLimite: null,
-    temAdicionalNoturno: true,
-    dataNascimento: Utils.Mes(1900, 1),
-    comercial: false,
-    estadoResidencia: 'RS',
-    sexo: 'F',
-    qtdFilhos: 0,
-    regiao: Regioes.GPOA,
-  },
-  {
-    matricula: 700019,
-    setor: 'MARKETING',
-    nomeCargo: Cargos.AnalistaSocialMidia,
-    admissao: Utils.Mes(2021, 2),
-    salarioBase: 0,
-    salarioBaseInicial: 3000,
-    funcaoGratificada: false,
-    dataLimite: null,
-    temAdicionalNoturno: true,
-    dataNascimento: Utils.Mes(1900, 1),
-    comercial: false,
-    estadoResidencia: 'RS',
-    sexo: 'F',
-    qtdFilhos: 0,
-    regiao: Regioes.GPOA,
-  },
-  {
     matricula: 700020,
     setor: 'MARKETING',
     nomeCargo: Cargos.AuxiliarDeMarketing,
-    admissao: Utils.Mes(2021, 2),
+    admissao: Utils.Mes(2021, 7),
     salarioBase: 0,
     salarioBaseInicial: 1656,
     funcaoGratificada: false,
@@ -1313,4 +1146,45 @@ export default [
     qtdFilhos: 0,
     regiao: Regioes.GPOA,
   },
+  {
+    matricula: 700021,
+    setor: 'JOVEM APRENDIZ',
+    nomeCargo: Cargos.JovemAprendiz,
+    admissao: Utils.Mes(2021, 1),
+    salarioBase: 0,
+    salarioBaseInicial: 616,
+    funcaoGratificada: false,
+    dataLimite: null,
+    temAdicionalNoturno: true,
+    dataNascimento: Utils.Mes(2000, 11),
+    comercial: false,
+    estadoResidencia: 'RS',
+    sexo: 'M',
+    qtdFilhos: 0,
+    regiao: Regioes.GPOA,
+  },
 ];
+
+// Definição de Ql com base nas versões
+let qlConsiderado = qlBase;
+// Retirada de 4 QL no cenário 25MM
+if (
+  versao.Versao === versoes.Cenario25MMNovoPortfolioCenario2 ||
+  versao.Versao === versoes.Cenario22MMNovoPortfolioCenario3
+) {
+  qlConsiderado = qlBase.filter(ql => {
+    return (
+      ql.matricula !== 111230 &&
+      ql.matricula !== 111254 &&
+      ql.matricula !== 111266 &&
+      ql.matricula !== 111255 &&
+      ql.matricula !== 111263
+    );
+  });
+} else {
+  qlConsiderado = qlBase.filter(ql => {
+    return ql.matricula !== 700010 && ql.matricula !== 700012;
+  });
+}
+
+export default qlConsiderado;

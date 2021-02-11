@@ -24,10 +24,9 @@ const variaveis = {
     { mes: 12, valor: 1850 },
   ],
   consultoriaDesenvolvimento: [
-    { mes: 3, valor: 5830 },
     { mes: 4, valor: 5830 },
     { mes: 5, valor: 5830 },
-    { mes: 6, valor: 4075 },
+    { mes: 6, valor: 5830 },
     { mes: 7, valor: 4075 },
     { mes: 8, valor: 4075 },
     { mes: 9, valor: 4075 },
@@ -35,11 +34,11 @@ const variaveis = {
     { mes: 11, valor: 4075 },
   ],
   consultoriaCargosESalarios: [
-    { mes: 1, valor: 5000 },
-    { mes: 2, valor: 5000 },
     { mes: 3, valor: 5000 },
-    { mes: 4, valor: 4250 },
-    { mes: 5, valor: 4250 },
+    { mes: 4, valor: 5000 },
+    { mes: 5, valor: 5000 },
+    { mes: 6, valor: 4250 },
+    { mes: 7, valor: 4250 },
   ],
 };
 

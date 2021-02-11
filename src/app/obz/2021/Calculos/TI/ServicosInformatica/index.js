@@ -7,18 +7,33 @@ import Areas from '../../../GlobalVars/ql/areas';
 // import Dolar from '../../../GlobalVars/financeiros/dolar';
 import Notebooks from '../../../GlobalVars/TI/notebooks';
 import Utils from '../../../../../../utils/utils';
+import Dolar from '../../../GlobalVars/financeiros/dolar';
 
 export const NomeConta = 'SERVICOS INFORMATICA';
 export const ContaContabil = '3.1.1.1.04.02.002.002';
 export const politicas = {
   CargosQueUsamPowerBIPro: [
-    cargosGerenciais,
+    ...cargosGerenciais,
     Cargos.SupervisorDeVendas,
     Cargos.SupervisorDeGrandesContas,
   ],
 };
 // TODO Ver com o Marcio
 export const variaveis = {
+  // Checklist das atividades dos vendedores e supervisores
+  ChecklistFacilComercial: [
+    {
+      mes: 1,
+      valor: 800,
+    },
+  ],
+  // Zoom cobrado em dólares
+  Zoom: [
+    {
+      mes: 1,
+      valor: 15,
+    },
+  ],
   ProjetoAntecipacaoRecebiveis: [
     { mes: 1, valor: 3584 },
     { mes: 2, valor: 3584 },
@@ -26,7 +41,7 @@ export const variaveis = {
   GestorCreditoSerasa: [{ mes: 2, valor: 24000 }],
   sistemaLogistica: [{ mes: 1, valor: 2870 }],
   QuantServidores: 5,
-  MensalidadeStart: [{ mes: 1, valor: 7500 }],
+  MensalidadeStart: [{ mes: 1, valor: 6800 }],
   MensalidadeCigam: [{ mes: 1, valor: 4700 * 1.2 }],
   valorHoraSuporteCigam: [{ mes: 1, valor: 200 }],
   TotalHorasCigam: [
@@ -48,6 +63,7 @@ export const variaveis = {
     { mes: 1, valor: 142 },
     { mes: 2, valor: 142 },
     { mes: 3, valor: 142 },
+    { mes: 4, valor: 142 },
     { mes: 5, valor: 142 },
     { mes: 6, valor: 142 },
     { mes: 7, valor: 142 },
@@ -62,7 +78,7 @@ export const variaveis = {
     { mes: 4, valor: 386 },
     { mes: 6, valor: 180 },
   ],
-  ValorLicencaPowerBi: 49,
+  ValorLicencaPowerBi: 9.99, // Cobrado em Dólar
   ValorUnitarioRenovacaoAntivirus: 82,
   AdobeMarketing: [
     { mes: 1, valor: 127 },
@@ -96,6 +112,8 @@ export default function ServicosInformatica(ano, mes) {
   const cargosQueUsamNotebook = NotebooksMes.vars.CargosQueUsamNotebookBasico.concat(
     NotebooksMes.vars.CargosQueUsamNotebookIntermediario
   );
+
+  const DolarMes = Dolar(ano, mes).value;
 
   let valorModuloFiscal = 0;
   if (variaveis.ModuloFiscalImplantacao.mes === mes)
@@ -147,13 +165,8 @@ export default function ServicosInformatica(ano, mes) {
       return politicas.CargosQueUsamPowerBIPro.includes(ql.nomeCargo);
     }).length + QuantAreasMes;
 
-  // const { DolarMes } = Dolar(ano, mes).value;
-
-  // const quantNotebooks = Notebooks(ano, mes).value.Total;
-  // const quantDesktops = qlMesAtual.length - quantNotebooks;
-  // const quantCelulares = Celulares(ano, mes).value.Total;
-
-  const totalPowerBiMes = QuantUsuariosPowerBI * variaveis.ValorLicencaPowerBi;
+  const totalPowerBiMes =
+    QuantUsuariosPowerBI * variaveis.ValorLicencaPowerBi * DolarMes;
 
   let totalMensalidadeStart = 0;
   variaveis.MensalidadeStart.forEach(m => {
@@ -168,15 +181,12 @@ export default function ServicosInformatica(ano, mes) {
     if (m.mes <= mes) totalMensalidadeCigam = m.valor;
   });
 
-  const valorHoraSuporteCigam = Utils.SomaArray(
-    variaveis.valorHoraSuporteCigam
-      .filter(v => {
-        return v.mes === mes;
-      })
-      .map(v => {
-        return v.valor;
-      })
-  );
+  let valorHoraSuporteCigam = 0;
+  variaveis.valorHoraSuporteCigam.forEach(v => {
+    if (v.mes <= mes) {
+      valorHoraSuporteCigam = v.valor;
+    }
+  });
 
   const TotalHorasCigam = Utils.SomaArray(
     variaveis.TotalHorasCigam.filter(v => {
@@ -248,8 +258,24 @@ export default function ServicosInformatica(ano, mes) {
       variaveis.ValorUnitarioRenovacaoAntivirus;
   }
 
+  let ValorChecklistFacil = 0;
+  variaveis.ChecklistFacilComercial.forEach(cf => {
+    if (cf.mes <= mes) {
+      ValorChecklistFacil = cf.valor;
+    }
+  });
+  let ValorZoom = 0;
+  variaveis.Zoom.forEach(z => {
+    if (z.mes <= mes) {
+      ValorZoom = z.valor * DolarMes;
+    }
+  });
+
   const Descricao = {
-    PowerBI: totalPowerBiMes,
+    PowerBI: {
+      Total: totalPowerBiMes,
+      QuantUsuarios: QuantUsuariosPowerBI,
+    },
     Start: totalMensalidadeStart,
     AdobeMarketing: totalMensalidadeAdobeMarketing,
     SpotifyMarketing: totalMensalidadeSpotify,
@@ -269,12 +295,14 @@ export default function ServicosInformatica(ano, mes) {
     GarantiaDell: totalGarantiaDell,
     DigitalOcean: totalDigitalOcean,
     Antivirus: totalAntivirus,
+    ZoomRH: ValorZoom,
+    ChecklistFacilComercial: ValorChecklistFacil,
   };
 
   return {
     value: {
       Total:
-        Descricao.PowerBI +
+        Descricao.PowerBI.Total +
         Descricao.Start +
         Descricao.AdobeMarketing +
         Descricao.SpotifyMarketing +
@@ -289,7 +317,9 @@ export default function ServicosInformatica(ano, mes) {
         Descricao.SistemaLogistica +
         Descricao.ProjetoAntecipacaoRecebiveis +
         Descricao.ProjetoGestorCreditoSerasa +
-        Descricao.ProjetoModuloFiscal,
+        Descricao.ProjetoModuloFiscal +
+        ValorZoom +
+        ValorChecklistFacil,
       Descricao,
       politicas,
       variaveis,

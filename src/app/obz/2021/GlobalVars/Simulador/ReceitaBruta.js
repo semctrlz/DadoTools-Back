@@ -1,4 +1,4 @@
-import { cenariosValidos } from '../../Calculos/Receitas/MercadoInterno';
+import { cenarioConsiderado } from '../../Calculos/Receitas/MercadoInterno';
 
 import Cenarios from '../../../../models/SimuladorCenarios';
 
@@ -108,7 +108,7 @@ const variavel = {
 };
 
 export default async function ReceitaBruta(ano, mes) {
-  const [idCenarioMes] = cenariosValidos.filter(c => c.mes === mes);
+  const [idCenarioMes] = cenarioConsiderado.filter(c => c.mes === mes);
 
   if (!idCenarioMes) {
     return {

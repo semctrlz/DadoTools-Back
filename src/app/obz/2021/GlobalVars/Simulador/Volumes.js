@@ -1,9 +1,9 @@
-import { cenariosValidos } from '../../Calculos/Receitas/MercadoInterno';
+import { cenarioConsiderado } from '../../Calculos/Receitas/MercadoInterno';
 
 import Cenarios from '../../../../models/SimuladorCenarios';
 
 export default async function Volume(ano, mes) {
-  const [idCenarioMes] = cenariosValidos.filter(c => c.mes === mes);
+  const [idCenarioMes] = cenarioConsiderado.filter(c => c.mes === mes);
 
   const volumesMes = await Cenarios.findOne({
     where: { id: idCenarioMes.cenario },

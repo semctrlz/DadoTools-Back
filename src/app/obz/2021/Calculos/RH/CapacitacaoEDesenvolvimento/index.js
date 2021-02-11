@@ -75,7 +75,6 @@ export const variaveis = {
     Calendario: [5, 7, 9, 11],
   },
   UniversidadeCorporativa: [
-    { mes: 2, valor: 4500 },
     { mes: 3, valor: 4500 },
     { mes: 4, valor: 4500 },
     { mes: 5, valor: 4500 },
@@ -203,7 +202,11 @@ export const variaveis = {
   PesquisaSalarial: [
     {
       mes: 1,
-      valor: 4600,
+      valor: 1840,
+    },
+    {
+      mes: 2,
+      valor: 2760,
     },
   ],
   MensalidadePesquisaSalarial: [

@@ -85,6 +85,7 @@ const politicas = {
   ],
   calendarioReunioes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
 };
+
 const variaveis = {
   CalendarioViagem: [],
   Destinos: [],
@@ -575,41 +576,6 @@ const variaveis = {
       valorPedagios: 70,
       estadiasViagensLongas: 3,
     },
-    {
-      rota: 'NOVA ROTA 03',
-      consumoCombustivel: 225,
-      quantLavagens: 1.0,
-      valorPedagios: 70,
-      estadiasViagensLongas: 3,
-    },
-    {
-      rota: 'NOVA ROTA 04',
-      consumoCombustivel: 225,
-      quantLavagens: 1.0,
-      valorPedagios: 70,
-      estadiasViagensLongas: 3,
-    },
-    {
-      rota: 'NOVA ROTA 05',
-      consumoCombustivel: 225,
-      quantLavagens: 1.0,
-      valorPedagios: 70,
-      estadiasViagensLongas: 3,
-    },
-    {
-      rota: 'NOVA ROTA 06',
-      consumoCombustivel: 225,
-      quantLavagens: 1.0,
-      valorPedagios: 70,
-      estadiasViagensLongas: 3,
-    },
-    {
-      rota: 'NOVA ROTA 07',
-      consumoCombustivel: 225,
-      quantLavagens: 1.0,
-      valorPedagios: 70,
-      estadiasViagensLongas: 3,
-    },
   ],
   ValorDiariaAluguelCarro: 200,
   ValorSemParar: 18.5,
@@ -617,8 +583,10 @@ const variaveis = {
 // #endregion
 
 export default function DespesasDeViagem(ano, mes) {
+  const baseHistoricoRota = variaveis.HistoricoMensalRota;
+
   // #region Variáveis iniciais
-  const rotasMes = Rotas(ano, mes).value;
+
   const valoresEstado = variaveis.ValoresPorEstado.filter(e => e.mes === mes);
 
   const QLMes = QlComercial(ano, mes).value;
@@ -638,10 +606,10 @@ export default function DespesasDeViagem(ano, mes) {
   // #endregion
 
   // #region Viagens dentro da rota
-
+  const rotasMes = Rotas(ano, mes).value;
   const resumoRotas = rotasMes.Rotas.map(r => {
     // Cobnsulta o histórico da rota
-    const historico = variaveis.HistoricoMensalRota.filter(h => {
+    const historico = baseHistoricoRota.filter(h => {
       return h.rota === r.rota;
     });
     const consumoCombustivel = Utils.SomaArray(

@@ -3,5 +3,5 @@ export const politicas = {
 };
 
 export const variaveis = {
-  estimativaHorasMesAdicional: 4.75,
+  estimativaHorasMesAdicional: 0.5,
 };

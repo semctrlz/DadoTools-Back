@@ -66,19 +66,13 @@ const variaveis = {
     { mes: 11, valor: 2500 },
     { mes: 12, valor: 2500 },
   ],
-  TI: [
-    { mes: 1, valor: 9780 },
-    { mes: 2, valor: 9780 },
-    { mes: 3, valor: 9780 },
-    { mes: 4, valor: 9780 },
-    { mes: 5, valor: 9780 },
-    { mes: 6, valor: 9780 },
-    { mes: 7, valor: 9780 },
-    { mes: 8, valor: 9780 },
-    { mes: 9, valor: 9780 },
-    { mes: 10, valor: 9780 },
-    { mes: 11, valor: 9780 },
-    { mes: 12, valor: 9780 },
+  TempMarketing: [
+    { mes: 1, valor: 1506 },
+    { mes: 2, valor: 1506 },
+    { mes: 3, valor: 1506 },
+    { mes: 4, valor: 1506 },
+    { mes: 5, valor: 1506 },
+    { mes: 6, valor: 1506 },
   ],
   TemporarioAdm: [
     { mes: 1, valor: 4500 },
@@ -112,8 +106,8 @@ export default function ServicosContratados(ano, mes) {
     variaveis.PeD.filter(p => p.mes === mes).map(p => p.valor)
   );
   // Valor TI
-  const TI = Utils.SomaArray(
-    variaveis.TI.filter(t => t.mes === mes).map(t => t.valor)
+  const TempMarketing = Utils.SomaArray(
+    variaveis.TempMarketing.filter(t => t.mes === mes).map(t => t.valor)
   );
   // Valor Temporário Adm
   const TemporarioAdm = Utils.SomaArray(
@@ -122,13 +116,13 @@ export default function ServicosContratados(ano, mes) {
 
   return {
     value: {
-      Total: Designer + Comex + CEO + PeD + TI + TemporarioAdm,
+      Total: Designer + Comex + CEO + PeD + TempMarketing + TemporarioAdm,
       Descricao: {
         Designer,
         Comex,
         CEO,
         PeD,
-        TI,
+        TempMarketing,
         TemporarioAdm,
       },
       politicas,
