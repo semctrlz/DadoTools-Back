@@ -74,11 +74,18 @@ class Sintegra {
   }
 
   async ConsultaSaldo() {
-    const dados = await apiSintegra.get(
-      `api/v1/consulta-saldo.php?token=${process.env.SINTEGRA_TOKEN}`
-    );
-    console.log(dados);
-    return dados.data;
+    try {
+      const response = await apiSintegra.get(
+        `api/v1/consulta-saldo.php?token=${process.env.SINTEGRA_TOKEN}`
+      );
+      return response.data;
+    } catch (err) {
+      console.log('Erro consulta sintegra: ', err);
+      return { qtd_consultas_disponiveis: 99 };
+    }
+
+    // console.log('saldo');
+    // return dados.data;
   }
 }
 
