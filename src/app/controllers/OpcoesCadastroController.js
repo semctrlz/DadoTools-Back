@@ -11,6 +11,7 @@ import User from '../models/User';
 
 class OpcoesCadastroController {
   async index(req, res) {
+    console.log('opcoesCadastro');
     const condicoes_pagto = await CondicoesPagto.findAll({
       attributes: [
         ['cod_condicao_pagto', 'cod'],

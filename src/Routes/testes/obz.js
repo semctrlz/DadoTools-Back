@@ -3,7 +3,8 @@ import { Router } from 'express';
 import GlobalVars from '../../app/obz/2021/GlobalVars';
 import MercadoInterno from '../../app/obz/2021/Calculos/Receitas/MercadoInterno';
 import Sim from '../../app/obz/2021/GlobalVars/Simulador/Volumes';
-import Conta from '../../app/obz/2021/GlobalVars/forcaVendas/dp/verbasRescisorias';
+
+import Conta from '../../app/obz/2021/Calculos/Tributos/OutrosDebitosTributarios';
 
 const routes = new Router();
 

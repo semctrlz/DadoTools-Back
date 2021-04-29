@@ -1,10 +1,10 @@
+/* eslint-disable no-console */
 import * as Yup from 'yup';
 import jwt from 'jsonwebtoken';
 import { promisify } from 'util';
 
 import User from '../models/User';
 import File from '../models/File';
-import Notification from '../schemas/Notification';
 
 class SessionController {
   async store(req, res) {
@@ -90,6 +90,15 @@ class SessionController {
       console.log(err);
       return res.status(401).json({ error: 'Invalid Token.' });
     }
+  }
+
+  async update(req, res) {
+    const userId = req.idUsuario;
+    return res.json({
+      token: jwt.sign({ id: userId }, process.env.JWT_KEY, {
+        expiresIn: process.env.JWT_EXPIRES,
+      }),
+    });
   }
 }
 

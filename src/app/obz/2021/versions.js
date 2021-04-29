@@ -11,6 +11,13 @@ export const versoes = {
   Cenario25MMNovoPortfolioCenario1: 'Cenario25MMNovoPortfolioCenario1',
   Cenario25MMNovoPortfolioCenario2: 'Cenario25MMNovoPortfolioCenario2',
   Cenario22MMNovoPortfolioCenario3: 'Cenario22MMNovoPortfolioCenario3',
+  Cenario4: 'Cenario4',
+  Cenario5: 'Cenario5',
+  Cenario6: 'Cenario6',
+  Cenario7_1: 'Cenario7_1',
+  Cenario7_2: 'Cenario7_2',
+  Cenario7_3: 'Cenario7_3',
+  Cenario7_4: 'Cenario7_4',
 };
 
 export const ConfigVersions = {
@@ -77,6 +84,47 @@ export const ConfigVersions = {
     MercadoInterno: versoes.Cenario22MMNovoPortfolioCenario3,
     Exportacoes: versoes.VersaoAlternativa21MM_CenarioExtra,
   },
+
+  Cenario4: {
+    Versao: versoes.Cenario22MMNovoPortfolioCenario3,
+    MercadoInterno: versoes.Cenario4,
+    Exportacoes: versoes.VersaoAlternativa21MM_CenarioExtra,
+  },
+
+  Cenario5: {
+    Versao: versoes.Cenario22MMNovoPortfolioCenario3,
+    MercadoInterno: versoes.Cenario5,
+    Exportacoes: versoes.VersaoAlternativa21MM_CenarioExtra,
+  },
+
+  Cenario6: {
+    Versao: versoes.Cenario22MMNovoPortfolioCenario3,
+    MercadoInterno: versoes.Cenario6,
+    Exportacoes: versoes.Cenario6,
+  },
+
+  Cenario7_1: {
+    Versao: versoes.Cenario22MMNovoPortfolioCenario3,
+    MercadoInterno: versoes.Cenario7_1,
+    Exportacoes: versoes.Cenario6,
+  },
+
+  Cenario7_2: {
+    Versao: versoes.Cenario22MMNovoPortfolioCenario3,
+    MercadoInterno: versoes.Cenario7_2,
+    Exportacoes: versoes.Cenario6,
+  },
+
+  Cenario7_3: {
+    Versao: versoes.Cenario22MMNovoPortfolioCenario3,
+    MercadoInterno: versoes.Cenario7_3,
+    Exportacoes: versoes.Cenario6,
+  },
+  Cenario7_4: {
+    Versao: versoes.Cenario22MMNovoPortfolioCenario3,
+    MercadoInterno: versoes.Cenario7_4,
+    Exportacoes: versoes.Cenario6,
+  },
 };
 
-export const versao = ConfigVersions.Cenario22MMNovoPortfolioCenario3;
+export const versao = ConfigVersions.Cenario7_4;

@@ -15,6 +15,7 @@ import DemaisRotas from './demaisRotas';
 import Obz2021 from './obz2021Router';
 import TestesObz from './testes/obz';
 import Simulador from './simuladorRouter';
+import Microservicos from './microservicos.routes';
 
 const routes = new Router();
 
@@ -33,6 +34,7 @@ routes.use('/cadastro_empresas', CadastroEmpresasRouter);
 routes.use('/testes_obz', TestesObz);
 routes.use('/obz2021', Obz2021);
 routes.use('/simulador', Simulador);
+routes.use('/microservicos', Microservicos);
 
 routes.use(DemaisRotas);
 

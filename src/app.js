@@ -32,6 +32,8 @@ class App {
       'https://server.zware.com.br',
       'https://server.zware.com.br/avatar',
       'https://dadotools.netlify.app/',
+      'http://localhost:8081',
+      '*',
     ];
 
     const corsOptions = {

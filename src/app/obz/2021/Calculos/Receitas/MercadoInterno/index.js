@@ -195,6 +195,110 @@ export const Cenario22MMNovoPortfolioCenario3 = [
   { mes: 12, cenario: 137 },
 ];
 
+export const Cenario4 = [
+  { mes: 1, cenario: 138 },
+  { mes: 2, cenario: 139 },
+  { mes: 3, cenario: 140 },
+  { mes: 4, cenario: 141 },
+  { mes: 5, cenario: 142 },
+  { mes: 6, cenario: 143 },
+  { mes: 7, cenario: 144 },
+  { mes: 8, cenario: 145 },
+  { mes: 9, cenario: 146 },
+  { mes: 10, cenario: 147 },
+  { mes: 11, cenario: 148 },
+  { mes: 12, cenario: 149 },
+];
+
+export const Cenario5 = [
+  { mes: 1, cenario: 151 },
+  { mes: 2, cenario: 152 },
+  { mes: 3, cenario: 153 },
+  { mes: 4, cenario: 154 },
+  { mes: 5, cenario: 155 },
+  { mes: 6, cenario: 156 },
+  { mes: 7, cenario: 157 },
+  { mes: 8, cenario: 158 },
+  { mes: 9, cenario: 159 },
+  { mes: 10, cenario: 160 },
+  { mes: 11, cenario: 161 },
+  { mes: 12, cenario: 162 },
+];
+
+export const Cenario6 = [
+  { mes: 1, cenario: 175 },
+  { mes: 2, cenario: 176 },
+  { mes: 3, cenario: 177 },
+  { mes: 4, cenario: 178 },
+  { mes: 5, cenario: 179 },
+  { mes: 6, cenario: 180 },
+  { mes: 7, cenario: 181 },
+  { mes: 8, cenario: 182 },
+  { mes: 9, cenario: 183 },
+  { mes: 10, cenario: 184 },
+  { mes: 11, cenario: 185 },
+  { mes: 12, cenario: 186 },
+];
+export const Cenario7_1 = [
+  { mes: 1, cenario: 187 },
+  { mes: 2, cenario: 188 },
+  { mes: 3, cenario: 189 },
+  { mes: 4, cenario: 190 },
+  { mes: 5, cenario: 191 },
+  { mes: 6, cenario: 192 },
+  { mes: 7, cenario: 193 },
+  { mes: 8, cenario: 194 },
+  { mes: 9, cenario: 195 },
+  { mes: 10, cenario: 196 },
+  { mes: 11, cenario: 197 },
+  { mes: 12, cenario: 198 },
+];
+
+export const Cenario7_2 = [
+  { mes: 1, cenario: 187 },
+  { mes: 2, cenario: 188 },
+  { mes: 3, cenario: 189 },
+  { mes: 4, cenario: 190 },
+  { mes: 5, cenario: 199 },
+  { mes: 6, cenario: 200 },
+  { mes: 7, cenario: 201 },
+  { mes: 8, cenario: 202 },
+  { mes: 9, cenario: 203 },
+  { mes: 10, cenario: 204 },
+  { mes: 11, cenario: 205 },
+  { mes: 12, cenario: 206 },
+];
+
+export const Cenario7_3 = [
+  { mes: 1, cenario: 187 },
+  { mes: 2, cenario: 188 },
+  { mes: 3, cenario: 189 },
+  { mes: 4, cenario: 190 },
+  { mes: 5, cenario: 207 },
+  { mes: 6, cenario: 208 },
+  { mes: 7, cenario: 209 },
+  { mes: 8, cenario: 210 },
+  { mes: 9, cenario: 211 },
+  { mes: 10, cenario: 212 },
+  { mes: 11, cenario: 213 },
+  { mes: 12, cenario: 214 },
+];
+
+export const Cenario7_4 = [
+  { mes: 1, cenario: 187 },
+  { mes: 2, cenario: 188 },
+  { mes: 3, cenario: 189 },
+  { mes: 4, cenario: 190 },
+  { mes: 5, cenario: 215 },
+  { mes: 6, cenario: 216 },
+  { mes: 7, cenario: 217 },
+  { mes: 8, cenario: 218 },
+  { mes: 9, cenario: 219 },
+  { mes: 10, cenario: 220 },
+  { mes: 11, cenario: 221 },
+  { mes: 12, cenario: 222 },
+];
+
 export const cenarios = {
   VersaoOficial,
   VersaoAlterada27MM,
@@ -208,6 +312,13 @@ export const cenarios = {
   Cenario25MMNovoPortfolioCenario1,
   Cenario25MMNovoPortfolioCenario2,
   Cenario22MMNovoPortfolioCenario3,
+  Cenario4,
+  Cenario5,
+  Cenario6,
+  Cenario7_1,
+  Cenario7_2,
+  Cenario7_3,
+  Cenario7_4,
 };
 
 export const cenarioConsiderado = cenarios[versao.MercadoInterno];

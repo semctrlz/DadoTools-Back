@@ -28,7 +28,7 @@ routes.post('/usuarios', TicketsController.criaUsuario);
 routes.put('/prazo', TicketsController.alterarPrazo);
 
 routes.post('/anexos', uploadFiles.single('file'), AnexoController.store);
-routes.delete('/anexos', AnexoController.delete);
+routes.post('/anexos/delete', TicketsController.deletaAnexo);
 
 routes.post('/upload', uploadS3.single('file'), UploadS3Controller.store);
 routes.delete('/upload/:id', UploadS3Controller.delete);

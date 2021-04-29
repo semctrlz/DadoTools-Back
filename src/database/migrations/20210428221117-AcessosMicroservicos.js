@@ -1,31 +1,23 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('user_apps', {
+    return queryInterface.createTable('acesso_microservicos', {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
       },
-
       id_usuario: {
         type: Sequelize.INTEGER,
         references: { model: 'users', key: 'id' },
         onDelete: 'cascade',
-        onUpdate: 'no action',
-      },
-      id_app: {
-        type: Sequelize.INTEGER,
-        references: { model: 'apps', key: 'id' },
-        onDelete: 'cascade',
-        onUpdate: 'no action',
-      },
-      nivel: {
-        type: Sequelize.INTEGER,
+        onUpdate: 'cascade',
         allowNull: false,
-        default_value: 0,
       },
-
+      acessos: {
+        type: Sequelize.TEXT('long'),
+        allowNull: false,
+      },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,
@@ -38,6 +30,6 @@ module.exports = {
   },
 
   down: queryInterface => {
-    return queryInterface.dropTable('user_apps');
+    return queryInterface.dropTable('acesso_microservicos');
   },
 };

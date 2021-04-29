@@ -26,7 +26,10 @@ class UploadS3Controller {
 
     const { id } = req.params;
     const upload = await Upload.findById(id);
-    await upload.remove();
+    if (upload) {
+      await upload.remove();
+    }
+
     return res.send();
   }
 

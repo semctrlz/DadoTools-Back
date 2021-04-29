@@ -15,6 +15,7 @@ import UserApp from '../models/UserApp';
 import TicketsEncaminhados from '../models/TicketsEncaminhados';
 import CategoriaTickets from '../models/CategoriaTickets';
 import TicketCategoriaAutoEncs from '../models/TicketCategoriaAutoEncs';
+import Upload from '../schemas/Upload';
 
 class TicketsController {
   async index(req, res) {
@@ -631,6 +632,47 @@ class TicketsController {
       message: 'Ticket encaminhado com sucesso',
       success: true,
     });
+  }
+
+  async deletaAnexo(req, res) {
+    const schema = Yup.object().shape({
+      id: Yup.number().required(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validation fails' });
+    }
+
+    const { id } = req.body;
+    const id_usuario = req.idUsuario;
+    const upload = await TicketsFile.findOne({ where: { id } });
+
+    if (upload) {
+      const ticket = await Ticket.findOne({
+        where: { [Op.and]: [{ id: upload.id_ticket }, { id_usuario }] },
+      });
+      if (!ticket)
+        return res
+          .status(400)
+          .json({ success: false, error: 'Erro ao deletar anexo' });
+      try {
+        const uploads3 = await Upload.findById(upload.id_anexo);
+        if (uploads3) {
+          await uploads3.remove();
+        }
+
+        upload.destroy();
+
+        return res.json({ success: true });
+      } catch (err) {
+        return res
+          .status(400)
+          .json({ success: false, error: 'Erro ao deletar anexo' });
+      }
+    }
+    return res
+      .status(400)
+      .json({ success: false, error: 'Erro ao deletar anexo' });
   }
 }
 
