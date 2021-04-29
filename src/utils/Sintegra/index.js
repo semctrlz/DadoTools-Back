@@ -2,8 +2,6 @@ import { format } from 'date-fns';
 import apiSintegra from '../../services/apiSintegra';
 import SintegraConsultas from '../../app/models/SintegraConsultas';
 
-const request = require('request');
-
 class Sintegra {
   async ConsultaCpf(id, cpf, nascimento) {
     const dadosSalvos = await SintegraConsultas.findAll({
