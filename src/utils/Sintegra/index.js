@@ -81,7 +81,12 @@ class Sintegra {
       return response.data;
     } catch (err) {
       console.log('Erro consulta sintegra: ', err);
-      return { qtd_consultas_disponiveis: 99 };
+      return {
+        code: '403',
+        status: 'ERRO',
+        message: 'Erro ao consular',
+        qtd_consultas_disponiveis: '00',
+      };
     }
 
     // console.log('saldo');
