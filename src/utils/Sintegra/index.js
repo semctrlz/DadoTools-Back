@@ -77,7 +77,7 @@ class Sintegra {
     const dados = await apiSintegra.get(
       `api/v1/consulta-saldo.php?token=${process.env.SINTEGRA_TOKEN}`
     );
-
+    console.log(dados);
     return dados.data;
   }
 }
