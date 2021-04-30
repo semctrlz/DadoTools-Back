@@ -36,14 +36,19 @@ class MicroServicoConfigController {
       return res.status(401).json({ error: 'Acesso não permitido' });
 
     if (config) {
-      const configs = await ConfigsMicroservicos.findAll({
+      const [configs] = await ConfigsMicroservicos.findAll({
         where: {
           [Op.and]: [{ microservico }, { config }],
         },
         order: [['createdAt', 'DESC']],
         limit: 1,
       });
-      return res.json(configs);
+
+      if (!configs) return res.json([]);
+
+      const { json_obj = [] } = configs;
+
+      return res.json(json_obj);
     }
     const configs = await ConfigsMicroservicos.findAll({
       where: { microservico },
