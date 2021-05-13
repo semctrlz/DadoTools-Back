@@ -41,7 +41,7 @@ class App {
     ];
 
     const corsOptions = {
-      origin: whitelist,
+      // origin: whitelist,
       exposedHeaders: [
         'origin',
         'x-requested-with',
@@ -53,17 +53,7 @@ class App {
         'X-Total-Count',
       ],
     };
-    this.server.use((req, res, next) => {
-      if (whitelist.indexOf(req.headers.origin) !== -1) {
-        res.header('Access-Control-Allow-Origin', req.headers.origin);
-        res.header(
-          'Access-Control-Allow-Headers',
-          'Origin, X-Requested-With, Content-Type, Accept'
-        );
-      }
-      next();
-      // cors(corsOptions);
-    });
+    this.server.use(cors(corsOptions));
   }
 
   routes() {
