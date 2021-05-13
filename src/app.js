@@ -32,11 +32,10 @@ class App {
   cors() {
     const whitelist = [
       process.env.HOST,
+      'https://dadotools.app.br/',
       'https://dadotools.netlify.app/',
       'https://server.zware.com.br',
       'https://server.zware.com.br/avatar',
-      'https://dadotools.netlify.app/',
-      'https://dadotools.app.br/',
       'http://localhost:8081',
       '*',
     ];
