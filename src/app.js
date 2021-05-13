@@ -47,6 +47,7 @@ class App {
         'x-requested-with',
         'content-type',
         'Access-Control-Allow-Origin',
+        'Access-Control-Allow-Headers',
         'Vary',
         'Content-Length',
         'X-Total-Count',
