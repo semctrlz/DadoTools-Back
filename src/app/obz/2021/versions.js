@@ -18,6 +18,7 @@ export const versoes = {
   Cenario7_2: 'Cenario7_2',
   Cenario7_3: 'Cenario7_3',
   Cenario7_4: 'Cenario7_4',
+  Cenario7_5: 'Cenario7_5',
 };
 
 export const ConfigVersions = {
@@ -125,6 +126,11 @@ export const ConfigVersions = {
     MercadoInterno: versoes.Cenario7_4,
     Exportacoes: versoes.Cenario6,
   },
+  Cenario7_5: {
+    Versao: versoes.Cenario22MMNovoPortfolioCenario3,
+    MercadoInterno: versoes.Cenario7_5,
+    Exportacoes: versoes.Cenario6,
+  },
 };
 
-export const versao = ConfigVersions.Cenario7_4;
+export const versao = ConfigVersions.Cenario7_5;

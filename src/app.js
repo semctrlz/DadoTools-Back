@@ -36,6 +36,7 @@ class App {
       'https://server.zware.com.br',
       'https://server.zware.com.br/avatar',
       'https://dadotools.netlify.app/',
+      'https://dadotools.app.br/',
       'http://localhost:8081',
       '*',
     ];
