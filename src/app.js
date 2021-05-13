@@ -53,7 +53,17 @@ class App {
         'X-Total-Count',
       ],
     };
-    this.server.use(cors(corsOptions));
+    this.server.use((req, res, next) => {
+      if (whitelist.indexOf(req.headers.origin) !== -1) {
+        res.header('Access-Control-Allow-Origin', req.headers.origin);
+        res.header(
+          'Access-Control-Allow-Headers',
+          'Origin, X-Requested-With, Content-Type, Accept'
+        );
+      }
+      next();
+      // cors(corsOptions);
+    });
   }
 
   routes() {
