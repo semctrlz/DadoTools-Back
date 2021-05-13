@@ -41,11 +41,7 @@ class App {
     ];
 
     const corsOptions = {
-      origin: [
-        'https://dadotools.app.br/',
-        'https://dadotools.netlify.app/',
-        'https://server.zware.com.br',
-      ],
+      origin: whitelist,
       exposedHeaders: [
         'origin',
         'x-requested-with',
