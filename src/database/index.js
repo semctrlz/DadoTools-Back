@@ -36,6 +36,7 @@ import TicketCategoriaAutoEncs from '../app/models/TicketCategoriaAutoEncs';
 import SimuladorCenarios from '../app/models/SimuladorCenarios';
 import ConfigsMicroservicos from '../app/models/ConfigsMicroservicos';
 import AcessoMicroservicos from '../app/models/AcessoMicroservicos';
+import DataMicroservicos from '../app/models/DataMicroservicos';
 
 const models = [
   User,
@@ -71,6 +72,7 @@ const models = [
   SimuladorCenarios,
   ConfigsMicroservicos,
   AcessoMicroservicos,
+  DataMicroservicos,
 ];
 
 class Database {

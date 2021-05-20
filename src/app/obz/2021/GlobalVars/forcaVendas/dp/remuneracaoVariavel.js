@@ -43,7 +43,6 @@ export const variaveis = {
       adicional: 1150,
     },
   ],
-  // FALTA Magalhães definir atingimento de meta
   atingimentosMeta: [
     {
       mes: 1,
