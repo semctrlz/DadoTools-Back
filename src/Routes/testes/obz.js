@@ -12,7 +12,7 @@ routes.get('/ql_geral', (req, res) => {
   return res.json(GlobalVars.QlGeral(2021, 12));
 });
 routes.get('/ql_comercial', (req, res) => {
-  return res.json(GlobalVars.QlComercial(2021, 11));
+  return res.json(GlobalVars.QlComercial(2021, 12));
 });
 routes.get('/ql_adm', (req, res) => {
   return res.json(GlobalVars.QlAdm(2021, 12));

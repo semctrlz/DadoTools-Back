@@ -1,17 +1,18 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('tickets_files', {
+    return queryInterface.createTable('cadastros_files', {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
       },
-      id_ticket: {
+      id_cadastro_clientes: {
         type: Sequelize.INTEGER,
-        references: { model: 'tickets', key: 'id' },
-        onDelete: 'cascade',
-        onUpdate: 'no action',
+        references: { model: 'cadastro_clientes', key: 'id' },
+        allowNull: true,
+        onDelete: 'SET NULL',
+        onUpdate: 'cascade',
       },
       id_anexo: {
         type: Sequelize.STRING,
@@ -41,6 +42,6 @@ module.exports = {
   },
 
   down: queryInterface => {
-    return queryInterface.dropTable('tickets_files');
+    return queryInterface.dropTable('cadastros_files');
   },
 };

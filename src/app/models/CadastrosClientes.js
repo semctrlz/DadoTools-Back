@@ -50,7 +50,10 @@ class CadastroClientes extends Model {
       foreignKey: 'id_cadastro',
       as: 'status_cigam',
     });
-
+    this.hasMany(models.CadastrosFile, {
+      foreignKey: 'id_cadastro_clientes',
+      as: 'anexos',
+    });
     this.hasMany(models.InfoCadastroClientes, {
       foreignKey: 'id_cadastro',
       as: 'messages',

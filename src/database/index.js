@@ -37,6 +37,7 @@ import SimuladorCenarios from '../app/models/SimuladorCenarios';
 import ConfigsMicroservicos from '../app/models/ConfigsMicroservicos';
 import AcessoMicroservicos from '../app/models/AcessoMicroservicos';
 import DataMicroservicos from '../app/models/DataMicroservicos';
+import CadastrosFile from '../app/models/CadastrosFile';
 
 const models = [
   User,
@@ -73,6 +74,7 @@ const models = [
   ConfigsMicroservicos,
   AcessoMicroservicos,
   DataMicroservicos,
+  CadastrosFile,
 ];
 
 class Database {
