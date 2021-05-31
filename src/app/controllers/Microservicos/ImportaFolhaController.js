@@ -127,7 +127,7 @@ class ImportaFolhaController {
       const s_unidade = `0000000000${unidade}`;
       const s_deb = `${dado.deb}      `;
       const s_cred = `${dado.cred}      `;
-      const s_valor = `000000000${Math.trunc(dado.valor * 100)}`;
+      const s_valor = `000000000${Math.trunc(dado.valor)}`;
 
       const i_unidade = s_unidade.substr(s_unidade.length - 6);
       const i_deb = dado.deb !== 0 ? s_deb.substr(0, 6) : '      ';
