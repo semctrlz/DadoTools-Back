@@ -8,6 +8,7 @@ import CadastrosDadosConsolidados from '../models/CadastrosDadosConsolidados';
 import CigamCadastroStatus from '../models/CigamCadastroStatus';
 import User from '../models/User';
 import File from '../models/File';
+import CadastrosFile from '../models/CadastrosFile';
 import Sintegra from '../../utils/Sintegra';
 
 class GerenciarCadastroController {
@@ -19,6 +20,10 @@ class GerenciarCadastroController {
         {
           model: User,
           as: 'criadorCadastro',
+        },
+        {
+          model: CadastrosFile,
+          as: 'anexos',
         },
         {
           model: InfoCadastroClientes,
