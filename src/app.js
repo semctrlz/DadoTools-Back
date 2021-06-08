@@ -32,7 +32,6 @@ class App {
   cors() {
     const whitelist = [
       process.env.HOST,
-      'https://dadotools.app.br/',
       'https://dadotools.netlify.app/',
       'https://server.zware.com.br',
       'https://server.zware.com.br/avatar',
@@ -41,7 +40,7 @@ class App {
     ];
 
     const corsOptions = {
-      // origin: whitelist,
+      origin: whitelist,
       exposedHeaders: [
         'origin',
         'x-requested-with',
