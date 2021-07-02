@@ -124,7 +124,7 @@ class ImportaFolhaController {
     const arquivo = fs.createWriteStream(path.join(destination, fileName));
 
     dados_dat.forEach(dado => {
-      const s_unidade = `0000000000${unidade}`;
+      const s_unidade = `0000000000${unidade === 6 ? 2 : 1}`;
       const s_deb = `${dado.deb}      `;
       const s_cred = `${dado.cred}      `;
       const s_valor = `000000000${Math.trunc(dado.valor)}`;

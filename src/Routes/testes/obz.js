@@ -4,7 +4,7 @@ import GlobalVars from '../../app/obz/2021/GlobalVars';
 import MercadoInterno from '../../app/obz/2021/Calculos/Receitas/MercadoInterno';
 import Sim from '../../app/obz/2021/GlobalVars/Simulador/Volumes';
 
-import Conta from '../../app/obz/2021/Calculos/Tributos/OutrosDebitosTributarios';
+import Conta from '../../app/obz/2021/Calculos/DespForcaDeVenda/DespesasDeViagem';
 
 const routes = new Router();
 
